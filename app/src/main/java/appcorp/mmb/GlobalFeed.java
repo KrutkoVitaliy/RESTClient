@@ -262,7 +262,7 @@ public class GlobalFeed extends AppCompatActivity {
                         availableDate = calculateAvailableTime(tempDate, currentDate);
 
                     if (publicate.equals("t")) {
-                        TapeDTO tapeDTO = new TapeDTO(id, sid, title_en, availableDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
+                        TapeDTO tapeDTO = new TapeDTO(id, sid, availableDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
                         data.add(tapeDTO);
                     }
                 }

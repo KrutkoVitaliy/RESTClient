@@ -190,7 +190,7 @@ public class SearchFeed extends AppCompatActivity {
                     tempDate = searchItem.getString("availableDate");
 
                     if (searchItem.getString("publicate").equals("t")) {
-                        SearchDTO searchDTO = new SearchDTO(id, sid, title, tempDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
+                        SearchDTO searchDTO = new SearchDTO(id, sid, tempDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
                         searchData.add(searchDTO);
                     }
 

@@ -7,7 +7,6 @@ public class SearchDTO {
 
     private long id;
     private long sid;
-    private String title;
     private String author;
     private String availableDate;
     private String colors;
@@ -19,18 +18,13 @@ public class SearchDTO {
     private List<String> images = new ArrayList<>();
     private List<String> hashTags = new ArrayList<>();
 
-    public SearchDTO() {
+    private SearchDTO() {
 
     }
 
-    public SearchDTO(String title) {
-        this.title = title;
-    }
-
-    public SearchDTO(long id, long sid, String title, String availableDate, String author, String authorPhoto, List<String> images, String colors, String eye_color, String occasion, String difficult, List<String> hashTags, long likes) {
+    public SearchDTO(long id, long sid, String availableDate, String author, String authorPhoto, List<String> images, String colors, String eye_color, String occasion, String difficult, List<String> hashTags, long likes) {
         this.id = id;
         this.sid = sid;
-        this.title = title;
         this.availableDate = availableDate;
         this.author = author;
         this.images = images;
@@ -57,14 +51,6 @@ public class SearchDTO {
 
     public void setSid(long sid) {
         this.sid = sid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getAuthor() {
