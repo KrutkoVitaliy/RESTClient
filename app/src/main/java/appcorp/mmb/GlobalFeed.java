@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,9 +45,8 @@ public class GlobalFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private GlobalFeedFragmentAdapter adapter;
-    private FirebaseAnalytics firebaseAnalytics;
 
-    private String photoURL, name, beauty;
+    private String photoURL, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +60,9 @@ public class GlobalFeed extends AppCompatActivity {
 
         Storage.Init(getApplicationContext());
 
-        if (Storage.Get("Autentification").equals("Success")) {
+        if (Intermediates.getData(getApplicationContext(), "Autentification").equals("Success")) {
             name = Storage.Get("Name");
             photoURL = Storage.Get("PhotoURL");
-        }
-
-        beauty = getIntent().getStringExtra("Beauty");
-
-        if (beauty == null) {
-            beauty = "GlobalFeed";
         }
 
         FireAnal.setContext(getApplicationContext());
@@ -87,10 +77,7 @@ public class GlobalFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (beauty == "GlobalFeed")
-            toolbar.setTitle(R.string.toolbar_title_global_feed);
-        else
-            toolbar.setTitle(beauty);
+        toolbar.setTitle(R.string.toolbar_title_global_feed);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -118,29 +105,22 @@ public class GlobalFeed extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        if (beauty == "Makeup" || beauty == "Hairstyle" || beauty == "Manicure" || beauty == "Lips")
-                            startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                    .putExtra("Beauty", "GlobalFeed"));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuMakeup:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                .putExtra("Beauty", "Makeup"));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuHairstyle:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                .putExtra("Beauty", "Hairstyle"));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuManicure:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                .putExtra("Beauty", "Manicure"));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                .putExtra("Beauty", "Lips"));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuProfile:
                         if (name != null)
@@ -180,21 +160,11 @@ public class GlobalFeed extends AppCompatActivity {
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
         String resultJsonFeed = "";
-        URL feedURL;
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                if (beauty.equals("GlobalFeed"))
-                    feedURL = new URL(Intermediates.URL.GET_FEED);
-                else if (beauty.equals("Makeup"))
-                    feedURL = new URL("http://195.88.209.17/search/index.php?request=example");
-                else if (beauty.equals("Hairstyle"))
-                    feedURL = new URL(Intermediates.URL.GET_FEED);
-                else if (beauty.equals("Manicure"))
-                    feedURL = new URL(Intermediates.URL.GET_FEED);
-                else if (beauty.equals("Lips"))
-                    feedURL = new URL(Intermediates.URL.GET_FEED);
+                URL feedURL = new URL(Intermediates.URL.GET_FEED);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -217,7 +187,7 @@ public class GlobalFeed extends AppCompatActivity {
 
             long id, sid, likes, tempDate, currentDate = System.currentTimeMillis();
             List<TapeDTO> data = new ArrayList<>();
-            String availableDate, colors, difficult, eye_color, occasion, tags, title_en, title_ru, authorPhoto, authorName, authorLastname, publicate;
+            String availableDate, colors, difficult, eye_color, occasion, tags, authorPhoto, authorName, authorLastname, publicate;
 
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
@@ -227,11 +197,9 @@ public class GlobalFeed extends AppCompatActivity {
                     List<String> images = new ArrayList<>();
                     List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 1; j < 11; j++) {
-                        if (!item.getString("screen" + j).equals("empty")) {
+                    for (int j = 1; j < 11; j++)
+                        if (!item.getString("screen" + j).equals("empty"))
                             images.add(item.getString("screen" + j));
-                        }
-                    }
 
                     id = item.getLong("id");
                     tempDate = item.getLong("availableDate");
@@ -239,9 +207,6 @@ public class GlobalFeed extends AppCompatActivity {
                     difficult = item.getString("difficult");
                     eye_color = item.getString("eye_color");
                     likes = item.getLong("likes");
-                    title_en = upperCaseFirst(item.getString("title_en"));
-
-                    title_ru = item.getString("title_ru");
                     occasion = item.getString("occasion");
                     publicate = item.getString("publicate");
                     tags = item.getString("tags");
@@ -256,10 +221,10 @@ public class GlobalFeed extends AppCompatActivity {
 
                     new ProfileDataLoader(sid, getApplicationContext()).execute();
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", dateFormatSymbols);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
                     availableDate = simpleDateFormat.format(new Date(tempDate));
                     if ((currentDate - tempDate) <= 259200000)
-                        availableDate = calculateAvailableTime(tempDate, currentDate);
+                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);
 
                     if (publicate.equals("t")) {
                         TapeDTO tapeDTO = new TapeDTO(id, sid, availableDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
@@ -277,68 +242,6 @@ public class GlobalFeed extends AppCompatActivity {
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
 
-        private String calculateAvailableTime(long temp, long current) {
-            String date = "";
-            if ((current - temp) < 3600000)
-                date = " Только что";
-            else if ((current - temp) > 3600000 && (current - temp) <= 7200000)
-                date = " 1 час назад";
-            else if ((current - temp) > 7200000 && (current - temp) <= 10800000)
-                date = " 2 часа назад";
-            else if ((current - temp) > 10800000 && (current - temp) <= 14400000)
-                date = " 3 часа назад";
-            else if ((current - temp) > 14400000 && (current - temp) <= 18000000)
-                date = " 4 часа назад";
-            else if ((current - temp) > 18000000 && (current - temp) <= 21600000)
-                date = " 5 часов назад";
-            else if ((current - temp) > 21600000 && (current - temp) <= 25200000)
-                date = " 6 часов назад";
-            else if ((current - temp) > 25200000 && (current - temp) <= 28800000)
-                date = " 7 часов назад";
-            else if ((current - temp) > 28800000 && (current - temp) <= 32400000)
-                date = " 8 часов назад";
-            else if ((current - temp) > 32400000 && (current - temp) <= 36000000)
-                date = " 9 часов назад";
-            else if ((current - temp) > 36000000 && (current - temp) <= 39600000)
-                date = " 10 часов назад";
-            else if ((current - temp) > 39600000 && (current - temp) <= 43200000)
-                date = " 11 часов назад";
-            else if ((current - temp) > 43200000 && (current - temp) <= 46800000)
-                date = " 12 часов назад";
-            else if ((current - temp) > 46800000 && (current - temp) <= 50400000)
-                date = " 13 часов назад";
-            else if ((current - temp) > 50400000 && (current - temp) <= 54000000)
-                date = " 14 часов назад";
-            else if ((current - temp) > 54000000 && (current - temp) <= 57600000)
-                date = " 15 часов назад";
-            else if ((current - temp) > 57600000 && (current - temp) <= 61200000)
-                date = " 16 часов назад";
-            else if ((current - temp) > 61200000 && (current - temp) <= 64800000)
-                date = " 17 часов назад";
-            else if ((current - temp) > 64800000 && (current - temp) <= 68400000)
-                date = " 18 часов назад";
-            else if ((current - temp) > 68400000 && (current - temp) <= 72000000)
-                date = " 19 часов назад";
-            else if ((current - temp) > 72000000 && (current - temp) <= 75600000)
-                date = " 20 часов назад";
-            else if ((current - temp) > 75600000 && (current - temp) <= 79200000)
-                date = " 21 час назад";
-            else if ((current - temp) > 79200000 && (current - temp) <= 82800000)
-                date = " 22 часа назад";
-            else if ((current - temp) > 82800000 && (current - temp) <= 86400000)
-                date = " 23 часа назад";
-            else if ((current - temp) > 86400000 && (current - temp) <= 172800000)
-                date = " 1 день назад";
-            else if ((current - temp) > 172800000 && (current - temp) <= 259200000)
-                date = " 2 дня назад";
-            return date;
-        }
 
-        private DateFormatSymbols dateFormatSymbols = new DateFormatSymbols() {
-            @Override
-            public String[] getMonths() {
-                return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
-            }
-        };
     }
 }
