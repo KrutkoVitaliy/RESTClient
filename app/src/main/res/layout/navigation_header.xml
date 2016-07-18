@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="144dp"
+    android:background="@mipmap/navigation_background"
+    android:paddingTop="32dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/navAvatar"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@mipmap/nav_icon" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/navName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Make Me Beauty"
+                android:textColor="#FFFFFF"
+                android:textSize="7pt"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/navLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click to sign in"
+                android:textColor="#FFFFFF"
+                android:textSize="6pt" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

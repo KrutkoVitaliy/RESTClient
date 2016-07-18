@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+    <TextView
+    android:id="@+id/checkLogoText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:text="Make me beauty"
+    android:textColor="#FFFFFF"
+    android:textSize="14pt"
+    android:paddingTop="96dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="96dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Не удалось подключиться к интернету\nПроверьте ваше интернет-соединение"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/reconnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Повторить попытку"
+            android:textSize="6pt"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="italic"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/menu_item_feed">
+        <menu>
+            <item
+                android:id="@+id/navMenuGlobalFeed"
+                android:orderInCategory="1"
+                android:title="@string/menu_item_news"
+                android:icon="@mipmap/ic_format_list_bulleted"/>
+            <!--<item
+                android:id="@+id/navMenuHotFeed"
+                android:orderInCategory="2"
+                android:title="@string/menu_item_hot"
+                android:icon="@mipmap/hot"/>-->
+            <item
+                android:id="@+id/navMenuSearch"
+                android:orderInCategory="3"
+                android:title="@string/menu_item_search"
+                android:icon="@mipmap/ic_magnify_dark"/>
+        </menu>
+    </item>
+    <item android:title="@string/menu_item_style_types">
+        <menu>
+            <item
+                android:id="@+id/navMenuMakeup"
+                android:orderInCategory="4"
+                android:title="@string/menu_item_makeup"
+                android:icon="@mipmap/makeup"/>
+            <item
+                android:id="@+id/navMenuHairstyle"
+                android:orderInCategory="5"
+                android:title="@string/menu_item_hairstyle"
+                android:icon="@mipmap/hairstyle"/>
+            <item
+                android:id="@+id/navMenuManicure"
+                android:orderInCategory="6"
+                android:title="@string/menu_item_manicure"
+                android:icon="@mipmap/manicure"/>
+            <item
+                android:id="@+id/navMenuLips"
+                android:orderInCategory="6"
+                android:title="@string/menu_item_lips"
+                android:icon="@mipmap/lips"/>
+        </menu>
+    </item>
+    <item android:title="@string/menu_item_user">
+        <menu>
+            <item
+                android:id="@+id/navMenuProfile"
+                android:orderInCategory="7"
+                android:title="@string/menu_item_profile"
+                android:icon="@mipmap/ic_account_card_details"/>
+            <item
+                android:id="@+id/navMenuFavorites"
+                android:orderInCategory="8"
+                android:title="@string/menu_item_favorites"
+                android:icon="@mipmap/ic_star"/>
+        </menu>
+    </item>
+    <item android:title="@string/menu_item_application">
+        <menu>
+            <item
+                android:id="@+id/navMenuSettings"
+                android:orderInCategory="9"
+                android:title="@string/menu_item_settings"
+                android:icon="@mipmap/ic_settings"/>
+            <item
+                android:id="@+id/navMenuSupport"
+                android:orderInCategory="10"
+                android:title="@string/menu_item_help"
+                android:icon="@mipmap/ic_comment_question_outline"/>
+        </menu>
+    </item>
+</menu>

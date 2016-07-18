@@ -1,0 +1,11 @@
+.gradle
+.idea
+build
+libs
+androidTest
+test
+app.iml
+captures
+local.properties
+README.md
+RESTClient.iml

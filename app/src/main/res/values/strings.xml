@@ -1,0 +1,64 @@
+<resources>
+    <!-- MAIN VALUES -->
+    <string name="app_name">Make Me Beauty</string>
+    <string name="drawer_toggle_open">Open</string>
+    <string name="drawer_toggle_close">Close</string>
+
+    <!-- TITLES FROM TOOLBAR -->
+    <string name="toolbar_title_global_feed">Make Me Beauty</string>
+    <string name="toolbar_title_stylists">Stylists</string>
+    <string name="toolbar_title_search">Search</string>
+    <string name="toolbar_title_profile">Profile</string>
+    <string name="toolbar_title_favorites">Favorites</string>
+    <string name="toolbar_title_options">Settings</string>
+    <string name="toolbar_title_support">Help</string>
+
+    <!-- VALUES FROM OCCASION FIELD -->
+    <string-array name="occasions">
+        <item>Everyday</item>
+        <item>Celebrity</item>
+        <item>Dramatic</item>
+        <item>Holiday</item>
+    </string-array>
+
+    <!-- VALUES FROM NAVIGATION MENU -->
+    <string name="menu_item_feed">Feed</string>
+    <string name="menu_item_news">News</string>
+    <string name="menu_item_stylists">Stylists</string>
+    <string name="menu_item_search">Search</string>
+    <string name="menu_item_user">User</string>
+    <string name="menu_item_profile">My profile</string>
+    <string name="menu_item_favorites">Favorites</string>
+    <string name="menu_item_application">Application</string>
+    <string name="menu_item_settings">Settings</string>
+    <string name="menu_item_help">Help</string>
+    <string name="menu_item_hot">Hot</string>
+    <string name="menu_item_style_types">Beauty</string>
+    <string name="menu_item_makeup">Makeup</string>
+    <string name="menu_item_hairstyle">Hairstyle</string>
+    <string name="menu_item_manicure">Manicure</string>
+    <string name="menu_item_lips">Lips</string>
+
+    <!-- VALUES FROM MORE CONTAINER -->
+    <string name="show_more_container">More</string>
+    <string name="hide_more_container">Hide</string>
+    <string name="title_eye_color">Eye color</string>
+    <string name="title_used_colors">Used colors</string>
+    <string name="title_difficult">Difficult</string>
+    <!-- EYE COLORS -->
+    <string name="blue_eyes">Blue eyes</string>
+    <string name="brown_eyes">Brown eyes</string>
+    <string name="gray_eyes">Gray eyes</string>
+    <string name="green_eyes">Green eyes</string>
+    <string name="hazel_eyes">Hazel eyes</string>
+    <string name="black_eyes">Black eyes</string>
+    <!-- OCCASION -->
+    <string name="occasion_everyday">Occasion: Everyday</string>
+    <string name="occasion_celebrity">Occasion: Celebrity</string>
+    <string name="occasion_dramatic">Occasion: Dramatic</string>
+    <string name="occasion_holiday">Occasion: Holiday</string>
+    <!-- DIFFICULT -->
+    <string name="difficult_easy">Easy difficult</string>
+    <string name="difficult_medium">Medium difficult</string>
+    <string name="difficult_hard">Hard difficult</string>
+</resources>

@@ -1,0 +1,64 @@
+<resources>
+    <!-- ОСНОВНЫЕ ЗНАЧЕНИЯ -->
+    <string name="app_name">Сделай меня красивой</string>
+    <string name="drawer_toggle_open">Открыть</string>
+    <string name="drawer_toggle_close">Закрыть</string>
+
+    <!-- ЗАГОЛОВКИ ДЛЯ ТУЛБАРА -->
+    <string name="toolbar_title_global_feed">Сделай меня красивой</string>
+    <string name="toolbar_title_stylists">Визажисты</string>
+    <string name="toolbar_title_search">Поиск</string>
+    <string name="toolbar_title_profile">Мой профиль</string>
+    <string name="toolbar_title_favorites">Избранное</string>
+    <string name="toolbar_title_options">Настройки</string>
+    <string name="toolbar_title_support">Помощь</string>
+
+    <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ТИП МЕРОПРИЯТИЯ" -->
+    <string-array name="occasions">
+        <item>На каждый день</item>
+        <item>Селебрити</item>
+        <item>Драматический</item>
+        <item>Праздничный</item>
+    </string-array>
+
+    <!-- ЗНАЧЕНИЯ ДЛЯ МЕНЮ НАВИГАЦИИ -->
+    <string name="menu_item_feed">Лента</string>
+    <string name="menu_item_news">Новости</string>
+    <string name="menu_item_stylists">Визажисты</string>
+    <string name="menu_item_search">Поиск</string>
+    <string name="menu_item_user">Пользователь</string>
+    <string name="menu_item_profile">Мой профиль</string>
+    <string name="menu_item_favorites">Мои закладки</string>
+    <string name="menu_item_application">Приложение</string>
+    <string name="menu_item_settings">Настройки</string>
+    <string name="menu_item_help">Помощь</string>
+
+    <!-- ЗНАЧЕНИЯ ДЛЯ КОНТЕЙНЕРА ПОДРОБНОСТЕЙ -->
+    <string name="show_more_container">Подробнее</string>
+    <string name="hide_more_container">Скрыть</string>
+    <string name="title_eye_color">Цвет глаз</string>
+    <string name="title_used_colors">Используемые цвета</string>
+    <string name="title_difficult">Сложность</string>
+    <!-- ЦВЕТ ГЛАЗ -->
+    <string name="blue_eyes">Голубой цвет глаз</string>
+    <string name="brown_eyes">Карие глаза</string>
+    <string name="gray_eyes">Серый цвет глаз</string>
+    <string name="green_eyes">Зеленый цвет глаз</string>
+    <string name="hazel_eyes">Болотный цвет глаз</string>
+    <string name="black_eyes">Черный цвет глаз</string>
+    <!-- МЕРОПРИЯТИЕ -->
+    <string name="occasion_everyday">Тип мероприятия: На каждый день</string>
+    <string name="occasion_celebrity">Тип мероприятия: Celebrity</string>
+    <string name="occasion_dramatic">Тип мероприятия: Dramatic</string>
+    <string name="occasion_holiday">Тип мероприятия: Holiday</string>
+    <!-- СЛОЖНОСТЬ -->
+    <string name="difficult_easy">Простой макияж</string>
+    <string name="difficult_medium">Усложненный макияж</string>
+    <string name="difficult_hard">Сложный макияж</string>
+    <string name="menu_item_manicure">Маникюр</string>
+    <string name="menu_item_makeup">Макияж</string>
+    <string name="menu_item_lips">Губы</string>
+    <string name="menu_item_hot">Набирающее популярность</string>
+    <string name="menu_item_hairstyle">Прически</string>
+    <string name="menu_item_style_types">Красота</string>
+</resources>
