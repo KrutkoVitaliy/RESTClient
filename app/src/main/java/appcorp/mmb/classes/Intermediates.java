@@ -1,11 +1,8 @@
-package appcorp.mmb;
+package appcorp.mmb.classes;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.view.Display;
-import android.view.WindowManager;
-import android.widget.Toolbar;
 
 import appcorp.mmb.loaders.Storage;
 

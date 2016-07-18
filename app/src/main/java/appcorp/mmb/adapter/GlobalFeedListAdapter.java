@@ -20,9 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.SearchFeed;
+import appcorp.mmb.activities.SearchFeed;
 import appcorp.mmb.activities.FullscreenPreview;
-import appcorp.mmb.activities.Profile;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.dto.TapeDTO;
 

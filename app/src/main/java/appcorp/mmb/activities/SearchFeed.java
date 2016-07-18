@@ -1,4 +1,4 @@
-package appcorp.mmb;
+package appcorp.mmb.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.R;
 import appcorp.mmb.adapter.SearchFragmentAdapter;
 import appcorp.mmb.dto.SearchDTO;
 

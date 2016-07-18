@@ -1,4 +1,4 @@
-package appcorp.mmb;
+package appcorp.mmb.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -28,6 +28,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.GlobalFeed;
+import appcorp.mmb.R;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.Introduction;
 import appcorp.mmb.activities.Options;

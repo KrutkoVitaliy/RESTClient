@@ -11,7 +11,6 @@ import android.view.MenuItem;
 
 import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.R;
-import appcorp.mmb.StylistFeed;
 
 public class Favorites extends Activity {
 

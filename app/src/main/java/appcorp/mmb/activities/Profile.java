@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -24,15 +23,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 import appcorp.mmb.GlobalFeed;
-import appcorp.mmb.Intermediates;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
-import appcorp.mmb.StylistFeed;
-import appcorp.mmb.adapter.GlobalFeedFragmentAdapter;
-import appcorp.mmb.dto.TapeDTO;
-import appcorp.mmb.loaders.Storage;
 
 public class Profile extends Activity {
 

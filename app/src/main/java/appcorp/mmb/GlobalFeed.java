@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.android.gms.tagmanager.DataLayer;
-import com.google.android.gms.tagmanager.TagManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
@@ -35,10 +33,11 @@ import appcorp.mmb.activities.InternetNotification;
 import appcorp.mmb.activities.Introduction;
 import appcorp.mmb.activities.MyProfile;
 import appcorp.mmb.activities.Options;
-import appcorp.mmb.activities.Profile;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.Support;
 import appcorp.mmb.adapter.GlobalFeedFragmentAdapter;
+import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.loaders.ProfileDataLoader;
 import appcorp.mmb.loaders.Storage;

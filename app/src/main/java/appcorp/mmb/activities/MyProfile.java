@@ -10,9 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import appcorp.mmb.GlobalFeed;
-import appcorp.mmb.Intermediates;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
-import appcorp.mmb.StylistFeed;
 
 public class MyProfile extends Activity {
 

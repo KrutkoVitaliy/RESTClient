@@ -2,7 +2,6 @@ package appcorp.mmb.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,9 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.R;
-import appcorp.mmb.SearchFeed;
-import appcorp.mmb.SearchStylistFeed;
-import appcorp.mmb.StylistFeed;
 import appcorp.mmb.loaders.Storage;
 
 public class Search extends Activity {

@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import appcorp.mmb.Intermediates;
+import appcorp.mmb.classes.Intermediates;
 
 public class ProfileDataLoader extends AsyncTask<Void, Void, String>{
 

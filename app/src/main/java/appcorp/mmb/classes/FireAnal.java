@@ -1,11 +1,11 @@
-package appcorp.mmb;
+package appcorp.mmb.classes;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class FireAnal{
+public class FireAnal {
 
     private static FirebaseAnalytics firebaseAnalytics;
     private static FireAnal instance = new FireAnal();
