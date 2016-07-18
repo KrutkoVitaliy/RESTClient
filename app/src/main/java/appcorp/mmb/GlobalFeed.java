@@ -54,14 +54,6 @@ public class GlobalFeed extends AppCompatActivity {
     private String photoURL, name, beauty;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        DataLayer dataLayer = TagManager.getInstance(this).getDataLayer();
-        dataLayer.pushEvent("Application ouverte", DataLayer.mapOf("login page", "un de plus"));
-        TagManager.getInstance(this).getDataLayer().push("qwe", "rty");
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
