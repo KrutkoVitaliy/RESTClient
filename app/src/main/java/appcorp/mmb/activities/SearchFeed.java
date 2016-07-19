@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.adapter.SearchFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchFragmentAdapter;
 import appcorp.mmb.dto.SearchDTO;
 
 public class SearchFeed extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package appcorp.mmb.fragment;
+package appcorp.mmb.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,17 +12,17 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.adapter.GlobalFeedListAdapter;
+import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
 import appcorp.mmb.dto.TapeDTO;
 
-public class GlobalFeedTapeFragment extends AbstractTabFragment{
+public class GlobalFeedFragment extends AbstractTabFragment{
 
     private List<TapeDTO> data;
     private GlobalFeedListAdapter adapter;
 
-    public static GlobalFeedTapeFragment getInstance(Context context, List<TapeDTO> data) {
+    public static GlobalFeedFragment getInstance(Context context, List<TapeDTO> data) {
         Bundle args = new Bundle();
-        GlobalFeedTapeFragment fragment = new GlobalFeedTapeFragment();
+        GlobalFeedFragment fragment = new GlobalFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
         fragment.setData(data);

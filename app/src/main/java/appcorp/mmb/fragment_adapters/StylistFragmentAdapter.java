@@ -1,4 +1,4 @@
-package appcorp.mmb.adapter;
+package appcorp.mmb.fragment_adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import appcorp.mmb.dto.StylistDTO;
-import appcorp.mmb.fragment.AbstractTabFragment;
-import appcorp.mmb.fragment.StylistFeedFragment;
+import appcorp.mmb.fragments.AbstractTabFragment;
+import appcorp.mmb.fragments.StylistFeedFragment;
 
 public class StylistFragmentAdapter extends FragmentPagerAdapter {
 

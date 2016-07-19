@@ -1,4 +1,4 @@
-package appcorp.mmb.fragment;
+package appcorp.mmb.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.adapter.SearchListAdapter;
-import appcorp.mmb.adapter.StylistListAdapter;
+import appcorp.mmb.list_adapters.StylistListAdapter;
 import appcorp.mmb.dto.StylistDTO;
 
 public class StylistFeedFragment extends AbstractTabFragment{

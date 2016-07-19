@@ -1,4 +1,4 @@
-package appcorp.mmb.adapter;
+package appcorp.mmb.fragment_adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -9,11 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import appcorp.mmb.dto.SearchDTO;
 import appcorp.mmb.dto.StylistDTO;
-import appcorp.mmb.fragment.AbstractTabFragment;
-import appcorp.mmb.fragment.SearchFeedFragment;
-import appcorp.mmb.fragment.SearchStylistFeedFragment;
+import appcorp.mmb.fragments.AbstractTabFragment;
+import appcorp.mmb.fragments.SearchStylistFeedFragment;
 
 public class SearchStylistFragmentAdapter extends FragmentPagerAdapter {
 

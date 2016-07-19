@@ -11,7 +11,6 @@ import appcorp.mmb.loaders.Storage;
 public class Intermediates {
 
     private static Intermediates instance = new Intermediates();
-    private static String userName, userPhotoURL;
 
     private Intermediates() {
 
@@ -107,21 +106,5 @@ public class Intermediates {
         else if ((current - temp) > 172800000 && (current - temp) <= 259200000)
             date = " 2 дня назад";
         return date;
-    }
-
-    public static String getUserName() {
-        return userName;
-    }
-
-    public static void setUserName(String userName) {
-        Intermediates.userName = userName;
-    }
-
-    public static String getUserPhotoURL() {
-        return userPhotoURL;
-    }
-
-    public static void setUserPhotoURL(String userPhotoURL) {
-        Intermediates.userPhotoURL = userPhotoURL;
     }
 }

@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.R;
 import appcorp.mmb.loaders.Storage;
 

@@ -1,4 +1,4 @@
-package appcorp.mmb.adapter;
+package appcorp.mmb.fragment_adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -9,20 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import appcorp.mmb.dto.TapeDTO;
-import appcorp.mmb.fragment.AbstractTabFragment;
-import appcorp.mmb.fragment.GlobalFeedTapeFragment;
+import appcorp.mmb.dto.SearchDTO;
+import appcorp.mmb.fragments.AbstractTabFragment;
+import appcorp.mmb.fragments.SearchFeedFragment;
 
-public class GlobalFeedFragmentAdapter extends FragmentPagerAdapter {
+public class SearchFragmentAdapter extends FragmentPagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
-    private List<TapeDTO> data;
-    private GlobalFeedTapeFragment globalFeedTapeFragment;
+    private List<SearchDTO> searchData;
+    private SearchFeedFragment shortTimeTapeFragment;
 
-    public GlobalFeedFragmentAdapter(Context context, FragmentManager fm, List<TapeDTO> data) {
+    public SearchFragmentAdapter(Context context, FragmentManager fm, List<SearchDTO> searchData) {
         super(fm);
-        this.data = data;
+        this.searchData = searchData;
         this.context = context;
         initTabsMap(context);
     }
@@ -44,12 +44,12 @@ public class GlobalFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
-        globalFeedTapeFragment = GlobalFeedTapeFragment.getInstance(context, data);
-        tabs.put(0, globalFeedTapeFragment);
+        shortTimeTapeFragment = SearchFeedFragment.getInstance(context, searchData);
+        tabs.put(0, shortTimeTapeFragment);
     }
 
-    public void setData(List<TapeDTO> data) {
-        this.data = data;
-        globalFeedTapeFragment.refreshData(data);
+    public void setData(List<SearchDTO> searchData) {
+        this.searchData = searchData;
+        shortTimeTapeFragment.refreshData(searchData);
     }
 }

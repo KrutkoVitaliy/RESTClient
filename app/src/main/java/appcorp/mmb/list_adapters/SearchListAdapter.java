@@ -1,4 +1,4 @@
-package appcorp.mmb.adapter;
+package appcorp.mmb.list_adapters;
 
 import android.content.Context;
 import android.content.Intent;

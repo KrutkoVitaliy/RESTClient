@@ -1,4 +1,4 @@
-package appcorp.mmb.fragment;
+package appcorp.mmb.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.adapter.SearchListAdapter;
+import appcorp.mmb.list_adapters.SearchListAdapter;
 import appcorp.mmb.dto.SearchDTO;
 
 public class SearchFeedFragment extends AbstractTabFragment{

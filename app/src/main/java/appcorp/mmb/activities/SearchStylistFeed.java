@@ -28,15 +28,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.Introduction;
-import appcorp.mmb.activities.Options;
-import appcorp.mmb.activities.Profile;
-import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
-import appcorp.mmb.adapter.SearchStylistFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchStylistFragmentAdapter;
 import appcorp.mmb.dto.StylistDTO;
 import appcorp.mmb.loaders.Storage;
 

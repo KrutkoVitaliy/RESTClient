@@ -1,4 +1,4 @@
-package appcorp.mmb.adapter;
+package appcorp.mmb.list_adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,15 +17,15 @@ import java.util.List;
 import appcorp.mmb.R;
 import appcorp.mmb.dto.StylistDTO;
 
-public class SearchStylistListAdapter extends RecyclerView.Adapter<SearchStylistListAdapter.SearchStylistViewHolder> {
+public class StylistListAdapter extends RecyclerView.Adapter<StylistListAdapter.StylistViewHolder> {
 
-    private List<StylistDTO> searchData;
+    private List<StylistDTO> data;
     private Context context;
     Display display;
     int width, height;
 
-    public SearchStylistListAdapter(List<StylistDTO> searchData, Context context) {
-        this.searchData = searchData;
+    public StylistListAdapter(List<StylistDTO> data, Context context) {
+        this.data = data;
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
@@ -34,37 +33,36 @@ public class SearchStylistListAdapter extends RecyclerView.Adapter<SearchStylist
     }
 
     @Override
-    public SearchStylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public StylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.stylist_item, parent, false);
-        return new SearchStylistViewHolder(view);
+        return new StylistViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final SearchStylistViewHolder holder, int position) {
-        final StylistDTO item = searchData.get(position);
-
+    public void onBindViewHolder(final StylistViewHolder holder, int position) {
+        final StylistDTO item = data.get(position);
 
         holder.name.setText(item.getAuthorName());
         holder.location.setText(item.getAuthorLocation());
-        holder.likes.setText("" + item.getLikes());
-        holder.followers.setText("" + item.getFollowers());
+        holder.likes.setText(""+item.getLikes());
+        holder.followers.setText(""+item.getFollowers());
         Picasso.with(context).load(item.getAuthorPhoto()).into(holder.photo);
     }
 
     @Override
     public int getItemCount() {
-        return searchData.size();
+        return data.size();
     }
 
-    public void setData(List<StylistDTO> searchData) {
-        this.searchData = searchData;
+    public void setData(List<StylistDTO> data) {
+        this.data = data;
     }
 
-    public static class SearchStylistViewHolder extends RecyclerView.ViewHolder {
+    public static class StylistViewHolder extends RecyclerView.ViewHolder {
         TextView name, location, likes, followers;
         ImageView photo;
 
-        public SearchStylistViewHolder(View itemView) {
+        public StylistViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.stylistName);
             location = (TextView) itemView.findViewById(R.id.stylistLocation);
@@ -73,5 +71,4 @@ public class SearchStylistListAdapter extends RecyclerView.Adapter<SearchStylist
             photo = (ImageView) itemView.findViewById(R.id.stylistPhoto);
         }
     }
-
 }

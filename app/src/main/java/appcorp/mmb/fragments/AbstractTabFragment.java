@@ -1,4 +1,4 @@
-package appcorp.mmb.fragment;
+package appcorp.mmb.fragments;
 
 import android.support.v4.app.Fragment;
 import android.content.Context;

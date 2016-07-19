@@ -3,13 +3,9 @@ package appcorp.mmb.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +16,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.R;
 import appcorp.mmb.loaders.Storage;
 

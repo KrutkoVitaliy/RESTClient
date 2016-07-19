@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import appcorp.mmb.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 

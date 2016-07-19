@@ -1,4 +1,4 @@
-package appcorp.mmb;
+package appcorp.mmb.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -25,14 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.InternetNotification;
-import appcorp.mmb.activities.Introduction;
-import appcorp.mmb.activities.MyProfile;
-import appcorp.mmb.activities.Options;
-import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
-import appcorp.mmb.adapter.GlobalFeedFragmentAdapter;
+import appcorp.mmb.R;
+import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.TapeDTO;
