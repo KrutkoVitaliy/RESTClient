@@ -23,6 +23,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.SearchFeed;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.TapeDTO;
 
 public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAdapter.TapeViewHolder> {
@@ -50,9 +51,9 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
         final TapeDTO item = data.get(position);
 
-        final String SHOW = convertToString(R.string.show_more_container);
-        final String HIDE = convertToString(R.string.hide_more_container);
-        
+        final String SHOW = Intermediates.convertToString(context,R.string.show_more_container);
+        final String HIDE = Intermediates.convertToString(context,R.string.hide_more_container);
+
         holder.title.setText(item.getAuthor());
         holder.availableDate.setText(item.getAvailableDate());
         holder.likesCount.setText("" + item.getLikes());
@@ -102,7 +103,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             screenShot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (holder.showMore.getText().equals(""+SHOW)) {
+                    if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("screenshot", "http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getImages().get(finalI));
@@ -139,9 +140,9 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(convertToString(R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context,R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
                     moreContainer.addView(createImage(item.getEye_color()));
-                    moreContainer.addView(createText(convertToString(R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context,R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     if (item.getColors().contains("pink"))
@@ -173,7 +174,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
-                    moreContainer.addView(createText(convertToString(R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context ,R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
                     moreContainer.addView(difficult(item.getDifficult()));
                     TextView occasion = createText(item.getOccasion(), Typeface.DEFAULT, 16);
                     if(item.getOccasion().equals("everyday"))
@@ -203,12 +204,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                 }
             }
         });
-    }
-
-    private String convertToString(int r) {
-        TextView textView = new TextView(context);
-        textView.setText(r);
-        return textView.getText().toString();
     }
 
     private TextView createText(String title, Typeface tf, int padding) {

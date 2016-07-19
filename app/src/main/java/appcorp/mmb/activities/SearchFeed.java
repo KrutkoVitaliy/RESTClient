@@ -63,17 +63,10 @@ public class SearchFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.searchToolbar);
-        toolbar.setTitle("#"+request);
-        /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
-                startActivity(intent);
-                return true;
-            }
-        });
-        toolbar.inflateMenu(R.menu.menu);*/
+        if (!request.equals(""))
+            toolbar.setTitle("#" + request);
+        else
+            toolbar.setTitle(R.string.toolbar_title_search);
     }
 
     private void initNavigationView() {
@@ -112,7 +105,7 @@ public class SearchFeed extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL profileURL = new URL("http://195.88.209.17/search/index.php?request="+request);
+                URL profileURL = new URL("http://195.88.209.17/search/index.php?request=" + request);
                 searchConnection = (HttpURLConnection) profileURL.openConnection();
                 searchConnection.setRequestMethod("GET");
                 searchConnection.connect();

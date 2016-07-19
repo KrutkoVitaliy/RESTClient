@@ -1,8 +1,11 @@
 package appcorp.mmb.classes;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.TextView;
 
 import java.text.DateFormatSymbols;
 
@@ -106,5 +109,11 @@ public class Intermediates {
         else if ((current - temp) > 172800000 && (current - temp) <= 259200000)
             date = " 2 дня назад";
         return date;
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 }
