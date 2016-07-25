@@ -121,16 +121,16 @@ public class GlobalFeed extends AppCompatActivity {
                                 .putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuMakeup:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;
                     case R.id.navMenuHairstyle:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
                         break;
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
                     case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
                         if (name != null)
