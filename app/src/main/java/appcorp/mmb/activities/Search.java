@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
+import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.loaders.Storage;
 
 public class Search extends Activity {

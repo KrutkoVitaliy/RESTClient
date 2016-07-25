@@ -17,6 +17,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.loaders.Storage;
 
 public class Introduction extends Activity {

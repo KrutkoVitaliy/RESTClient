@@ -20,20 +20,21 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
-import appcorp.mmb.dto.TapeDTO;
+import appcorp.mmb.dto.ManicureDTO;
 
-public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAdapter.TapeViewHolder> {
+public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedListAdapter.TapeViewHolder> {
 
-    private List<TapeDTO> data;
+    private List<ManicureDTO> data;
     private Context context;
     Display display;
     int width, height;
 
-    public GlobalFeedListAdapter(List<TapeDTO> data, Context context) {
+    public ManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
         this.data = data;
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -49,16 +50,21 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final TapeDTO item = data.get(position);
+        final ManicureDTO item = data.get(position);
+
+        if (position == data.size() - 1) {
+            if (data.size()-1 % 100 != 8)
+                ManicureFeed.addFeed(data.size() / 100 + 1);
+        }
 
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
-        holder.title.setText(item.getAuthor());
+        holder.title.setText(item.getAuthorName());
         holder.availableDate.setText(item.getAvailableDate());
         holder.likesCount.setText("" + item.getLikes());
 
-        Picasso.with(context).load("http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +103,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -107,7 +113,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getImages().get(finalI));
+                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
                         context.startActivity(intent);
                     }
                 }
@@ -141,8 +147,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
-                    moreContainer.addView(createImage(item.getEye_color()));
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
@@ -175,28 +179,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
-                    moreContainer.addView(difficult(item.getDifficult()));
-                    TextView occasion = createText(item.getOccasion(), Typeface.DEFAULT, 16);
-                    if (item.getOccasion().equals("everyday"))
-                        occasion.setText(R.string.occasion_everyday);
-                    else if (item.getOccasion().equals("celebrity"))
-                        occasion.setText(R.string.occasion_celebrity);
-                    else if (item.getOccasion().equals("dramatic"))
-                        occasion.setText(R.string.occasion_dramatic);
-                    else if (item.getOccasion().equals("holiday"))
-                        occasion.setText(R.string.occasion_holiday);
-
-                    occasion.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, Search.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("hashTag", item.getOccasion());
-                            context.startActivity(intent);
-                        }
-                    });
-                    moreContainer.addView(occasion);
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -325,7 +307,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         return data.size();
     }
 
-    public void setData(List<TapeDTO> data) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
     }
 

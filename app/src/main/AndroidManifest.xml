@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     package="appcorp.mmb">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,14 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.GlobalFeed"
+            android:name=".activities.feeds.GlobalFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FullscreenPreview"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".activities.SearchFeed"
+            android:name=".activities.search_feeds.SearchFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Search"
@@ -49,10 +49,10 @@
             android:name=".activities.InternetNotification"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.StylistFeed"
+            android:name=".activities.feeds.StylistFeed"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.SearchStylistFeed"
+            android:name=".activities.search_feeds.SearchStylistFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MyProfile"
@@ -60,8 +60,11 @@
         <activity android:name=".StartApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.feeds.ManicureFeed"></activity>
     </application>
+
 </manifest>

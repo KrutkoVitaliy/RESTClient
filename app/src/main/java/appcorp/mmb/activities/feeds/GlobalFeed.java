@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.feeds;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,6 +26,13 @@ import java.util.Date;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.Favorites;
+import appcorp.mmb.activities.InternetNotification;
+import appcorp.mmb.activities.Introduction;
+import appcorp.mmb.activities.MyProfile;
+import appcorp.mmb.activities.Options;
+import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.Support;
 import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
@@ -48,6 +55,8 @@ public class GlobalFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_global_feed);
 
+        //adMob();
+
         if (!Intermediates.isConnected(getApplicationContext())) {
             startActivity(new Intent(getApplicationContext(), InternetNotification.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
@@ -67,6 +76,13 @@ public class GlobalFeed extends AppCompatActivity {
         initViewPager();
 
         new GlobalFeedLoader().execute();
+    }
+
+    private void adMob() {
+        //MobileAds.initialize(getApplicationContext(), "ca-app-pub-4151792091524133/8805221291");
+        //AdView mAdView = (AdView) findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //mAdView.loadAd(adRequest);
     }
 
     private void initToolbar() {
@@ -111,7 +127,7 @@ public class GlobalFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuManicure:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
                     case R.id.navMenuLips:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
@@ -158,7 +174,8 @@ public class GlobalFeed extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL(Intermediates.URL.GET_FEED);
+                //URL feedURL = new URL(Intermediates.URL.GET_FEED);
+                URL feedURL = new URL("http://195.88.209.17/app/out/manicure1.html");
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -191,7 +208,7 @@ public class GlobalFeed extends AppCompatActivity {
                     List<String> images = new ArrayList<>();
                     List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 1; j < 11; j++)
+                    for (int j = 0; j < 10; j++)
                         if (!item.getString("screen" + j).equals("empty"))
                             images.add(item.getString("screen" + j));
 

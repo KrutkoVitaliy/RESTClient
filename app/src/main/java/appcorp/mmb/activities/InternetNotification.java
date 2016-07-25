@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 

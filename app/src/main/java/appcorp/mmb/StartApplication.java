@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import appcorp.mmb.activities.GlobalFeed;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 
 public class StartApplication extends Activity {
 

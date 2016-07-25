@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.search_feeds;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

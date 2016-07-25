@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 
