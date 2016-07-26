@@ -3,6 +3,7 @@ package appcorp.mmb.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.GlobalFeed;
@@ -47,8 +61,8 @@ public class Introduction extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         //startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                //.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        //.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     private void auth() {
@@ -99,6 +113,8 @@ public class Introduction extends Activity {
             Storage.Add("Name", name);
             Storage.Add("PhotoURL", photoURL);
 
+            new SendUserData(email, name, photoURL).execute();
+
             finish();
             startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
@@ -106,6 +122,42 @@ public class Introduction extends Activity {
             //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
         } else {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public class SendUserData extends AsyncTask<Void, Void, String> {
+        HttpURLConnection userAddConnection = null;
+        BufferedReader userAddReader = null;
+        String name, email, photo;
+
+        String resultJsonSearch = "";
+
+        public SendUserData(String email, String name, String photo) {
+            this.email = email;
+            this.name = name;
+            this.photo = photo;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                name = name.replace(" ", "%20");
+                URL feedURL = new URL("http://195.88.209.17/app/in/user.php?name="+name+"&photo="+photo+"&email="+email);
+                userAddConnection = (HttpURLConnection) feedURL.openConnection();
+                userAddConnection.setRequestMethod("GET");
+                userAddConnection.connect();
+                InputStream inputStream = userAddConnection.getInputStream();
+                userAddReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer profileBuffer = new StringBuffer();
+                String profileLine;
+                while ((profileLine = userAddReader.readLine()) != null) {
+                    profileBuffer.append(profileLine);
+                }
+                resultJsonSearch = profileBuffer.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonSearch;
         }
     }
 }

@@ -11,7 +11,9 @@ public class StartApplication extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+        //setContentView(R.layout.activity_start);
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 }

@@ -64,7 +64,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         holder.availableDate.setText(item.getAvailableDate());
         holder.likesCount.setText("" + item.getLikes());
 
-        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +103,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -113,7 +113,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                        intent.putExtra("screenshot", "http://185.158.112.18/storage/images/" + item.getImages().get(finalI));
                         context.startActivity(intent);
                     }
                 }
