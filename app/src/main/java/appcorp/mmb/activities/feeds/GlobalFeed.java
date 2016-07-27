@@ -53,7 +53,7 @@ public class GlobalFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_global_feed);
+        setContentView(R.layout.global_feed);
 
         //adMob();
 
@@ -135,9 +135,9 @@ public class GlobalFeed extends AppCompatActivity {
                     case R.id.navMenuProfile:
                         if (name != null)
                             startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                                    .putExtra("Name", name)
-                                    .putExtra("PhotoURL", photoURL)
-                                    .putExtra("From", "NavMenu"));
+                                    .putExtra("E-mail", Storage.Get("E-mail"))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         else
                             startActivity(new Intent(getApplicationContext(), Introduction.class));
                         break;
@@ -175,7 +175,7 @@ public class GlobalFeed extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try {
                 //URL feedURL = new URL(Intermediates.URL.GET_FEED);
-                URL feedURL = new URL("http://195.88.209.17/app/out/manicure1.html");
+                URL feedURL = new URL("http://195.88.209.17/app/static/makeup1.html");
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -209,21 +209,21 @@ public class GlobalFeed extends AppCompatActivity {
                     List<String> hashTags = new ArrayList<>();
 
                     for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty"))
+                        if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
                     id = item.getLong("id");
-                    tempDate = item.getLong("availableDate");
+                    tempDate = item.getLong("uploadDate");
                     colors = item.getString("colors");
                     difficult = item.getString("difficult");
-                    eye_color = item.getString("eye_color");
+                    eye_color = item.getString("eyeColor");
                     likes = item.getLong("likes");
                     occasion = item.getString("occasion");
-                    publicate = item.getString("publicate");
+                    publicate = item.getString("published");
                     tags = item.getString("tags");
-                    sid = item.getLong("sid");
                     authorPhoto = item.getString("authorPhoto");
                     authorName = item.getString("authorName");
+                    sid = item.getLong("sid");
 
                     String[] tempTags = tags.split(",");
                     for (int j = 0; j < tempTags.length; j++) {
@@ -252,7 +252,5 @@ public class GlobalFeed extends AppCompatActivity {
             if (word == null || word.isEmpty()) return "";
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
-
-
     }
 }

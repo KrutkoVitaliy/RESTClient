@@ -36,9 +36,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
     public GlobalFeedListAdapter(List<TapeDTO> data, Context context) {
         this.data = data;
         this.context = context;
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
     }
 
     @Override
@@ -50,6 +47,9 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
         final TapeDTO item = data.get(position);
+        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
 
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
@@ -58,7 +58,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         holder.availableDate.setText(item.getAvailableDate());
         holder.likesCount.setText("" + item.getLikes());
 
-        Picasso.with(context).load("http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +97,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -107,7 +107,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/" + item.getImages().get(finalI));
+                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
                         context.startActivity(intent);
                     }
                 }
