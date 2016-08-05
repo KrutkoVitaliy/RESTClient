@@ -21,11 +21,12 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="96dp">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Не удалось подключиться к интернету\nПроверьте ваше интернет-соединение"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"/>
         <Button
             android:id="@+id/reconnect"
             android:layout_width="wrap_content"

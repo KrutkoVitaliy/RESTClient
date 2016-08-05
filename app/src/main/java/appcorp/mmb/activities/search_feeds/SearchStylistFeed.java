@@ -30,15 +30,17 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.Introduction;
-import appcorp.mmb.activities.Options;
+import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.Profile;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
 import appcorp.mmb.activities.feeds.GlobalFeed;
+import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.fragment_adapters.SearchStylistFragmentAdapter;
 import appcorp.mmb.dto.StylistDTO;
-import appcorp.mmb.loaders.Storage;
+import appcorp.mmb.classes.Storage;
 
 public class SearchStylistFeed extends AppCompatActivity {
 
@@ -54,12 +56,9 @@ public class SearchStylistFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_stylist_feed);
-        Storage.Init(getApplicationContext());
 
-        if (Storage.Get("Autentification").equals("Success")) {
-            name = Storage.Get("Name");
-            photoURL = Storage.Get("PhotoURL");
-        }
+        name = Storage.getString("Name", "Make Me Beauty");
+        photoURL = Storage.getString("PhotoURL", ""+R.mipmap.icon);
 
         requestCity = getIntent().getStringExtra("City").replace(" ", "%20");
         requestSkill = getIntent().getStringExtra("Skill");
@@ -69,6 +68,11 @@ public class SearchStylistFeed extends AppCompatActivity {
         initViewPager();
 
         new SearchStylistLoad().execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
     }
 
     private void initToolbar() {
@@ -111,7 +115,7 @@ public class SearchStylistFeed extends AppCompatActivity {
                             .putExtra("PhotoURL", photoURL)
                             .putExtra("From", "NavHeader"));
                 else
-                    startActivity(new Intent(getApplicationContext(), Introduction.class)
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -139,25 +143,30 @@ public class SearchStylistFeed extends AppCompatActivity {
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
+                        break;
+                    case R.id.navMenuHairstyle:
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                        break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                        break;
+                    case R.id.navMenuLips:
+                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
+                        break;
                     case R.id.navMenuProfile:
                         if (name != null)
                             startActivity(new Intent(getApplicationContext(), Profile.class)
-
                                     .putExtra("Name", name)
                                     .putExtra("PhotoURL", photoURL)
                                     .putExtra("From", "NavMenu"));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class)
+                            startActivity(new Intent(getApplicationContext(), Authorization.class)
                                     );
                         break;
                     case R.id.navMenuFavorites:
                         startActivity(new Intent(getApplicationContext(), Favorites.class));
-                        break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
                         break;
                 }
                 return true;

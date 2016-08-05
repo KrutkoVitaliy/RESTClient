@@ -1,5 +1,5 @@
 <resources>
-    <string name="banner_ad_unit_id">ca-app-pub-4151792091524133/8805221291</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4151792091524133/8805221291</string>
 
     <!-- MAIN VALUES -->
     <string name="app_name">Make Me Beauty</string>
@@ -21,6 +21,13 @@
         <item>Celebrity</item>
         <item>Dramatic</item>
         <item>Holiday</item>
+    </string-array>
+
+    <!-- VALUES FROM CATEGORY FIELD -->
+    <string-array name="searchTypes">
+        <item>Makeup</item>
+        <!--<item>Hairstyle</item>-->
+        <item>Manicure</item>
     </string-array>
 
     <!-- VALUES FROM NAVIGATION MENU -->
@@ -47,6 +54,8 @@
     <string name="title_eye_color">Eye color</string>
     <string name="title_used_colors">Used colors</string>
     <string name="title_difficult">Difficult</string>
+    <string name="title_shape">Shape</string>
+    <string name="title_design">Design</string>
     <!-- EYE COLORS -->
     <string name="blue_eyes">Blue eyes</string>
     <string name="brown_eyes">Brown eyes</string>
@@ -63,4 +72,6 @@
     <string name="difficult_easy">Easy difficult</string>
     <string name="difficult_medium">Medium difficult</string>
     <string name="difficult_hard">Hard difficult</string>
+    <string name="account_hint_unsigned">Click to sign in</string>
+    <string name="account_hint_signed">Click to open profile</string>
 </resources>

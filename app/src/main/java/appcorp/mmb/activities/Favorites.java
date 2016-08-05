@@ -11,6 +11,10 @@ import android.view.MenuItem;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.GlobalFeed;
+import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
 
 public class Favorites extends Activity {
 
@@ -25,6 +29,12 @@ public class Favorites extends Activity {
         initToolbar();
         initNavigationView();
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+    }
+
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.favoritesToolbar);
@@ -61,15 +71,20 @@ public class Favorites extends Activity {
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
+                        break;
+                    case R.id.navMenuHairstyle:
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                        break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                        break;
+                    case R.id.navMenuLips:
+                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
+                        break;
                     case R.id.navMenuProfile:
                         startActivity(new Intent(getApplicationContext(), MyProfile.class));
-                        break;
-                    case R.id.navMenuFavorites: break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
                         break;
                 }
                 return true;

@@ -60,8 +60,10 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
+        String[] date = item.getAvailableDate().split("");
+
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(item.getAvailableDate());
+        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
@@ -147,6 +149,8 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createImage(item.getEye_color()));
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
@@ -179,6 +183,29 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
+
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(difficult(item.getDifficult()));
+                    TextView occasion = createText(item.getOccasion(), Typeface.DEFAULT, 16);
+                    if (item.getOccasion().equals("everyday"))
+                        occasion.setText(R.string.occasion_everyday);
+                    else if (item.getOccasion().equals("celebrity"))
+                        occasion.setText(R.string.occasion_celebrity);
+                    else if (item.getOccasion().equals("dramatic"))
+                        occasion.setText(R.string.occasion_dramatic);
+                    else if (item.getOccasion().equals("holiday"))
+                        occasion.setText(R.string.occasion_holiday);
+
+                    occasion.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, Search.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("hashTag", item.getOccasion());
+                            context.startActivity(intent);
+                        }
+                    });
+                    moreContainer.addView(occasion);
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {

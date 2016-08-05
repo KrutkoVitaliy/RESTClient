@@ -9,9 +9,7 @@ public class HairstyleDTO {
     private String authorName;
     private String authorPhoto;
     private String availableDate;
-    private String colors;
     private String hairstyleType;
-    private String design;
     private long likes;
     private List<String> images = new ArrayList<>();
     private List<String> hashTags = new ArrayList<>();
@@ -20,17 +18,15 @@ public class HairstyleDTO {
 
     }
 
-    public HairstyleDTO(long id, String availableDate, String authorName, String authorPhoto, String hairstyleType, String design, List<String> images, String colors, List<String> hashTags, long likes) {
+    public HairstyleDTO(long id, String availableDate, String authorName, String authorPhoto, String hairstyleType, List<String> images, List<String> hashTags, long likes) {
         this.id = id;
         this.availableDate = availableDate;
         this.images = images;
-        this.colors = colors;
         this.hashTags = hashTags;
         this.likes = likes;
         this.authorPhoto = authorPhoto;
         this.authorName = authorName;
         this.hairstyleType = hairstyleType;
-        this.design = design;
     }
 
     public long getId() {
@@ -55,14 +51,6 @@ public class HairstyleDTO {
 
     public void setImages(List<String> imageURL) {
         this.images = imageURL;
-    }
-
-    public String getColors() {
-        return colors;
-    }
-
-    public void setColors(String colors) {
-        this.colors = colors;
     }
 
     public List<String> getHashTags() {
@@ -103,13 +91,5 @@ public class HairstyleDTO {
 
     public void setHairstyleType(String hairstyleType) {
         this.hairstyleType = hairstyleType;
-    }
-
-    public String getDesign() {
-        return design;
-    }
-
-    public void setDesign(String design) {
-        this.design = design;
     }
 }

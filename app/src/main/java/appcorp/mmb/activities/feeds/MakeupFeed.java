@@ -9,13 +9,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Options;
+import appcorp.mmb.activities.Authorization;
+import appcorp.mmb.activities.Favorites;
+import appcorp.mmb.activities.MyProfile;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 import appcorp.mmb.loaders.MakeupFeedLoader;
@@ -29,7 +36,6 @@ public class MakeupFeed extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
 
@@ -40,19 +46,24 @@ public class MakeupFeed extends AppCompatActivity {
         new MakeupFeedLoader(adapter, 1).execute();
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+    }
+
     public static void addFeed(int position) {
         new MakeupFeedLoader(adapter, position).execute();
     }
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.makeupToolbar);
-        //toolbar.setTitle(R.string.menu_item_makeup);
-        toolbar.setTitle("dsfsdfsdfsdf");
+        toolbar.setTitle(R.string.menu_item_makeup);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getApplicationContext(), Search.class);
                 intent.putExtra("hashTag", "empty");
+                intent.putExtra("from", "makeupFeed");
                 startActivity(intent);
                 return true;
             }
@@ -66,7 +77,8 @@ public class MakeupFeed extends AppCompatActivity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.makeupNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.makeupNavigation);
+        initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -74,13 +86,11 @@ public class MakeupFeed extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
-                        break;
-                    case R.id.navMenuMakeup:
-                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
@@ -92,19 +102,45 @@ public class MakeupFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                            startActivity(new Intent(getApplicationContext(), MyProfile.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-                        break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
+                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                            startActivity(new Intent(getApplicationContext(), Favorites.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText("Click to open profile");
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText("Click to sign in");
+        }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
+
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }

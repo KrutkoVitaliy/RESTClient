@@ -7,11 +7,12 @@ public class MakeupDTO {
 
     private long id;
     private String authorName;
-    private String authorPhoto;
     private String availableDate;
     private String colors;
-    private String shape;
-    private String design;
+    private String eye_color;
+    private String occasion;
+    private String difficult;
+    private String authorPhoto;
     private long likes;
     private List<String> images = new ArrayList<>();
     private List<String> hashTags = new ArrayList<>();
@@ -20,17 +21,18 @@ public class MakeupDTO {
 
     }
 
-    public MakeupDTO(long id, String availableDate, String authorName, String authorPhoto, String shape, String design, List<String> images, String colors, List<String> hashTags, long likes) {
+    public MakeupDTO(long id, String availableDate, String authorName, String authorPhoto, List<String> images, String colors, String eye_color, String occasion, String difficult, List<String> hashTags, long likes) {
         this.id = id;
         this.availableDate = availableDate;
+        this.authorName = authorName;
         this.images = images;
         this.colors = colors;
+        this.eye_color = eye_color;
+        this.occasion = occasion;
+        this.difficult = difficult;
         this.hashTags = hashTags;
         this.likes = likes;
         this.authorPhoto = authorPhoto;
-        this.authorName = authorName;
-        this.shape = shape;
-        this.design = design;
     }
 
     public long getId() {
@@ -41,20 +43,20 @@ public class MakeupDTO {
         this.id = id;
     }
 
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String author) {
+        this.authorName = author;
+    }
+
     public String getAvailableDate() {
         return availableDate;
     }
 
     public void setAvailableDate(String availableDate) {
         this.availableDate = availableDate;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> imageURL) {
-        this.images = imageURL;
     }
 
     public String getColors() {
@@ -65,20 +67,28 @@ public class MakeupDTO {
         this.colors = colors;
     }
 
-    public List<String> getHashTags() {
-        return hashTags;
+    public String getEye_color() {
+        return eye_color;
     }
 
-    public void setHashTags(List<String> hashTags) {
-        this.hashTags = hashTags;
+    public void setEye_color(String eye_color) {
+        this.eye_color = eye_color;
     }
 
-    public long getLikes() {
-        return likes;
+    public String getOccasion() {
+        return occasion;
     }
 
-    public void setLikes(long likes) {
-        this.likes = likes;
+    public void setOccasion(String occasion) {
+        this.occasion = occasion;
+    }
+
+    public String getDifficult() {
+        return difficult;
+    }
+
+    public void setDifficult(String difficult) {
+        this.difficult = difficult;
     }
 
     public String getAuthorPhoto() {
@@ -89,27 +99,27 @@ public class MakeupDTO {
         this.authorPhoto = authorPhoto;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public long getLikes() {
+        return likes;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setLikes(long likes) {
+        this.likes = likes;
     }
 
-    public String getShape() {
-        return shape;
+    public List<String> getImages() {
+        return images;
     }
 
-    public void setShape(String shape) {
-        this.shape = shape;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
-    public String getDesign() {
-        return design;
+    public List<String> getHashTags() {
+        return hashTags;
     }
 
-    public void setDesign(String design) {
-        this.design = design;
+    public void setHashTags(List<String> hashTags) {
+        this.hashTags = hashTags;
     }
 }

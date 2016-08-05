@@ -21,6 +21,13 @@
         <item>Праздничный</item>
     </string-array>
 
+    <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ЧТО ИЩЕМ" -->
+    <string-array name="searchTypes">
+        <item>Макияж</item>
+        <!--<item>Прически</item>-->
+        <item>Маникюр</item>
+    </string-array>
+
     <!-- ЗНАЧЕНИЯ ДЛЯ МЕНЮ НАВИГАЦИИ -->
     <string name="menu_item_feed">Лента</string>
     <string name="menu_item_news">Новости</string>
@@ -39,6 +46,8 @@
     <string name="title_eye_color">Цвет глаз</string>
     <string name="title_used_colors">Используемые цвета</string>
     <string name="title_difficult">Сложность</string>
+    <string name="title_shape">Форма ногтей</string>
+    <string name="title_design">Дизайн ногтей</string>
     <!-- ЦВЕТ ГЛАЗ -->
     <string name="blue_eyes">Голубой цвет глаз</string>
     <string name="brown_eyes">Карие глаза</string>
@@ -61,4 +70,6 @@
     <string name="menu_item_hot">Набирающее популярность</string>
     <string name="menu_item_hairstyle">Прически</string>
     <string name="menu_item_style_types">Красота</string>
+    <string name="account_hint_signed">Открыть профиль</string>
+    <string name="account_hint_unsigned">Войти в аккаунт</string>
 </resources>

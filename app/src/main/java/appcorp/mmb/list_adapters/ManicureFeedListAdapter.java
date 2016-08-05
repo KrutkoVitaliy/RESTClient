@@ -60,8 +60,10 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
+        String[] date = item.getAvailableDate().split("");
+
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(item.getAvailableDate());
+        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
@@ -179,6 +181,43 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
+                    if(item.getShape().equals("square"))
+                        moreContainer.addView(createText("Форма ногтей: Квадратная форма", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getShape().equals("oval"))
+                        moreContainer.addView(createText("Форма ногтей: Овальная форма", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getShape().equals("stiletto"))
+                        moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16));
+
+                    if(item.getDesign().equals("french_classic"))
+                        moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_chevron"))
+                        moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_millennium"))
+                        moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_fun"))
+                        moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_crystal"))
+                        moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_colorful"))
+                        moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_designer"))
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_spa"))
+                        moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("french_moon"))
+                        moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("art"))
+                        moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("designer"))
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("volume"))
+                        moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("aqua"))
+                        moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("american"))
+                        moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if(item.getDesign().equals("photo"))
+                        moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -244,7 +283,6 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         });
         return imageView;
     }
-
 
     String colorName;
 

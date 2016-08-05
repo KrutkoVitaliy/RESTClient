@@ -58,9 +58,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Se
         final String SHOW = Intermediates.convertToString(context,R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context,R.string.hide_more_container);
 
+        String[] date = item.getAvailableDate().split("");
+
         holder.title.setText(item.getAuthor());
-        String s = item.getAvailableDate().toString();
-        holder.availableDate.setText(s);
+        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         Picasso.with(context).load("http://195.88.209.17:8080/mmbcontent/Storage/Screenshots/"+item.getAuthorPhoto()).into(holder.user_avatar);

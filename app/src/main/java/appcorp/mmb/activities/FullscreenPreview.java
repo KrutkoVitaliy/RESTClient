@@ -36,4 +36,9 @@ public class FullscreenPreview extends Activity {
         int width = display.getWidth();
         int height = display.getHeight();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

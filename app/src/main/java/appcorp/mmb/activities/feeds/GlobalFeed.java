@@ -10,6 +10,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,25 +26,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.InternetNotification;
-import appcorp.mmb.activities.Introduction;
 import appcorp.mmb.activities.MyProfile;
-import appcorp.mmb.activities.Options;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
-import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.TapeDTO;
-import appcorp.mmb.loaders.ProfileDataLoader;
-import appcorp.mmb.loaders.Storage;
+import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 
 public class GlobalFeed extends AppCompatActivity {
 
@@ -47,42 +48,18 @@ public class GlobalFeed extends AppCompatActivity {
     private ViewPager viewPager;
     private GlobalFeedFragmentAdapter adapter;
 
-    private String photoURL, name;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_feed);
-
-        //adMob();
-
-        if (!Intermediates.isConnected(getApplicationContext())) {
-            startActivity(new Intent(getApplicationContext(), InternetNotification.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        }
-
-        Storage.Init(getApplicationContext());
-
-        if (Intermediates.getData(getApplicationContext(), "Autentification").equals("Success")) {
-            name = Storage.Get("Name");
-            photoURL = Storage.Get("PhotoURL");
-        }
-
-        FireAnal.setContext(getApplicationContext());
-        FireAnal.sendString("1", "Open", "GlobalFeed");
-
         initToolbar();
         initNavigationView();
         initViewPager();
 
-        new GlobalFeedLoader().execute();
-    }
+        if (!Intermediates.isConnected(getApplicationContext()))
+            startActivity(new Intent(getApplicationContext(), InternetNotification.class));
 
-    private void adMob() {
-        //MobileAds.initialize(getApplicationContext(), "ca-app-pub-4151792091524133/8805221291");
-        //AdView mAdView = (AdView) findViewById(R.id.adView);
-        //AdRequest adRequest = new AdRequest.Builder().build();
-        //mAdView.loadAd(adRequest);
+        FireAnal.sendString("1", "Open", "GlobalFeed");
     }
 
     private void initToolbar() {
@@ -91,13 +68,10 @@ public class GlobalFeed extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                 return true;
             }
         });
-
         toolbar.inflateMenu(R.menu.menu);
     }
 
@@ -107,18 +81,16 @@ public class GlobalFeed extends AppCompatActivity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.navigation);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    case R.id.navMenuGlobalFeed:
-                        break;
                     case R.id.navMenuSearch:
-                        startActivity(new Intent(getApplicationContext(), Search.class)
-                                .putExtra("hashTag", "empty"));
+                        startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
@@ -133,28 +105,45 @@ public class GlobalFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
-                        if (name != null)
-                            startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                                    .putExtra("E-mail", Storage.Get("E-mail"))
-                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                            startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class));
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (name != null)
+                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class));
-                        break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText(R.string.account_hint_signed);
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText(R.string.account_hint_unsigned);
+        }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
+
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }
@@ -163,94 +152,5 @@ public class GlobalFeed extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new GlobalFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<TapeDTO>());
         viewPager.setAdapter(adapter);
-    }
-
-    public class GlobalFeedLoader extends AsyncTask<Void, Void, String> {
-
-        HttpURLConnection urlFeedConnection = null;
-        BufferedReader reader = null;
-        String resultJsonFeed = "";
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                //URL feedURL = new URL(Intermediates.URL.GET_FEED);
-                URL feedURL = new URL("http://195.88.209.17/app/static/makeup1.html");
-                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                urlFeedConnection.setRequestMethod("GET");
-                urlFeedConnection.connect();
-                InputStream inputStream = urlFeedConnection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
-                String line;
-                while ((line = reader.readLine()) != null)
-                    buffer.append(line);
-                resultJsonFeed = buffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            long id, sid, likes, tempDate, currentDate = System.currentTimeMillis();
-            List<TapeDTO> data = new ArrayList<>();
-            String availableDate, colors, difficult, eye_color, occasion, tags, authorPhoto, authorName, authorLastname, publicate;
-
-            try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
-
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
-
-                    id = item.getLong("id");
-                    tempDate = item.getLong("uploadDate");
-                    colors = item.getString("colors");
-                    difficult = item.getString("difficult");
-                    eye_color = item.getString("eyeColor");
-                    likes = item.getLong("likes");
-                    occasion = item.getString("occasion");
-                    publicate = item.getString("published");
-                    tags = item.getString("tags");
-                    authorPhoto = item.getString("authorPhoto");
-                    authorName = item.getString("authorName");
-                    sid = item.getLong("sid");
-
-                    String[] tempTags = tags.split(",");
-                    for (int j = 0; j < tempTags.length; j++) {
-                        hashTags.add(tempTags[j]);
-                    }
-
-                    new ProfileDataLoader(sid, getApplicationContext()).execute();
-
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                    availableDate = simpleDateFormat.format(new Date(tempDate));
-                    if ((currentDate - tempDate) <= 259200000)
-                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);
-
-                    if (publicate.equals("t")) {
-                        TapeDTO tapeDTO = new TapeDTO(id, sid, availableDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
-                        data.add(tapeDTO);
-                    }
-                }
-                adapter.setData(data);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private String upperCaseFirst(String word) {
-            if (word == null || word.isEmpty()) return "";
-            return word.substring(0, 1).toUpperCase() + word.substring(1);
-        }
     }
 }

@@ -106,10 +106,27 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Введите запрос"
+                        android:text="Что ищем"
                         android:textSize="8pt"
                         android:textStyle="bold"
-                        android:textColor="@color/description_title"/>
+                        android:textColor="@color/description_title"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"/>
+                    <Spinner
+                        android:id="@+id/searchType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/searchTypes"
+                        android:spinnerMode="dialog">
+                    </Spinner>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Теги (через запятую)"
+                        android:textSize="8pt"
+                        android:textStyle="bold"
+                        android:textColor="@color/description_title"
+                        android:paddingTop="8dp"/>
                     <EditText
                         android:id="@+id/requestField"
                         android:layout_width="match_parent"
@@ -132,169 +149,284 @@
                         android:orientation="horizontal"
                         android:gravity="center">
                         <ImageView
-                            android:id="@+id/pinkCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#bb125b"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/purpleCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#9210ae"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/blueCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#117dae"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/tealCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#3b9670"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/greenCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#79bd14"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/yellowCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#d4b515"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/orangeCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#d46915"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-                        <ImageView
-                            android:id="@+id/redCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#d42415"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/neutralCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#d2af7f"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/copperCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#b48f58"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/brownCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#604e36"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/hazelCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#70653f"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/grayCircle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="#555555"
-                            android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
-                        <ImageView
-                            android:id="@+id/blackCircle"
+                            android:id="@+id/c000000"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="#000000"
                             android:layout_margin="4dp"
                             android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c404040"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#404040"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cFF0000"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#FF0000"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cFF6A00"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#FF6A00"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cFFD800"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#FFD800"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cB6FF00"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#B6FF00"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c4CFF00"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#4CFF00"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Выберите цвет глаз"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
-                        android:textColor="@color/description_title"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center">
                         <ImageView
-                            android:id="@+id/blueEyesCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_blue"/>
+                            android:id="@+id/c00FF21"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#00FF21"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                         <ImageView
-                            android:id="@+id/greenEyeCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_green"/>
+                            android:id="@+id/c00FF90"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#00FF90"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                         <ImageView
-                            android:id="@+id/hazelEyeCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_hazel"/>
+                            android:id="@+id/c00FFFF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#00FFFF"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                         <ImageView
-                            android:id="@+id/brownEyeCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_brown"/>
+                            android:id="@+id/c0094FF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#0094FF"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                         <ImageView
-                            android:id="@+id/grayEyeCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_gray"/>
+                            android:id="@+id/c0026FF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#0026FF"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                         <ImageView
-                            android:id="@+id/blackEyeCircle"
-                            android:layout_width="48dp"
-                            android:layout_height="28dp"
-                            android:background="@mipmap/eye_black"/>
+                            android:id="@+id/c4800FF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#4800FF"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cB200FF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#B200FF"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Сложность макияжа"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
-                        android:textColor="@color/description_title"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center">
+                        <ImageView
+                            android:id="@+id/cFF00DC"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#FF00DC"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cFF006E"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#FF006E"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c808080"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#808080"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cFFFFFF"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#EEEEEE"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cF79F49"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#F79F49"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c8733DD"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#8733DD"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c62B922"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#62B922"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/cF9F58D"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#F9F58D"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cA50909"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#A50909"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c1D416F"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#1D416F"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cBCB693"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#BCB693"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/c644949"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#644949"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cF9CBCB"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#F9CBCB"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                        <ImageView
+                            android:id="@+id/cD6C880"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#D6C880"
+                            android:layout_margin="4dp"
+                            android:src="@mipmap/photo_layer"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/makeupCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Выберите цвет глаз"
+                            android:textSize="8pt"
+                            android:textStyle="bold"
+                            android:textColor="@color/description_title"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/blueEyesCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_blue"/>
+                            <ImageView
+                                android:id="@+id/greenEyeCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_green"/>
+                            <ImageView
+                                android:id="@+id/hazelEyeCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_hazel"/>
+                            <ImageView
+                                android:id="@+id/brownEyeCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_brown"/>
+                            <ImageView
+                                android:id="@+id/grayEyeCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_gray"/>
+                            <ImageView
+                                android:id="@+id/blackEyeCircle"
+                                android:layout_width="48dp"
+                                android:layout_height="28dp"
+                                android:background="@mipmap/eye_black"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Сложность макияжа"
+                            android:textSize="8pt"
+                            android:textStyle="bold"
+                            android:textColor="@color/description_title"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center">
                             <ImageView
                                 android:id="@+id/easyDifficult"
                                 android:layout_width="50dp"
@@ -315,24 +447,25 @@
                                 android:src="@mipmap/hard"
                                 android:background="#FFFFFF"
                                 android:layout_marginLeft="32dp"/>
-                    </LinearLayout>
+                        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Мероприятие"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
-                        android:textColor="@color/description_title"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
-                    <Spinner
-                        android:id="@+id/occasionField"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/occasions"
-                        android:spinnerMode="dialog">
-                    </Spinner>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Мероприятие"
+                            android:textSize="8pt"
+                            android:textStyle="bold"
+                            android:textColor="@color/description_title"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"/>
+                        <Spinner
+                            android:id="@+id/occasionField"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/occasions"
+                            android:spinnerMode="dialog">
+                        </Spinner>
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp"/>

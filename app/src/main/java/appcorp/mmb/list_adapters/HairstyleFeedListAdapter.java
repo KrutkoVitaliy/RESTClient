@@ -25,21 +25,20 @@ import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 
 public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeedListAdapter.TapeViewHolder> {
 
     private List<HairstyleDTO> data;
     private Context context;
-    Display display;
     int width, height;
 
     public HairstyleFeedListAdapter(List<HairstyleDTO> data, Context context) {
         this.data = data;
         this.context = context;
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
+        width = Storage.getInt("Width", 480);
+        height = (int) (width * 1.5F);
     }
 
     @Override
@@ -60,8 +59,10 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
+        String[] date = item.getAvailableDate().split("");
+
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(item.getAvailableDate());
+        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
@@ -103,7 +104,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).onlyScaleDown().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -146,39 +147,6 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
-
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
-                    LinearLayout colors = new LinearLayout(context);
-                    colors.setOrientation(LinearLayout.HORIZONTAL);
-                    if (item.getColors().contains("pink"))
-                        colors.addView(createCircle("#bb125b", "pink"));
-                    if (item.getColors().contains("purple"))
-                        colors.addView(createCircle("#9210ae", "purple"));
-                    if (item.getColors().contains("blue"))
-                        colors.addView(createCircle("#117dae", "blue"));
-                    if (item.getColors().contains("teal"))
-                        colors.addView(createCircle("#3b9670", "teal"));
-                    if (item.getColors().contains("green"))
-                        colors.addView(createCircle("#79bd14", "green"));
-                    if (item.getColors().contains("yellow"))
-                        colors.addView(createCircle("#d4b515", "yellow"));
-                    if (item.getColors().contains("orange"))
-                        colors.addView(createCircle("#d46915", "orange"));
-                    if (item.getColors().contains("red"))
-                        colors.addView(createCircle("#d42415", "red"));
-                    if (item.getColors().contains("neutral"))
-                        colors.addView(createCircle("#d2af7f", "neutral"));
-                    if (item.getColors().contains("copper"))
-                        colors.addView(createCircle("#b48f58", "copper"));
-                    if (item.getColors().contains("brown"))
-                        colors.addView(createCircle("#604e36", "brown"));
-                    if (item.getColors().contains("hazel"))
-                        colors.addView(createCircle("#70653f", "hazel"));
-                    if (item.getColors().contains("gray"))
-                        colors.addView(createCircle("#555555", "gray"));
-                    if (item.getColors().contains("black"))
-                        colors.addView(createCircle("#000000", "black"));
-                    moreContainer.addView(colors);
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {

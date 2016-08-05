@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,15 +25,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import appcorp.mmb.activities.feeds.GlobalFeed;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
-import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 
-public class MyProfile extends Activity {
+public class MyProfile extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -46,14 +50,14 @@ public class MyProfile extends Activity {
         initToolbar();
         initNavigationView();
         initViews();
-        new MyProfileLoader(getIntent().getStringExtra("E-mail")).execute();
+        new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
     }
 
     @Override
     public void onBackPressed() {
-        this.finish();
         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
     }
+
 
     private void initViews() {
         name = (TextView) findViewById(R.id.name);
@@ -63,18 +67,15 @@ public class MyProfile extends Activity {
     }
 
     private void initToolbar() {
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.myProfileToolbar);
-        toolbar.setTitle(R.string.toolbar_title_global_feed);
-        toolbar.setOnMenuItemClickListener(new android.support.v7.widget.Toolbar.OnMenuItemClickListener() {
+        toolbar = (Toolbar) findViewById(R.id.myProfileToolbar);
+        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
-                startActivity(intent);
+                //startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                 return true;
             }
         });
-
         toolbar.inflateMenu(R.menu.menu_myprofile);
     }
 
@@ -84,7 +85,8 @@ public class MyProfile extends Activity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation);
+        initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -92,11 +94,23 @@ public class MyProfile extends Activity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
+                        break;
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
+                        break;
+                    case R.id.navMenuHairstyle:
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                        break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                        break;
+                    case R.id.navMenuLips:
+                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
                         break;
@@ -104,16 +118,36 @@ public class MyProfile extends Activity {
                         if (name != null)
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class));
-                        break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText("Click to open profile");
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText("Click to sign in");
+        }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
+
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }

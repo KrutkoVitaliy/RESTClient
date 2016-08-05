@@ -18,23 +18,20 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.GlobalFeed;
-import appcorp.mmb.loaders.Storage;
+import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Storage;
 
-public class Introduction extends Activity {
+public class Authorization extends Activity {
 
     TextView logoText;
     GoogleApiClient mGoogleApiClient;
@@ -59,10 +56,7 @@ public class Introduction extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        //startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-        //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        //.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        finish();
     }
 
     private void auth() {
@@ -106,20 +100,14 @@ public class Introduction extends Activity {
             String name = acct.getDisplayName();
             String photoURL = acct.getPhotoUrl().toString();
             String id = acct.getId();
-            Storage.Init(getApplicationContext());
-            Storage.Add("Autentification", "Success");
-            Storage.Add("ID", id);
-            Storage.Add("E-mail", email);
-            Storage.Add("Name", name);
-            Storage.Add("PhotoURL", photoURL);
+            Storage.addString("ID", id);
+            Storage.addString("E-mail", email);
+            Storage.addString("Name", name);
+            Storage.addString("PhotoURL", photoURL);
 
             new SendUserData(email, name, photoURL).execute();
-
             finish();
-            startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-
-            //Toast.makeText(getApplicationContext(), email, Toast.LENGTH_LONG).show();
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
         } else {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
         }

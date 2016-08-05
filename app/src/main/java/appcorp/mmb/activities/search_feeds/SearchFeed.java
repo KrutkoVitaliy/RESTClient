@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.search_feeds;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.fragment_adapters.SearchFragmentAdapter;
 import appcorp.mmb.dto.SearchDTO;
 
@@ -32,7 +34,7 @@ public class SearchFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private SearchFragmentAdapter adapter;
-    private String request, colors, eyeColor, difficult, occasion;
+    private String request, colors, eyeColor, difficult, occasion, category;
 
     public SearchFeed() {
 
@@ -44,6 +46,7 @@ public class SearchFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_feed);
 
+        this.category = getIntent().getStringExtra("Category");
         this.request = getIntent().getStringExtra("Request");
         this.colors = getIntent().getStringExtra("Colors");
         this.eyeColor = getIntent().getStringExtra("EyeColor");
@@ -58,7 +61,7 @@ public class SearchFeed extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
     }
 
     private void initToolbar() {
@@ -105,7 +108,13 @@ public class SearchFeed extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL profileURL = new URL("http://195.88.209.17/search/index.php?request=" + request);
+                URL profileURL = new URL("http://195.88.209.17/search/index.php?category="
+                        + category + "&request="
+                        + request + "&colors="
+                        + colors + "&eyecolor="
+                        + eyeColor + "&difficult="
+                        + difficult + "&occasion="
+                        + occasion);
                 searchConnection = (HttpURLConnection) profileURL.openConnection();
                 searchConnection.setRequestMethod("GET");
                 searchConnection.connect();
@@ -183,7 +192,19 @@ public class SearchFeed extends AppCompatActivity {
                     tempDate = searchItem.getString("availableDate");
 
                     if (searchItem.getString("publicate").equals("t")) {
-                        SearchDTO searchDTO = new SearchDTO(id, sid, tempDate, authorName, authorPhoto, images, colors, eye_color, occasion, difficult, hashTags, likes);
+                        SearchDTO searchDTO = new SearchDTO(
+                                id,
+                                sid,
+                                tempDate,
+                                authorName,
+                                authorPhoto,
+                                images,
+                                colors,
+                                eye_color,
+                                occasion,
+                                difficult,
+                                hashTags,
+                                likes);
                         searchData.add(searchDTO);
                     }
 

@@ -24,14 +24,13 @@ import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.TapeDTO;
 
 public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAdapter.TapeViewHolder> {
 
     private List<TapeDTO> data;
     private Context context;
-    Display display;
-    int width, height;
 
     public GlobalFeedListAdapter(List<TapeDTO> data, Context context) {
         this.data = data;
@@ -47,15 +46,14 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
         final TapeDTO item = data.get(position);
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
 
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
+        String[] date = item.getAvailableDate().split("");
+
         holder.title.setText(item.getAuthor());
-        holder.availableDate.setText(item.getAvailableDate());
+        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
@@ -93,11 +91,11 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         holder.countImages.removeAllViews();
         for (int i = 0; i < item.getImages().size(); i++) {
             ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(width);
-            screenShot.setMinimumHeight(height);
+            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+            screenShot.setMinimumHeight(Storage.getInt("Height", 480));
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Height", 480)).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -115,7 +113,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             holder.imageViewer.addView(screenShot);
 
             LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 480)));
             TextView count = new TextView(context);
             count.setText((i + 1) + "/" + item.getImages().size());
             count.setTextSize(20);
@@ -245,7 +243,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
 
     private ImageView createCircle(String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Storage.getInt("Width", 480) * 0.075F), (int) (Storage.getInt("Width", 480) * 0.075F)));
         imageView.setScaleX(0.9F);
         imageView.setScaleY(0.9F);
         imageView.setBackgroundColor(Color.parseColor(color));

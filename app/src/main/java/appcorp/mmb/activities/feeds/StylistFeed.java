@@ -10,6 +10,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,16 +30,14 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.Introduction;
-import appcorp.mmb.activities.Options;
+import appcorp.mmb.activities.Authorization;
+import appcorp.mmb.activities.MyProfile;
 import appcorp.mmb.activities.Profile;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.Support;
-import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.fragment_adapters.StylistFragmentAdapter;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.StylistDTO;
-import appcorp.mmb.loaders.Storage;
+import appcorp.mmb.classes.Storage;
 
 public class StylistFeed extends AppCompatActivity {
 
@@ -49,11 +52,8 @@ public class StylistFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stylist_feed);
 
-        Storage.Init(getApplicationContext());
-        if (Storage.Get("Autentification").equals("Success")) {
-            name = Storage.Get("Name");
-            photoURL = Storage.Get("PhotoURL");
-        }
+        name = Storage.getString("Name", "Make Me Beauty");
+        photoURL = Storage.getString("PhotoURL", ""+R.mipmap.icon);
 
         initToolbar();
         initNavigationView();
@@ -64,8 +64,7 @@ public class StylistFeed extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
     }
 
     private void initToolbar() {
@@ -90,7 +89,8 @@ public class StylistFeed extends AppCompatActivity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.stylist_navigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.stylist_navigation);
+        initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -103,6 +103,18 @@ public class StylistFeed extends AppCompatActivity {
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
+                        break;
+                    case R.id.navMenuHairstyle:
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                        break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                        break;
+                    case R.id.navMenuLips:
+                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
+                        break;
                     case R.id.navMenuProfile:
                         if (name != null)
                             startActivity(new Intent(getApplicationContext(), Profile.class)
@@ -110,20 +122,40 @@ public class StylistFeed extends AppCompatActivity {
                                     .putExtra("PhotoURL", photoURL)
                                     .putExtra("From", "StylistFeed"));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class)
-                                    );
+                            startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            );
                         break;
                     case R.id.navMenuFavorites:
                         startActivity(new Intent(getApplicationContext(), Favorites.class));
                         break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
-                        break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText("Click to open profile");
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText("Click to sign in");
+        }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
+
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }
@@ -173,16 +205,16 @@ public class StylistFeed extends AppCompatActivity {
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
 
-                    name = item.getString("first_name") +" "+ item.getString("last_name");
+                    name = item.getString("first_name") + " " + item.getString("last_name");
                     id = item.getString("id");
                     sid = item.getString("aid");
                     likes = item.getString("likes");
                     followers = item.getString("followers");
                     userType = item.getString("user_type");
                     photo = item.getString("avatar");
-                    location = item.getString("city") +", "+ item.getString("address");
+                    location = item.getString("city") + ", " + item.getString("address");
 
-                    if(userType.equals("Stylist")) {
+                    if (userType.equals("Stylist")) {
                         StylistDTO stylistDTO = new StylistDTO(id, sid, likes, followers, name, photo, location);
                         data.add(stylistDTO);
                     }

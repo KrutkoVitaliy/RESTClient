@@ -73,9 +73,7 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
 
-        long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
         List<HairstyleDTO> data = new ArrayList<>();
-        String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
 
         try {
             JSONArray items = new JSONArray(resultJsonFeed);
@@ -89,18 +87,7 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     if (!item.getString("screen" + j).equals("empty.jpg"))
                         images.add(item.getString("screen" + j));
 
-                id = item.getLong("id");
-                authorPhoto = item.getString("authorPhoto");
-                authorName = item.getString("authorName");
-                availableDate = item.getString("uploadDate");
-                tags = item.getString("tags");
-                shape = item.getString("shape");
-                design = item.getString("design");
-                colors = item.getString("colors");
-                likes = item.getLong("likes");
-                published = item.getString("published");
-
-                String[] tempTags = tags.split(",");
+                String[] tempTags = item.getString("tags").split(",");
                 for (int j = 0; j < tempTags.length; j++) {
                     hashTags.add(tempTags[j]);
                 }
@@ -110,8 +97,16 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     if ((currentDate - tempDate) <= 259200000)
                         availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);*/
 
-                if (published.equals("t")) {
-                    HairstyleDTO hairstyleDTO = new HairstyleDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
+                if (item.getString("published").equals("t")) {
+                    HairstyleDTO hairstyleDTO = new HairstyleDTO(
+                            item.getLong("id"),
+                            item.getString("uploadDate"),
+                            item.getString("authorName"),
+                            item.getString("authorPhoto"),
+                            item.getString("hairstyleType"),
+                            images,
+                            hashTags,
+                            item.getLong("likes"));
                     data.add(hairstyleDTO);
                 }
             }

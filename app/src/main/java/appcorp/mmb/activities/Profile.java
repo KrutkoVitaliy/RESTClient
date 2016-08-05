@@ -27,6 +27,7 @@ import java.net.URL;
 import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
+import appcorp.mmb.classes.Storage;
 
 public class Profile extends Activity {
 
@@ -91,13 +92,11 @@ public class Profile extends Activity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.profileToolbar);
-        toolbar.setTitle(R.string.toolbar_title_profile);
+        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
-                startActivity(intent);
+                //startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                 return true;
             }
         });
@@ -111,7 +110,7 @@ public class Profile extends Activity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.profileNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.profileNavigation);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -126,22 +125,16 @@ public class Profile extends Activity {
                                 .putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuProfile:
-                        if (Intermediates.getData(getApplicationContext(), "Autentification").equals("Success"))
+                        if (!name.equals("Click to sign in"))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class));
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
                         if (name != null)
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Introduction.class));
-                        break;
-                    case R.id.navMenuSettings:
-                        startActivity(new Intent(getApplicationContext(), Options.class));
-                        break;
-                    case R.id.navMenuSupport:
-                        startActivity(new Intent(getApplicationContext(), Support.class));
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                 }
                 return true;
@@ -151,8 +144,7 @@ public class Profile extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
     }
 
     class Get extends AsyncTask<Void, Void, String> {

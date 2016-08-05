@@ -11,69 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/myProfileToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/myProfileToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                android:title="@string/toolbar_title_profile" />
-        </android.support.design.widget.AppBarLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/profile_back"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/ic_keyboard_backspace" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Профиль"
-                        android:textColor="#FFFFFF"
-                        android:textSize="8pt" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right">
-
-                    <ImageView
-                        android:id="@+id/profile_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/ic_pencil"/>
-                </LinearLayout>
-
-            </FrameLayout>
+            android:orientation="vertical"
+            android:paddingTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,27 +57,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
+                        android:text="Name Lastname"
                         android:textColor="@color/author_title"
-                        android:textSize="8pt"
-                        android:text="Name Lastname" />
+                        android:textSize="8pt" />
 
                     <TextView
                         android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
+                        android:text="City, Address"
                         android:textColor="@color/author_title"
-                        android:textSize="6pt"
-                        android:text="City, Address" />
+                        android:textSize="6pt" />
 
                     <TextView
                         android:id="@+id/phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
+                        android:text="Phone number"
                         android:textColor="@color/author_title"
                         android:textSize="6pt"
-                        android:text="Phone number"
 
                         android:visibility="invisible" />
                 </LinearLayout>
@@ -144,8 +93,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="left">
+                    android:layout_gravity="left"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/skill1"
@@ -159,9 +108,9 @@
                         android:id="@+id/skill4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="Skill 4"
                         android:textColor="@color/author_title" />
                 </LinearLayout>
@@ -169,8 +118,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/skill2"
@@ -184,9 +133,9 @@
                         android:id="@+id/skill5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
                         android:paddingLeft="8dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="Skill 5"
                         android:textColor="@color/author_title" />
                 </LinearLayout>
@@ -194,8 +143,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="right">
+                    android:layout_gravity="right"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/skill3"
@@ -209,9 +158,9 @@
                         android:id="@+id/skill6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="Skill 6"
                         android:textColor="@color/author_title" />
                 </LinearLayout>
@@ -234,15 +183,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
                     android:orientation="horizontal"
-                    android:padding="8dp"
-                    android:layout_marginLeft="32dp">
+                    android:padding="8dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@mipmap/ic_heart_outline"
-                        android:layout_gravity="center_vertical" />
+                        android:layout_gravity="center_vertical"
+                        android:background="@mipmap/ic_heart_outline" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -254,9 +203,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:textStyle="bold"
+                            android:text="1724"
                             android:textSize="6pt"
-                            android:text="1724" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -270,16 +219,16 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="32dp">
+                    android:layout_marginRight="32dp"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@mipmap/ic_account_multiple"
-                        android:layout_gravity="center_vertical" />
+                        android:layout_gravity="center_vertical"
+                        android:background="@mipmap/ic_account_multiple" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -291,9 +240,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:textStyle="bold"
+                            android:text="886"
                             android:textSize="6pt"
-                            android:text="886" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -322,34 +271,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/selectStylistGallery"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:padding="8dp"
                         android:text="Best works"
-                        android:layout_gravity="center"
                         android:textColor="@color/description_title" />
 
                     <TextView
                         android:id="@+id/selectPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:padding="8dp"
                         android:text="Price list"
-                        android:layout_gravity="center"
                         android:textColor="@color/author_title" />
 
                     <TextView
                         android:id="@+id/selectCalendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:padding="8dp"
                         android:text="Calendar"
-                        android:layout_gravity="center"
                         android:textColor="@color/description_title" />
                 </LinearLayout>
 
@@ -375,20 +324,20 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="32dp"
                             android:padding="8dp"
                             android:text="Service"
-                            android:layout_gravity="left"
-                            android:textColor="@color/author_title"
-                            android:layout_marginLeft="32dp" />
+                            android:textColor="@color/author_title" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="32dp"
                             android:padding="8dp"
                             android:text="Cost"
-                            android:layout_gravity="right"
-                            android:textColor="@color/author_title"
-                            android:layout_marginRight="32dp" />
+                            android:textColor="@color/author_title" />
                     </FrameLayout>
                 </LinearLayout>
             </ScrollView>

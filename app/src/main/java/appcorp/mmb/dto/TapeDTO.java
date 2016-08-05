@@ -6,7 +6,6 @@ import java.util.List;
 public class TapeDTO {
 
     private long id;
-    private long sid;
     private String author;
     private String availableDate;
     private String colors;
@@ -22,9 +21,8 @@ public class TapeDTO {
 
     }
 
-    public TapeDTO(long id, long sid, String availableDate, String author, String authorPhoto, List<String> images, String colors, String eye_color, String occasion, String difficult, List<String> hashTags, long likes) {
+    public TapeDTO(long id, String availableDate, String author, String authorPhoto, List<String> images, String colors, String eye_color, String occasion, String difficult, List<String> hashTags, long likes) {
         this.id = id;
-        this.sid = sid;
         this.availableDate = availableDate;
         this.author = author;
         this.images = images;
@@ -43,14 +41,6 @@ public class TapeDTO {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
     }
 
     public String getAuthor() {

@@ -20,10 +20,9 @@
         android:paddingTop="16dp">
 
         <ImageView
-            android:id="@+id/navAvatar"
+            android:id="@+id/accountPhoto"
             android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:background="@mipmap/nav_icon" />
+            android:layout_height="75dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,19 +32,17 @@
             android:paddingTop="16dp">
 
             <TextView
-                android:id="@+id/navName"
+                android:id="@+id/accountName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Make Me Beauty"
                 android:textColor="#FFFFFF"
                 android:textSize="7pt"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/navLocation"
+                android:id="@+id/accountHint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Click to sign in"
                 android:textColor="#FFFFFF"
                 android:textSize="6pt" />
         </LinearLayout>
