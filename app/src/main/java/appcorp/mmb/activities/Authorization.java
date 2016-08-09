@@ -20,25 +20,20 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.feeds.GlobalFeed;
-import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.LipsFeed;
-import appcorp.mmb.activities.feeds.MakeupFeed;
-import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.network.GetRequest;
 
 public class Authorization extends Activity {
 
     TextView logoText;
     GoogleApiClient mGoogleApiClient;
 
-    String from;
-
-    private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
     @Override
@@ -48,8 +43,6 @@ public class Authorization extends Activity {
 
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-
-        from = getIntent().getStringExtra("From");
 
         auth();
     }
@@ -84,8 +77,6 @@ public class Authorization extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
@@ -93,59 +84,21 @@ public class Authorization extends Activity {
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            String email = acct.getEmail();
-            String name = acct.getDisplayName();
-            String photoURL = acct.getPhotoUrl().toString();
-            String id = acct.getId();
-            Storage.addString("ID", id);
-            Storage.addString("E-mail", email);
-            Storage.addString("Name", name);
-            Storage.addString("PhotoURL", photoURL);
+            Storage.addString("E-mail", acct.getEmail());
+            Storage.addString("Name", acct.getDisplayName());
+            Storage.addString("PhotoURL", acct.getPhotoUrl().toString());
+            String name = new String(acct.getDisplayName().getBytes());
+            String email = acct.getEmail().toString();
+            String photo = acct.getPhotoUrl().toString();
 
-            new SendUserData(email, name, photoURL).execute();
+            new GetRequest("http://195.88.209.17/app/in/user.php?name="+name.replace(" ", "%20")+"&photo=" + photo + "&email=" + email).execute();
+
             finish();
-            startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            //startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
         } else {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public class SendUserData extends AsyncTask<Void, Void, String> {
-        HttpURLConnection userAddConnection = null;
-        BufferedReader userAddReader = null;
-        String name, email, photo;
-
-        String resultJsonSearch = "";
-
-        public SendUserData(String email, String name, String photo) {
-            this.email = email;
-            this.name = name;
-            this.photo = photo;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                name = name.replace(" ", "%20");
-                URL feedURL = new URL("http://195.88.209.17/app/in/user.php?name="+name+"&photo="+photo+"&email="+email);
-                userAddConnection = (HttpURLConnection) feedURL.openConnection();
-                userAddConnection.setRequestMethod("GET");
-                userAddConnection.connect();
-                InputStream inputStream = userAddConnection.getInputStream();
-                userAddReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
-                String profileLine;
-                while ((profileLine = userAddReader.readLine()) != null) {
-                    profileBuffer.append(profileLine);
-                }
-                resultJsonSearch = profileBuffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return resultJsonSearch;
         }
     }
 }

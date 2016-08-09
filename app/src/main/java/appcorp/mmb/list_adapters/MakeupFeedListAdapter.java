@@ -340,8 +340,8 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer, addLike;
-        ImageView user_avatar;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        ImageView user_avatar, addLike;
 
         public TapeViewHolder(View itemView) {
             super(itemView);
@@ -354,7 +354,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
-            addLike = (LinearLayout) itemView.findViewById(R.id.addLike);
+            addLike = (ImageView) itemView.findViewById(R.id.addLike);
         }
     }
 }

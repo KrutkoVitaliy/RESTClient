@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,24 +18,45 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.dto.TapeDTO;
+import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
+import appcorp.mmb.network.GetRequest;
 
-public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAdapter.TapeViewHolder> {
+public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<FavoritesManicureFeedListAdapter.TapeViewHolder> {
 
-    private List<TapeDTO> data;
+    private List<ManicureDTO> data;
     private Context context;
+    private List<Long> likesId = new ArrayList<>();
+    Display display;
+    int width, height;
 
-    public GlobalFeedListAdapter(List<TapeDTO> data, Context context) {
+    public FavoritesManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
         this.data = data;
         this.context = context;
+        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
     }
 
     @Override
@@ -45,18 +67,56 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final TapeDTO item = data.get(position);
+        final ManicureDTO item = data.get(position);
+
+        if (position == data.size() - 1) {
+            if (data.size() - 1 % 100 != 8)
+                ManicureFeed.addFeed(data.size() / 100 + 1);
+        }
 
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
-        holder.title.setText(item.getAuthor());
-        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
+        holder.title.setText(item.getAuthorName());
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
         holder.likesCount.setText("" + item.getLikes());
+        if (!likesId.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        } else {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+            holder.likesCount.setText("" + (item.getLikes() + 1));
+        }
 
-        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        if (likesId.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+        } else if (!likesId.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        }
+        holder.addLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                    if (!likesId.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                        likesId.add(item.getId());
+                        holder.likesCount.setText("" + (item.getLikes() + 1));
+                        new GetRequest("http://195.88.209.17/app/in/like.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                    } else if (likesId.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                        likesId.remove(item.getId());
+                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
+                        new GetRequest("http://195.88.209.17/app/in/dislike.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                    }
+                } else {
+                    context.startActivity(new Intent(context, Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+
+        Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,11 +151,11 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         holder.countImages.removeAllViews();
         for (int i = 0; i < item.getImages().size(); i++) {
             ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-            screenShot.setMinimumHeight(Storage.getInt("Height", 480));
+            screenShot.setMinimumWidth(width);
+            screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Height", 480)).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -105,7 +165,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                        intent.putExtra("screenshot", "http://185.158.112.18/storage/images/" + item.getImages().get(finalI));
                         context.startActivity(intent);
                     }
                 }
@@ -113,7 +173,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             holder.imageViewer.addView(screenShot);
 
             LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 480)));
+            countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
             count.setText((i + 1) + "/" + item.getImages().size());
             count.setTextSize(20);
@@ -139,8 +199,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
-                    moreContainer.addView(createImage(item.getEye_color()));
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
@@ -173,28 +231,43 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
-                    moreContainer.addView(difficult(item.getDifficult()));
-                    TextView occasion = createText(item.getOccasion(), Typeface.DEFAULT, 16);
-                    if (item.getOccasion().equals("everyday"))
-                        occasion.setText(R.string.occasion_everyday);
-                    else if (item.getOccasion().equals("celebrity"))
-                        occasion.setText(R.string.occasion_celebrity);
-                    else if (item.getOccasion().equals("dramatic"))
-                        occasion.setText(R.string.occasion_dramatic);
-                    else if (item.getOccasion().equals("holiday"))
-                        occasion.setText(R.string.occasion_holiday);
+                    if (item.getShape().equals("square"))
+                        moreContainer.addView(createText("Форма ногтей: Квадратная форма", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getShape().equals("oval"))
+                        moreContainer.addView(createText("Форма ногтей: Овальная форма", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getShape().equals("stiletto"))
+                        moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16));
 
-                    occasion.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, Search.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("hashTag", item.getOccasion());
-                            context.startActivity(intent);
-                        }
-                    });
-                    moreContainer.addView(occasion);
+                    if (item.getDesign().equals("french_classic"))
+                        moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_chevron"))
+                        moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_millennium"))
+                        moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_fun"))
+                        moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_crystal"))
+                        moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_colorful"))
+                        moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_designer"))
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_spa"))
+                        moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("french_moon"))
+                        moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("art"))
+                        moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("designer"))
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("volume"))
+                        moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("aqua"))
+                        moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("american"))
+                        moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getDesign().equals("photo"))
+                        moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -323,7 +396,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         return data.size();
     }
 
-    public void setData(List<TapeDTO> data) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
     }
 

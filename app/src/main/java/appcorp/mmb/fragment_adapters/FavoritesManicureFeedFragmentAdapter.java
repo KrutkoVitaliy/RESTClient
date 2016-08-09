@@ -9,18 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import appcorp.mmb.dto.StylistDTO;
+import appcorp.mmb.dto.ManicureDTO;
+import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.fragments.AbstractTabFragment;
-import appcorp.mmb.fragments.StylistFeedFragment;
+import appcorp.mmb.fragments.FavoritesManicureFeedFragment;
+import appcorp.mmb.fragments.GlobalFeedFragment;
 
-public class StylistFragmentAdapter extends FragmentPagerAdapter {
+public class FavoritesManicureFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
-    private List<StylistDTO> data;
-    private StylistFeedFragment stylistFeedFragment;
+    private List<ManicureDTO> data;
+    private FavoritesManicureFeedFragment favoritesManicureFeedFragment;
 
-    public StylistFragmentAdapter(Context context, FragmentManager fm, List<StylistDTO> data) {
+    public FavoritesManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> data) {
         super(fm);
         this.data = data;
         this.context = context;
@@ -44,12 +46,13 @@ public class StylistFragmentAdapter extends FragmentPagerAdapter {
 
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
-        stylistFeedFragment = StylistFeedFragment.getInstance(context, data);
-        tabs.put(0, stylistFeedFragment);
+        favoritesManicureFeedFragment = FavoritesManicureFeedFragment.getInstance(context, data);
+        tabs.put(0, favoritesManicureFeedFragment);
+        //tabs.put(1, FavoritesManicureFeedFragment.getInstance(context, data));
     }
 
-    public void setData(List<StylistDTO> data) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
-        stylistFeedFragment.refreshData(data);
+        favoritesManicureFeedFragment.refreshData(data);
     }
 }

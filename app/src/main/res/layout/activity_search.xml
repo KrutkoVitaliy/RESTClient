@@ -21,459 +21,535 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                android:title="@string/toolbar_title_search"/>
-            <!--<LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:gravity="center">
-                <TextView
-                    android:id="@+id/searchLook"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Вдохновение"
-                    android:layout_gravity="left|center"
-                    android:background="#FFFFFF"
-                    android:layout_marginLeft="16dp"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"/>
-                <TextView
-                    android:id="@+id/searchStylist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Визажист"
-                    android:layout_gravity="right|center"
-                    android:background="@color/colorPrimary"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"/>
-            </LinearLayout>-->
+                android:title="@string/toolbar_title_search" />
         </android.support.design.widget.AppBarLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize">
-            <!--<LinearLayout
-                android:id="@+id/stylistFields"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:visibility="invisible">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Введите данные визажиста"
-                    android:textSize="8pt"
-                    android:textStyle="bold"
-                    android:textColor="@color/description_title"/>
-                <EditText
-                    android:id="@+id/stylistCityRequestField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Город"
-                    android:textColorHint="#C0C0C0"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"/>
-                <EditText
-                    android:id="@+id/stylistSkillRequestField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Тип услуг"
-                    android:textColorHint="#C0C0C0"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"/>
-                <Button
-                    android:id="@+id/stylistSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Искать"/>
-            </LinearLayout>-->
+
             <ScrollView
-                android:id="@+id/lookFields"
+                android:id="@+id/searchFrame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Что ищем"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
-                        android:textColor="@color/description_title"
+                        android:paddingBottom="8dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
-                    <Spinner
-                        android:id="@+id/searchType"
+                        android:text="Что ищем"
+                        android:textColor="@color/description_title"
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/searchTypes"
-                        android:spinnerMode="dialog">
-                    </Spinner>
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/catMakeup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="16dp">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/makeup" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Makeup" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/catHairstyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="16dp">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/hairstyle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Hairstyle" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/catManicure"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="16dp">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/manicure" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Manicure" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/catLips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="16dp">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/lips" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Lips" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
                         android:text="Теги (через запятую)"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
                         android:textColor="@color/description_title"
-                        android:paddingTop="8dp"/>
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/requestField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"/>
+                        android:focusableInTouchMode="true" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Отметьте используемые цвета"
-                        android:textSize="8pt"
-                        android:textStyle="bold"
-                        android:textColor="@color/description_title"
+                        android:paddingBottom="8dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
+                        android:text="Отметьте используемые цвета"
+                        android:textColor="@color/description_title"
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:id="@+id/c000000"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#000000"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#000000"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c404040"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#404040"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#404040"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cFF0000"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#FF0000"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#FF0000"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cFF6A00"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#FF6A00"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#FF6A00"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cFFD800"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#FFD800"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#FFD800"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cB6FF00"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#B6FF00"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#B6FF00"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c4CFF00"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#4CFF00"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#4CFF00"
+                            android:src="@mipmap/photo_layer" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:id="@+id/c00FF21"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#00FF21"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#00FF21"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c00FF90"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#00FF90"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#00FF90"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c00FFFF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#00FFFF"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#00FFFF"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c0094FF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#0094FF"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#0094FF"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c0026FF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#0026FF"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#0026FF"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c4800FF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#4800FF"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#4800FF"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cB200FF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#B200FF"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#B200FF"
+                            android:src="@mipmap/photo_layer" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:id="@+id/cFF00DC"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#FF00DC"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#FF00DC"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cFF006E"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#FF006E"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#FF006E"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c808080"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#808080"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#808080"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cFFFFFF"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#EEEEEE"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#EEEEEE"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cF79F49"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#F79F49"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#F79F49"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c8733DD"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#8733DD"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#8733DD"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c62B922"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#62B922"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#62B922"
+                            android:src="@mipmap/photo_layer" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:id="@+id/cF9F58D"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#F9F58D"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#F9F58D"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cA50909"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#A50909"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#A50909"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c1D416F"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#1D416F"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#1D416F"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cBCB693"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#BCB693"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#BCB693"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/c644949"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#644949"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#644949"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cF9CBCB"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#F9CBCB"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#F9CBCB"
+                            android:src="@mipmap/photo_layer" />
+
                         <ImageView
                             android:id="@+id/cD6C880"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="#D6C880"
                             android:layout_margin="4dp"
-                            android:src="@mipmap/photo_layer"/>
+                            android:background="#D6C880"
+                            android:src="@mipmap/photo_layer" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/makeupCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Выберите цвет глаз"
-                            android:textSize="8pt"
-                            android:textStyle="bold"
-                            android:textColor="@color/description_title"
+                            android:paddingBottom="8dp"
                             android:paddingTop="8dp"
-                            android:paddingBottom="8dp"/>
+                            android:text="Выберите цвет глаз"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <ImageView
                                 android:id="@+id/blueEyesCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_blue"/>
+                                android:background="@mipmap/eye_blue" />
+
                             <ImageView
                                 android:id="@+id/greenEyeCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_green"/>
+                                android:background="@mipmap/eye_green" />
+
                             <ImageView
                                 android:id="@+id/hazelEyeCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_hazel"/>
+                                android:background="@mipmap/eye_hazel" />
+
                             <ImageView
                                 android:id="@+id/brownEyeCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_brown"/>
+                                android:background="@mipmap/eye_brown" />
+
                             <ImageView
                                 android:id="@+id/grayEyeCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_gray"/>
+                                android:background="@mipmap/eye_gray" />
+
                             <ImageView
                                 android:id="@+id/blackEyeCircle"
                                 android:layout_width="48dp"
                                 android:layout_height="28dp"
-                                android:background="@mipmap/eye_black"/>
-                        </LinearLayout>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Сложность макияжа"
-                            android:textSize="8pt"
-                            android:textStyle="bold"
-                            android:textColor="@color/description_title"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-                            <ImageView
-                                android:id="@+id/easyDifficult"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@mipmap/easy"
-                                android:background="#FFFFFF"/>
-                            <ImageView
-                                android:id="@+id/mediumDifficult"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@mipmap/medium"
-                                android:background="#FFFFFF"
-                                android:layout_marginLeft="32dp"/>
-                            <ImageView
-                                android:id="@+id/hardDifficult"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@mipmap/hard"
-                                android:background="#FFFFFF"
-                                android:layout_marginLeft="32dp"/>
+                                android:background="@mipmap/eye_black" />
                         </LinearLayout>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Мероприятие"
-                            android:textSize="8pt"
-                            android:textStyle="bold"
-                            android:textColor="@color/description_title"
+                            android:paddingBottom="8dp"
                             android:paddingTop="8dp"
-                            android:paddingBottom="8dp"/>
+                            android:text="Сложность макияжа"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/easyDifficult"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="#FFFFFF"
+                                android:src="@mipmap/easy" />
+
+                            <ImageView
+                                android:id="@+id/mediumDifficult"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="32dp"
+                                android:background="#FFFFFF"
+                                android:src="@mipmap/medium" />
+
+                            <ImageView
+                                android:id="@+id/hardDifficult"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="32dp"
+                                android:background="#FFFFFF"
+                                android:src="@mipmap/hard" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:text="Мероприятие"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
                         <Spinner
                             android:id="@+id/occasionField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:entries="@array/occasions"
-                            android:spinnerMode="dialog">
-                        </Spinner>
+                            android:spinnerMode="dialog"></Spinner>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"/>
+                        android:layout_height="30dp" />
+
                     <Button
                         android:id="@+id/lookSearch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Искать"/>
+                        android:text="Искать" />
                 </LinearLayout>
             </ScrollView>
         </RelativeLayout>
@@ -485,51 +561,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/menu_navigation">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingLeft="16dp"
-            android:paddingTop="48dp">
-
-            <ImageView
-                android:id="@+id/searchNavAvatar"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:background="@mipmap/nav_icon" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp">
-
-                <TextView
-                    android:id="@+id/searchNavName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Make Me Beauty"
-                    android:textColor="#FFFFFF"
-                    android:textSize="7pt"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/searchNavLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Click to sign in"
-                    android:textColor="#FFFFFF"
-                    android:textSize="6pt" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </android.support.design.widget.NavigationView>
+        app:menu="@menu/menu_navigation" />
 </android.support.v4.widget.DrawerLayout>

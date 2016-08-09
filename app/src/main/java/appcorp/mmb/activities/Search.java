@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,107 +38,34 @@ public class Search extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private String hashTag = "", request = "", eyeColor = "", difficult = "",
-            photoURL = "", name = "";
-    private String arrayColors = "";
-    private EditText requestField, stylistCityRequest, stylistSkillRequest;
-    private Button search, stylistSearch;
-    private ImageView circlePink, circlePurple, circleBlue, circleTeal, circleGreen, circleYellow,
-            circleOrange, circleRed, circleNeutral, circleCopper, circleBrown, circleHazel,
-            circleGray, circleBlack, eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
+    private String hashTag = "", request = "", eyeColor = "", difficult = "";
+    private String arrayColors = "", category = "";
+    private EditText requestField;
+    private Button search;
+    private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
             eyeGrayCircle, eyeBlackCircle;
     private ImageView easyDifficult, mediumDifficult, hardDifficult;
-    private LinearLayout stylistFields, makeupCategory;
-    private TextView selectLook, selectStylist;
-    private ScrollView lookFields;
-    private Spinner occasion, category;
+    private Spinner occasion;
     private ImageView c000000, c404040, cFF0000, cFF6A00, cFFD800, cB6FF00, c4CFF00, c00FF21, c00FF90,
             c00FFFF, c0094FF, c0026FF, c4800FF, cB200FF, cFF00DC, cFF006E, c808080, cFFFFFF, cF79F49,
             c8733DD, c62B922, cF9F58D, cA50909, c1D416F, cBCB693, c644949, cF9CBCB, cD6C880;
     private List<String> colors = new ArrayList<>();
+    private LinearLayout catMakeup, catManicure, makeupCategory;
+    private ScrollView searchFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        name = Storage.getString("Name", "Make Me Beauty");
-        photoURL = Storage.getString("PhotoURL", "" + R.mipmap.icon);
-
         initToolbar();
         initNavigationView();
         initViews();
-
-
-        selectLook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectLook.setBackgroundColor(Color.WHITE);
-                selectLook.setTextColor(Color.parseColor("#43A047"));
-                selectStylist.setBackgroundColor(Color.parseColor("#43A047"));
-                selectStylist.setTextColor(Color.WHITE);
-                lookFields.setVisibility(View.VISIBLE);
-                stylistFields.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        selectStylist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectStylist.setBackgroundColor(Color.WHITE);
-                selectStylist.setTextColor(Color.parseColor("#43A047"));
-                selectLook.setBackgroundColor(Color.parseColor("#43A047"));
-                selectLook.setTextColor(Color.WHITE);
-                lookFields.setVisibility(View.INVISIBLE);
-                stylistFields.setVisibility(View.VISIBLE);
-            }
-        });
-
-
         if (!getIntent().getStringExtra("hashTag").equals("empty")) {
             hashTag = getIntent().getStringExtra("hashTag");
             requestField.setText(hashTag);
         }
-
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (requestField.getText() == null || requestField.getText().equals(""))
-                    request = "";
-                else
-                    request = requestField.getText().toString();
-                for (int i = 0; i < colors.size(); i++) {
-                    arrayColors += colors.get(i) + ",";
-                }
-                if (eyeColor == null || eyeColor.equals(""))
-                    eyeColor = "";
-                if (difficult == null || difficult.equals(""))
-                    difficult = "";
-                Intent intent = new Intent(getApplicationContext(), SearchFeed.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent
-                        .putExtra("Category", "" + category.getSelectedItemPosition())
-                        .putExtra("Request", request)
-                        .putExtra("Colors", arrayColors)
-                        .putExtra("EyeColor", eyeColor)
-                        .putExtra("Difficult", difficult)
-                        .putExtra("Occasion", "" + occasion.getSelectedItemPosition());
-                getApplicationContext().startActivity(intent);
-            }
-        });
-
-        /*stylistSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SearchStylistFeed.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent
-                        .putExtra("City", stylistCityRequest.getText().toString())
-                        .putExtra("Skill", stylistSkillRequest.getText().toString());
-                getApplicationContext().startActivity(intent);
-            }
-        });*/
-
+        initButtons();
         initColors();
         initEyeColors();
         initDifficult();
@@ -150,16 +78,45 @@ public class Search extends AppCompatActivity {
 
     private void initViews() {
         occasion = (Spinner) findViewById(R.id.occasionField);
-        category = (Spinner) findViewById(R.id.searchType);
-        /*selectLook = (TextView) findViewById(R.id.searchLook);
-        selectStylist = (TextView) findViewById(R.id.searchStylist);*/
-        lookFields = (ScrollView) findViewById(R.id.lookFields);
-        /*stylistFields = (LinearLayout) findViewById(R.id.stylistFields);
-        stylistCityRequest = (EditText) findViewById(R.id.stylistCityRequestField);
-        stylistSkillRequest = (EditText) findViewById(R.id.stylistSkillRequestField);*/
         requestField = (EditText) findViewById(R.id.requestField);
-        //stylistSearch = (Button) findViewById(R.id.stylistSearch);
         search = (Button) findViewById(R.id.lookSearch);
+        catMakeup = (LinearLayout) findViewById(R.id.catMakeup);
+        catManicure = (LinearLayout) findViewById(R.id.catManicure);
+        makeupCategory = (LinearLayout) findViewById(R.id.makeupCategory);
+        searchFrame = (ScrollView) findViewById(R.id.searchFrame);
+    }
+
+    private void initButtons() {
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SearchFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent
+                        .putExtra("Category", category)
+                        .putExtra("Request", request)
+                        .putExtra("Colors", arrayColors)
+                        .putExtra("EyeColor", eyeColor)
+                        .putExtra("Difficult", difficult)
+                        .putExtra("Occasion", "" + occasion.getSelectedItemPosition());
+                getApplicationContext().startActivity(intent);
+            }
+        });
+
+        catMakeup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeupCategory.setVisibility(View.VISIBLE);
+                category = "makeup";
+            }
+        });
+        catManicure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeupCategory.setVisibility(View.INVISIBLE);
+                category = "manicure";
+            }
+        });
     }
 
     private void initToolbar() {
@@ -173,37 +130,8 @@ public class Search extends AppCompatActivity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.searchNavigation);
-
-        ImageView navAvatar = (ImageView) findViewById(R.id.searchNavAvatar);
-        if (photoURL != null && photoURL != "")
-            Picasso.with(getApplicationContext()).load(photoURL).resize(300, 300).into(navAvatar);
-        else
-            navAvatar.setImageResource(R.mipmap.icon);
-
-        navAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (name != null)
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                else
-                    startActivity(new Intent(getApplicationContext(), Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
-
-        TextView navName = (TextView) findViewById(R.id.searchNavName);
-        if (name != null && name != "")
-            navName.setText(name + "");
-        else
-            navName.setText("Вы не авторизованы");
-
-        TextView navLocation = (TextView) findViewById(R.id.searchNavLocation);
-        if (navLocation.getText().equals("Click to sign in"))
-            navLocation.setText("Click to change account");
-        else if (navLocation.getText().equals("Click to change account"))
-            navLocation.setText("Click to sign in");
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.searchNavigation);
+        initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -211,10 +139,11 @@ public class Search extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;
                     case R.id.navMenuSearch:
-                        startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
@@ -242,6 +171,32 @@ public class Search extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText(R.string.account_hint_signed);
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText(R.string.account_hint_unsigned);
+        }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
+
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }

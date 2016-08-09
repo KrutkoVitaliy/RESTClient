@@ -113,16 +113,15 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/addLike"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/addLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@mipmap/ic_heart_outline" />
+                android:layout_margin="10dp"
+                android:background="@mipmap/ic_heart_outline" />
 
             <TextView
                 android:id="@+id/likesCount"

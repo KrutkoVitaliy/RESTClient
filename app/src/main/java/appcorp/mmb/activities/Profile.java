@@ -155,7 +155,7 @@ public class Profile extends Activity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL profileURL = new URL(Intermediates.URL.GET_PROFILE + "/1");
+                URL profileURL = new URL("fd");
                 profileConnection = (HttpURLConnection) profileURL.openConnection();
                 profileConnection.setRequestMethod("GET");
                 profileConnection.connect();

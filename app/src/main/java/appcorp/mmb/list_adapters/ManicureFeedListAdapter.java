@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,19 +18,29 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
+import appcorp.mmb.network.GetRequest;
 
 public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedListAdapter.TapeViewHolder> {
 
     private List<ManicureDTO> data;
+    private List<Long> likes = new ArrayList<>();
     private Context context;
     Display display;
     int width, height;
@@ -40,6 +51,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
         height = (int) (width * 0.75F);
+        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+            new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 
     @Override
@@ -53,7 +66,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         final ManicureDTO item = data.get(position);
 
         if (position == data.size() - 1) {
-            if (data.size()-1 % 100 != 8)
+            if (data.size() - 1 % 100 != 8)
                 ManicureFeed.addFeed(data.size() / 100 + 1);
         }
 
@@ -63,8 +76,41 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         String[] date = item.getAvailableDate().split("");
 
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
         holder.likesCount.setText("" + item.getLikes());
+        if (!likes.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        } else {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+            holder.likesCount.setText("" + (item.getLikes() + 1));
+        }
+
+        if (likes.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+        } else if (!likes.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        }
+        holder.addLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                    if (!likes.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                        likes.add(item.getId());
+                        holder.likesCount.setText("" + (item.getLikes() + 1));
+                        new GetRequest("http://195.88.209.17/app/in/like.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                    } else if (likes.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                        likes.remove(item.getId());
+                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
+                        new GetRequest("http://195.88.209.17/app/in/dislike.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                    }
+                } else {
+                    context.startActivity(new Intent(context, Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
 
         Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
@@ -181,42 +227,42 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     if (item.getColors().contains("black"))
                         colors.addView(createCircle("#000000", "black"));
                     moreContainer.addView(colors);
-                    if(item.getShape().equals("square"))
+                    if (item.getShape().equals("square"))
                         moreContainer.addView(createText("Форма ногтей: Квадратная форма", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getShape().equals("oval"))
+                    else if (item.getShape().equals("oval"))
                         moreContainer.addView(createText("Форма ногтей: Овальная форма", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getShape().equals("stiletto"))
+                    else if (item.getShape().equals("stiletto"))
                         moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16));
 
-                    if(item.getDesign().equals("french_classic"))
+                    if (item.getDesign().equals("french_classic"))
                         moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_chevron"))
+                    else if (item.getDesign().equals("french_chevron"))
                         moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_millennium"))
+                    else if (item.getDesign().equals("french_millennium"))
                         moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_fun"))
+                    else if (item.getDesign().equals("french_fun"))
                         moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_crystal"))
+                    else if (item.getDesign().equals("french_crystal"))
                         moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_colorful"))
+                    else if (item.getDesign().equals("french_colorful"))
                         moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_designer"))
+                    else if (item.getDesign().equals("french_designer"))
                         moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_spa"))
+                    else if (item.getDesign().equals("french_spa"))
                         moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("french_moon"))
+                    else if (item.getDesign().equals("french_moon"))
                         moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("art"))
+                    else if (item.getDesign().equals("art"))
                         moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("designer"))
+                    else if (item.getDesign().equals("designer"))
                         moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("volume"))
+                    else if (item.getDesign().equals("volume"))
                         moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("aqua"))
+                    else if (item.getDesign().equals("aqua"))
                         moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("american"))
+                    else if (item.getDesign().equals("american"))
                         moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16));
-                    else if(item.getDesign().equals("photo"))
+                    else if (item.getDesign().equals("photo"))
                         moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16));
 
                     holder.moreContainer.addView(moreContainer);
@@ -351,8 +397,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer, addLike;
-        ImageView user_avatar;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        ImageView user_avatar, addLike;
 
         public TapeViewHolder(View itemView) {
             super(itemView);
@@ -365,7 +411,50 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
-            addLike = (LinearLayout) itemView.findViewById(R.id.addLike);
+            addLike = (ImageView) itemView.findViewById(R.id.addLike);
+        }
+    }
+
+    public class CheckLikes extends AsyncTask<Void, Void, String> {
+
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        String url = "";
+        String result = "";
+        String email = "";
+
+        public CheckLikes(String email) {
+            this.email = email;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/in/favorites.php?email=" + email);
+                connection = (HttpURLConnection) feedURL.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer profileBuffer = new StringBuffer();
+                String profileLine;
+                while ((profileLine = reader.readLine()) != null) {
+                    profileBuffer.append(profileLine);
+                }
+                result = profileBuffer.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            String[] array = s.split(",");
+            for (int i = 0; i < array.length; i++) {
+                if (!array[i].equals(""))
+                    likes.add(new Long(array[i]));
+            }
         }
     }
 }
