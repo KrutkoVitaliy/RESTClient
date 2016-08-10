@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
@@ -18,41 +17,33 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
+import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.network.GetRequest;
 
-public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAdapter.TapeViewHolder> {
+public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<FavoritesMakeupFeedListAdapter.TapeViewHolder> {
 
-    private List<MakeupDTO> data;
-    private List<Long> likes = new ArrayList<>();
+    private List<MakeupDTO> makeupData;
     private Context context;
+    private List<Long> likesId = new ArrayList<>();
     Display display;
     int width, height;
 
-    public MakeupFeedListAdapter(List<MakeupDTO> data, Context context) {
-        this.data = data;
+    public FavoritesMakeupFeedListAdapter(List<MakeupDTO> makeupData, Context context) {
+        this.makeupData = makeupData;
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
         height = (int) (width * 0.75F);
-        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
-            new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 
     @Override
@@ -63,47 +54,27 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final MakeupDTO item = data.get(position);
+        final MakeupDTO item = makeupData.get(position);
 
-        if (position == data.size() - 1) {
-            if (data.size()-1 % 100 != 8)
-                MakeupFeed.addFeed(data.size() / 100 + 1);
+        if (position == makeupData.size() - 1) {
+            if (makeupData.size() - 1 % 100 != 8)
+                Favorites.addMakeupFeed(makeupData.size() / 100 + 1);
         }
-
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
         final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
-        holder.likesCount.setText("" + item.getLikes());
-        if (!likes.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-        } else {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-            holder.likesCount.setText("" + (item.getLikes() + 1));
-        }
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+        holder.likesCount.setText("");
+        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
 
         holder.addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
-                    if (!likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                        likes.add(item.getId());
-                        holder.likesCount.setText("" + (item.getLikes() + 1));
-                        new GetRequest("http://195.88.209.17/app/in/makeupLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    } else if (likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                        likes.remove(item.getId());
-                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
-                        new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    }
-                } else {
-                    context.startActivity(new Intent(context, Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
+                new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                holder.post.removeAllViews();
             }
         });
 
@@ -295,7 +266,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
 
     private ImageView createCircle(String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Storage.getInt("Width", 480) * 0.075F), (int) (Storage.getInt("Width", 480) * 0.075F)));
         imageView.setScaleX(0.9F);
         imageView.setScaleY(0.9F);
         imageView.setBackgroundColor(Color.parseColor(color));
@@ -372,16 +343,16 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return makeupData.size();
     }
 
-    public void setData(List<MakeupDTO> data) {
-        this.data = data;
+    public void setData(List<MakeupDTO> makeupData) {
+        this.makeupData = makeupData;
     }
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
         ImageView user_avatar, addLike;
 
         public TapeViewHolder(View itemView) {
@@ -395,50 +366,8 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
+            post = (LinearLayout) itemView.findViewById(R.id.post);
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
-        }
-    }
-
-    public class CheckLikes extends AsyncTask<Void, Void, String> {
-
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-        String email = "";
-
-        public CheckLikes(String email) {
-            this.email = email;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesMakeup.php?email=" + email);
-                connection = (HttpURLConnection) feedURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
-                String profileLine;
-                while ((profileLine = reader.readLine()) != null) {
-                    profileBuffer.append(profileLine);
-                }
-                result = profileBuffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String[] array = s.split(",");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals(""))
-                    likes.add(new Long(array[i]));
-            }
         }
     }
 }

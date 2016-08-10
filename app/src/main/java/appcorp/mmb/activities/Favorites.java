@@ -11,6 +11,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,18 +36,20 @@ import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.fragment_adapters.FavoritesManicureFeedFragmentAdapter;
-import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
+import appcorp.mmb.loaders.FavoriteHairstyleLoader;
+import appcorp.mmb.loaders.FavoriteMakeupLoader;
+import appcorp.mmb.loaders.FavoriteManicureLoader;
 
 public class Favorites extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
-    private FavoritesManicureFeedFragmentAdapter adapter;
-    private List<Long> likesId = new ArrayList<>();
+    private static FavoritesManicureFeedFragmentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +60,22 @@ public class Favorites extends AppCompatActivity {
         initNavigationView();
         initViewPager();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
-            new LoadIdSet("http://195.88.209.17/app/in/favorites.php?email=" + Storage.getString("E-mail", "")).execute();
-            new ManicureFeedLoader(1).execute();
+            addManicureFeed(1);
+            addMakeupFeed(1);
+            addHairstyleFeed(1);
         }
+    }
+
+    public static void addManicureFeed(int position) {
+        new FavoriteManicureLoader(adapter, position).execute();
+    }
+
+    public static void addMakeupFeed(int position) {
+        new FavoriteMakeupLoader(adapter, position).execute();
+    }
+
+    public static void addHairstyleFeed(int position) {
+        new FavoriteHairstyleLoader(adapter, position).execute();
     }
 
     private void initToolbar() {
@@ -75,7 +95,7 @@ public class Favorites extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.favoritesViewPager);
-        adapter = new FavoritesManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
+        adapter = new FavoritesManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<MakeupDTO>(), new ArrayList<HairstyleDTO>());
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.favoritesTabLayout);
@@ -88,7 +108,9 @@ public class Favorites extends AppCompatActivity {
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.favoritesNavigation);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.favoritesNavigation);
+        initHeaderLayout(navigationView);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -121,146 +143,29 @@ public class Favorites extends AppCompatActivity {
         });
     }
 
-    public class LoadIdSet extends AsyncTask<Void, Void, String> {
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-
-        public LoadIdSet(String url) {
-            this.url = url;
+    private void initHeaderLayout(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
+        if (!Storage.getString("PhotoURL", "").equals("")) {
+            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            switcherHint.setText(R.string.account_hint_signed);
+        } else {
+            avatar.setImageResource(R.mipmap.icon);
+            switcherHint.setText(R.string.account_hint_unsigned);
         }
+        TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
+        accountName.setText(Storage.getString("Name", "Make Me Beauty"));
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                URL feedURL = new URL(url);
-                connection = (HttpURLConnection) feedURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
-                String profileLine;
-                while ((profileLine = reader.readLine()) != null) {
-                    profileBuffer.append(profileLine);
-                }
-                result = profileBuffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String[] set = s.split(",");
-            for (int i = 0; i < set.length; i++)
-                if (!set[i].equals(""))
-                    likesId.add(new Long(set[i]));
-        }
-    }
-
-
-    public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
-
-        HttpURLConnection urlFeedConnection = null;
-        BufferedReader reader = null;
-        String resultJsonFeed = "";
-        int position;
-
-        public ManicureFeedLoader(int position) {
-            this.position = position;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
+        menuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("PhotoURL", "").equals("")) {
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + i + ".html");
-                        //URL feedURL = new URL(Intermediates.URL.GET_FEED);
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuffer buffer = new StringBuffer();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
+                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
-            List<ManicureDTO> data = new ArrayList<>();
-            String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
-
-            try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
-
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
-
-                    id = item.getLong("id");
-                    authorPhoto = item.getString("authorPhoto");
-                    authorName = item.getString("authorName");
-                    availableDate = item.getString("uploadDate");
-                    tags = item.getString("tags");
-                    shape = item.getString("shape");
-                    design = item.getString("design");
-                    colors = item.getString("colors");
-                    likes = item.getLong("likes");
-                    published = item.getString("published");
-
-                    String[] tempTags = tags.split(",");
-                    for (int j = 0; j < tempTags.length; j++) {
-                        hashTags.add(tempTags[j]);
-                    }
-
-                    /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                    availableDate = simpleDateFormat.format(new Date(tempDate));
-                    if ((currentDate - tempDate) <= 259200000)
-                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);*/
-
-                    if (likesId.contains(id)) {
-                        ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
-                        data.add(manicureDTO);
-                    }
-                }
-                adapter.setData(data);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        });
     }
 }

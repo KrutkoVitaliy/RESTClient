@@ -9,22 +9,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import appcorp.mmb.activities.Favorites;
+import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.fragments.AbstractTabFragment;
+import appcorp.mmb.fragments.FavoritesHairstyleFeedFragment;
+import appcorp.mmb.fragments.FavoritesMakeupFeedFragment;
 import appcorp.mmb.fragments.FavoritesManicureFeedFragment;
-import appcorp.mmb.fragments.GlobalFeedFragment;
 
 public class FavoritesManicureFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
-    private List<ManicureDTO> data;
+    private List<ManicureDTO> manicureData;
+    private List<MakeupDTO> makeupData;
+    private List<HairstyleDTO> hairstyleData;
     private FavoritesManicureFeedFragment favoritesManicureFeedFragment;
+    private FavoritesMakeupFeedFragment favoritesMakeupFeedFragment;
+    private FavoritesHairstyleFeedFragment favoritesHairstyleFeedFragment;
 
-    public FavoritesManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> data) {
+    public FavoritesManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> manicureData, List<MakeupDTO> makeupData, List<HairstyleDTO> hairstyleData) {
         super(fm);
-        this.data = data;
+        this.manicureData = manicureData;
+        this.makeupData = makeupData;
+        this.hairstyleData = hairstyleData;
         this.context = context;
         initTabsMap(context);
     }
@@ -46,13 +55,26 @@ public class FavoritesManicureFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
-        favoritesManicureFeedFragment = FavoritesManicureFeedFragment.getInstance(context, data);
+        favoritesManicureFeedFragment = FavoritesManicureFeedFragment.getInstance(context, manicureData);
+        favoritesMakeupFeedFragment = FavoritesMakeupFeedFragment.getInstance(context, makeupData);
+        favoritesHairstyleFeedFragment = FavoritesHairstyleFeedFragment.getInstance(context, hairstyleData);
         tabs.put(0, favoritesManicureFeedFragment);
-        //tabs.put(1, FavoritesManicureFeedFragment.getInstance(context, data));
+        tabs.put(1, favoritesMakeupFeedFragment);
+        tabs.put(2, favoritesHairstyleFeedFragment);
     }
 
-    public void setData(List<ManicureDTO> data) {
-        this.data = data;
-        favoritesManicureFeedFragment.refreshData(data);
+    public void setManicureData(List<ManicureDTO> manicureData) {
+        this.manicureData = manicureData;
+        favoritesManicureFeedFragment.setData(manicureData);
+        favoritesManicureFeedFragment.refreshData(manicureData);
+    }
+    public void setMakeupData(List<MakeupDTO> makeupData) {
+        this.makeupData = makeupData;
+        favoritesMakeupFeedFragment.setData(makeupData);
+        favoritesMakeupFeedFragment.refreshData(makeupData);
+    }
+    public void setHairstyleData(List<HairstyleDTO> hairstyleData) {
+        this.hairstyleData = hairstyleData;
+        favoritesHairstyleFeedFragment.setData(hairstyleData);
     }
 }

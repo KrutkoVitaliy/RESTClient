@@ -12,21 +12,21 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.list_adapters.FavoritesManicureFeedListAdapter;
+import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.list_adapters.FavoritesHairstyleFeedListAdapter;
 
-public class FavoritesManicureFeedFragment extends AbstractTabFragment{
+public class FavoritesHairstyleFeedFragment extends AbstractTabFragment{
 
-    private List<ManicureDTO> manicureData;
-    private FavoritesManicureFeedListAdapter adapter;
+    private List<HairstyleDTO> hairstyleData;
+    private FavoritesHairstyleFeedListAdapter adapter;
 
-    public static FavoritesManicureFeedFragment getInstance(Context context, List<ManicureDTO> manicureData) {
+    public static FavoritesHairstyleFeedFragment getInstance(Context context, List<HairstyleDTO> hairstyleData) {
         Bundle args = new Bundle();
-        FavoritesManicureFeedFragment fragment = new FavoritesManicureFeedFragment();
+        FavoritesHairstyleFeedFragment fragment = new FavoritesHairstyleFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(manicureData);
-        fragment.setTitle("Manicure");
+        fragment.setData(hairstyleData);
+        fragment.setTitle("Hairstyle");
         return fragment;
     }
 
@@ -34,8 +34,8 @@ public class FavoritesManicureFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<ManicureDTO> manicureData) {
-        this.manicureData = manicureData;
+    public void setData(List<HairstyleDTO> hairstyleData) {
+        this.hairstyleData = hairstyleData;
     }
 
     @Nullable
@@ -44,13 +44,13 @@ public class FavoritesManicureFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new FavoritesManicureFeedListAdapter(manicureData, context);
+        adapter = new FavoritesHairstyleFeedListAdapter(hairstyleData, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<ManicureDTO> manicureData) {
-        adapter.setData(manicureData);
+    public void refreshData(List<HairstyleDTO> hairstyleData) {
+        adapter.setData(hairstyleData);
         adapter.notifyDataSetChanged();
     }
 }

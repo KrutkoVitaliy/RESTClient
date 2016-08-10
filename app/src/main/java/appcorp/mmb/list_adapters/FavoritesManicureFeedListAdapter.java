@@ -32,6 +32,7 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.Authorization;
+import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
@@ -45,14 +46,14 @@ import appcorp.mmb.network.GetRequest;
 
 public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<FavoritesManicureFeedListAdapter.TapeViewHolder> {
 
-    private List<ManicureDTO> data;
+    private List<ManicureDTO> manicureData;
     private Context context;
     private List<Long> likesId = new ArrayList<>();
     Display display;
     int width, height;
 
-    public FavoritesManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
-        this.data = data;
+    public FavoritesManicureFeedListAdapter(List<ManicureDTO> manicureData, Context context) {
+        this.manicureData = manicureData;
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
@@ -67,11 +68,11 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final ManicureDTO item = data.get(position);
+        final ManicureDTO item = manicureData.get(position);
 
-        if (position == data.size() - 1) {
-            if (data.size() - 1 % 100 != 8)
-                ManicureFeed.addFeed(data.size() / 100 + 1);
+        if (position == manicureData.size() - 1) {
+            if (manicureData.size() - 1 % 100 != 8)
+                Favorites.addManicureFeed(manicureData.size() / 100 + 1);
         }
 
         final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
@@ -81,38 +82,14 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
 
         holder.title.setText(item.getAuthorName());
         holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-        holder.likesCount.setText("" + item.getLikes());
-        if (!likesId.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-        } else {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-            holder.likesCount.setText("" + (item.getLikes() + 1));
-        }
+        holder.likesCount.setText("");
+        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
 
-        if (likesId.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-        } else if (!likesId.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-        }
         holder.addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
-                    if (!likesId.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                        likesId.add(item.getId());
-                        holder.likesCount.setText("" + (item.getLikes() + 1));
-                        new GetRequest("http://195.88.209.17/app/in/like.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
-                    } else if (likesId.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                        likesId.remove(item.getId());
-                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
-                        new GetRequest("http://195.88.209.17/app/in/dislike.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
-                    }
-                } else {
-                    context.startActivity(new Intent(context, Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
+                new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                holder.post.removeAllViews();
             }
         });
 
@@ -393,16 +370,16 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return manicureData.size();
     }
 
-    public void setData(List<ManicureDTO> data) {
-        this.data = data;
+    public void setData(List<ManicureDTO> manicureData) {
+        this.manicureData = manicureData;
     }
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
         ImageView user_avatar, addLike;
 
         public TapeViewHolder(View itemView) {
@@ -416,6 +393,7 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
+            post = (LinearLayout) itemView.findViewById(R.id.post);
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,9 +18,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
@@ -27,10 +35,12 @@ import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.network.GetRequest;
 
 public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeedListAdapter.TapeViewHolder> {
 
     private List<HairstyleDTO> data;
+    private List<Long> likes = new ArrayList<>();
     private Context context;
     int width, height;
 
@@ -39,6 +49,8 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         this.context = context;
         width = Storage.getInt("Width", 480);
         height = (int) (width * 1.5F);
+        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+            new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 
     @Override
@@ -64,6 +76,35 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         holder.title.setText(item.getAuthorName());
         holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
         holder.likesCount.setText("" + item.getLikes());
+
+        if (!likes.contains(item.getId())) {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        } else {
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+            holder.likesCount.setText("" + (item.getLikes() + 1));
+        }
+
+        holder.addLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                    if (!likes.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                        likes.add(item.getId());
+                        holder.likesCount.setText("" + (item.getLikes() + 1));
+                        new GetRequest("http://195.88.209.17/app/in/hairstyleLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                    } else if (likes.contains(item.getId())) {
+                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                        likes.remove(item.getId());
+                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
+                        new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                    }
+                } else {
+                    context.startActivity(new Intent(context, Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
 
         Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
@@ -281,8 +322,8 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer, addLike;
-        ImageView user_avatar;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        ImageView user_avatar, addLike;
 
         public TapeViewHolder(View itemView) {
             super(itemView);
@@ -295,7 +336,50 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
-            addLike = (LinearLayout) itemView.findViewById(R.id.addLike);
+            addLike = (ImageView) itemView.findViewById(R.id.addLike);
+        }
+    }
+
+    public class CheckLikes extends AsyncTask<Void, Void, String> {
+
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        String url = "";
+        String result = "";
+        String email = "";
+
+        public CheckLikes(String email) {
+            this.email = email;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesHairstyle.php?email=" + email);
+                connection = (HttpURLConnection) feedURL.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer profileBuffer = new StringBuffer();
+                String profileLine;
+                while ((profileLine = reader.readLine()) != null) {
+                    profileBuffer.append(profileLine);
+                }
+                result = profileBuffer.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            String[] array = s.split(",");
+            for (int i = 0; i < array.length; i++) {
+                if (!array[i].equals(""))
+                    likes.add(new Long(array[i]));
+            }
         }
     }
 }

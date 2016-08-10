@@ -85,11 +85,6 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             holder.likesCount.setText("" + (item.getLikes() + 1));
         }
 
-        if (likes.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-        } else if (!likes.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-        }
         holder.addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,12 +93,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                         holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
                         likes.add(item.getId());
                         holder.likesCount.setText("" + (item.getLikes() + 1));
-                        new GetRequest("http://195.88.209.17/app/in/like.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                        new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     } else if (likes.contains(item.getId())) {
                         holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
                         likes.remove(item.getId());
                         holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
-                        new GetRequest("http://195.88.209.17/app/in/dislike.php?id=" + item.getId() + "&category=manicure&email=" + Storage.getString("E-mail", "")).execute();
+                        new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     }
                 } else {
                     context.startActivity(new Intent(context, Authorization.class)
@@ -430,7 +425,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/app/in/favorites.php?email=" + email);
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesManicure.php?email=" + email);
                 connection = (HttpURLConnection) feedURL.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();

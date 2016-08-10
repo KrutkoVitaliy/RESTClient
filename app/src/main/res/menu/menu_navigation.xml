@@ -32,8 +32,7 @@
                 android:id="@+id/navMenuHairstyle"
                 android:orderInCategory="5"
                 android:title="@string/menu_item_hairstyle"
-                android:icon="@mipmap/hairstyle"
-                android:visible="false"/>
+                android:icon="@mipmap/hairstyle"/>
             <item
                 android:id="@+id/navMenuManicure"
                 android:orderInCategory="6"
