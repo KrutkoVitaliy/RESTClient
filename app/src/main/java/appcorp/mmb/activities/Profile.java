@@ -76,14 +76,6 @@ public class Profile extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        search_back = (ImageView) findViewById(R.id.profile_back);
-        search_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         initToolbar();
         initNavigationView();
 

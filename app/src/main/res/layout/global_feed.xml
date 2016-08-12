@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/globalMenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
-    <android.support.design.widget.CoordinatorLayout
+    <TextView
+        android:id="@+id/logoText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:text="Make Me Beauty"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:textSize="8pt"
+        android:textColor="@color/colorPrimary"/>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                android:title="@string/app_name"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+        <ImageView
+            android:id="@+id/manicure"
+            android:layout_width="280dp"
+            android:layout_height="140dp"
+            android:src="@mipmap/thumb_manicure"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/makeup"
+            android:layout_width="280dp"
+            android:layout_height="140dp"
+            android:src="@mipmap/thumb_makeup"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/hairstyle"
+            android:layout_width="280dp"
+            android:layout_height="140dp"
+            android:src="@mipmap/thumb_hairstyles"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </android.support.design.widget.CoordinatorLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/menu_navigation"
-        app:headerLayout="@layout/navigation_header"/>
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

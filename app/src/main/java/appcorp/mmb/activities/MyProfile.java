@@ -72,7 +72,7 @@ public class MyProfile extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
+                startActivity(new Intent(getApplicationContext(), EditMyProfile.class));
                 return true;
             }
         });

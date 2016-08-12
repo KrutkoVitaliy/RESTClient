@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -77,108 +77,19 @@
                         android:paddingLeft="16dp"
                         android:text="Phone number"
                         android:textColor="@color/author_title"
-                        android:textSize="6pt"
-
-                        android:visibility="invisible" />
+                        android:textSize="6pt"/>
                 </LinearLayout>
             </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-
-                android:visibility="invisible">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:text="Skill 1"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 4"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
-                        android:text="Skill 2"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 5"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
-                        android:text="Skill 3"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 6"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-            </FrameLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D0D0D0"
-
-                android:visibility="invisible" />
+                android:background="#D0D0D0"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-
-                android:visibility="invisible">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -257,16 +168,94 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D0D0D0"
+                android:background="#D0D0D0"/>
 
-                android:visibility="invisible" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/skill1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="32dp"
+                        android:text="Skill 1"
+                        android:textColor="@color/author_title" />
+
+                    <TextView
+                        android:id="@+id/skill4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="32dp"
+                        android:paddingTop="8dp"
+                        android:text="Skill 4"
+                        android:textColor="@color/author_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/skill2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:text="Skill 2"
+                        android:textColor="@color/author_title" />
+
+                    <TextView
+                        android:id="@+id/skill5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="8dp"
+                        android:text="Skill 5"
+                        android:textColor="@color/author_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/skill3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="32dp"
+                        android:text="Skill 3"
+                        android:textColor="@color/author_title" />
+
+                    <TextView
+                        android:id="@+id/skill6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingRight="32dp"
+                        android:paddingTop="8dp"
+                        android:text="Skill 6"
+                        android:textColor="@color/author_title" />
+                </LinearLayout>
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                android:visibility="invisible">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -317,9 +306,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-
-                        android:visibility="invisible">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"

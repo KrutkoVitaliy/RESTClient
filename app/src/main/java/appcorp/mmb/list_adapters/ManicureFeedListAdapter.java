@@ -129,10 +129,9 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchFeed.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra("Request", item.getHashTags().get(finalI)));
                 }
             });
             holder.hashTags.addView(hashTag);
