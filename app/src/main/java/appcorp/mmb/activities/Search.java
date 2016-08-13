@@ -58,6 +58,7 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         initToolbar();
         initNavigationView();
         initViews();
@@ -122,6 +123,22 @@ public class Search extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.searchToolbar);
         toolbar.setTitle(R.string.toolbar_title_search);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(getApplicationContext(), SearchFeed.class);
+                intent
+                        .putExtra("Category", category)
+                        .putExtra("Request", request)
+                        .putExtra("Colors", arrayColors)
+                        .putExtra("EyeColor", eyeColor)
+                        .putExtra("Difficult", difficult)
+                        .putExtra("Occasion", "" + occasion.getSelectedItemPosition());
+                startActivity(intent);
+                return true;
+            }
+        });
+        toolbar.inflateMenu(R.menu.menu_search);
     }
 
     private void initNavigationView() {
@@ -140,8 +157,8 @@ public class Search extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;
                     case R.id.navMenuSearch:
                         break;

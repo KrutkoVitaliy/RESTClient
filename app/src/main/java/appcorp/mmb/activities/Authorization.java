@@ -1,13 +1,10 @@
 package appcorp.mmb.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +17,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import appcorp.mmb.R;
 import appcorp.mmb.classes.Storage;
@@ -104,7 +93,7 @@ public class Authorization extends AppCompatActivity implements GoogleApiClient.
             String email = acct.getEmail().toString();
             String photo = acct.getPhotoUrl().toString();
 
-            new GetRequest("http://195.88.209.17/app/in/user.php?name="+name.replace(" ", "%20")+"&photo=" + photo + "&email=" + email).execute();
+            new GetRequest("http://195.88.209.17/app/in/user.php?name=" + name.replace(" ", "%20") + "&photo=" + photo + "&email=" + email).execute();
 
             finish();
             //startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));

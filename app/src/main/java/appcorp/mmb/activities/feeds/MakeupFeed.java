@@ -46,11 +46,6 @@ public class MakeupFeed extends AppCompatActivity {
         new MakeupFeedLoader(adapter, 1).execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-    }
-
     public static void addFeed(int position) {
         new MakeupFeedLoader(adapter, position).execute();
     }

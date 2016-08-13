@@ -13,30 +13,29 @@
         android:text="Make Me Beauty"
         android:gravity="center"
         android:layout_marginTop="32dp"
-        android:textSize="8pt"
+        android:textSize="16pt"
         android:textColor="@color/colorPrimary"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp">
+        android:orientation="vertical">
         <ImageView
             android:id="@+id/manicure"
-            android:layout_width="280dp"
-            android:layout_height="140dp"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
             android:src="@mipmap/thumb_manicure"
             android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/makeup"
-            android:layout_width="280dp"
-            android:layout_height="140dp"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
             android:src="@mipmap/thumb_makeup"
             android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/hairstyle"
-            android:layout_width="280dp"
-            android:layout_height="140dp"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
             android:src="@mipmap/thumb_hairstyles"
             android:layout_gravity="center"/>
     </LinearLayout>

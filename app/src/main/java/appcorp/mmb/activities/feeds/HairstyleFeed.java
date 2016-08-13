@@ -47,11 +47,6 @@ public class HairstyleFeed extends AppCompatActivity {
         new HairstyleFeedLoader(adapter, 1).execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-    }
-
     public static void addFeed(int position) {
         new HairstyleFeedLoader(adapter, position).execute();
     }

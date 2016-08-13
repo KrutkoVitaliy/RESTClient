@@ -33,8 +33,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Authorization"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Favorites"
             android:screenOrientation="portrait" />

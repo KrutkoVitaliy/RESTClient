@@ -59,11 +59,6 @@ public class SearchFeed extends AppCompatActivity {
         new Get().execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-    }
-
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.searchToolbar);
         if (!request.equals(""))
