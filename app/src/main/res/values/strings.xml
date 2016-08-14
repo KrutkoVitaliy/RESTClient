@@ -34,17 +34,21 @@
 
     <!-- VALUES FROM MANICURE DESIGN -->
     <string-array name="manicureDesign">
-        <item>Not selected</item>
-        <item>Celebrity</item>
-        <item>Dramatic</item>
-        <item>Holiday</item>
-    </string-array>
-
-    <!-- VALUES FROM CATEGORY FIELD -->
-    <string-array name="searchTypes">
-        <item>Makeup</item>
-        <!--<item>Hairstyle</item>-->
-        <item>Manicure</item>
+        <item>French classic</item>
+        <item>French chevron</item>
+        <item>French millennium</item>
+        <item>French fun</item>
+        <item>French crystal</item>
+        <item>French colorful</item>
+        <item>French designer</item>
+        <item>French spa</item>
+        <item>French moon</item>
+        <item>Art</item>
+        <item>Designer</item>
+        <item>Volume</item>
+        <item>Aqua</item>
+        <item>American</item>
+        <item>Photo</item>
     </string-array>
 
     <!-- VALUES FROM NAVIGATION MENU -->

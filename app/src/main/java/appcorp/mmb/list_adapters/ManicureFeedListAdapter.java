@@ -107,7 +107,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             }
         });
 
-        Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,7 +145,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             screenShot.setMinimumHeight(height);
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://185.158.112.18/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -155,7 +155,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     if (holder.showMore.getText().equals(SHOW)) {
                         Intent intent = new Intent(context, FullscreenPreview.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://185.158.112.18/storage/images/" + item.getImages().get(finalI));
+                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
                         context.startActivity(intent);
                     }
                 }
@@ -192,34 +192,10 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
-                    if (item.getColors().contains("pink"))
-                        colors.addView(createCircle("#bb125b", "pink"));
-                    if (item.getColors().contains("purple"))
-                        colors.addView(createCircle("#9210ae", "purple"));
-                    if (item.getColors().contains("blue"))
-                        colors.addView(createCircle("#117dae", "blue"));
-                    if (item.getColors().contains("teal"))
-                        colors.addView(createCircle("#3b9670", "teal"));
-                    if (item.getColors().contains("green"))
-                        colors.addView(createCircle("#79bd14", "green"));
-                    if (item.getColors().contains("yellow"))
-                        colors.addView(createCircle("#d4b515", "yellow"));
-                    if (item.getColors().contains("orange"))
-                        colors.addView(createCircle("#d46915", "orange"));
-                    if (item.getColors().contains("red"))
-                        colors.addView(createCircle("#d42415", "red"));
-                    if (item.getColors().contains("neutral"))
-                        colors.addView(createCircle("#d2af7f", "neutral"));
-                    if (item.getColors().contains("copper"))
-                        colors.addView(createCircle("#b48f58", "copper"));
-                    if (item.getColors().contains("brown"))
-                        colors.addView(createCircle("#604e36", "brown"));
-                    if (item.getColors().contains("hazel"))
-                        colors.addView(createCircle("#70653f", "hazel"));
-                    if (item.getColors().contains("gray"))
-                        colors.addView(createCircle("#555555", "gray"));
-                    if (item.getColors().contains("black"))
-                        colors.addView(createCircle("#000000", "black"));
+                    String[] mColors = (item.getColors().split(","));
+                    for (int i = 0; i < mColors.length; i++) {
+                        colors.addView(createCircle("#"+mColors[i], mColors[i]));
+                    }
                     moreContainer.addView(colors);
                     if (item.getShape().equals("square"))
                         moreContainer.addView(createText("Форма ногтей: Квадратная форма", Typeface.DEFAULT_BOLD, 16));

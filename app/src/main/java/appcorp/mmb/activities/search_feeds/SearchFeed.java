@@ -34,7 +34,9 @@ public class SearchFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private SearchFragmentAdapter adapter;
-    private String request, colors, eyeColor, difficult, occasion, category;
+    private String request, eyeColor, difficult, occasion, hairstyleType, shape, design;
+    private ArrayList<String> colors = new ArrayList<>();
+    private ArrayList<String> manicureColors = new ArrayList<>();
 
     public SearchFeed() {
 
@@ -46,17 +48,31 @@ public class SearchFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_feed);
 
-        this.category = getIntent().getStringExtra("Category");
-        this.request = getIntent().getStringExtra("Request");
-        this.colors = getIntent().getStringExtra("Colors");
-        this.eyeColor = getIntent().getStringExtra("EyeColor");
-        this.difficult = getIntent().getStringExtra("Difficult");
-        this.occasion = getIntent().getStringExtra("Occasion");
-
         initToolbar();
         initNavigationView();
         initViewPager();
-        new Get().execute();
+
+        switch (getIntent().getStringExtra("Category")) {
+            case "makeup":
+                this.request = getIntent().getStringExtra("Request");
+                this.colors = getIntent().getStringArrayListExtra("Colors");
+                this.eyeColor = getIntent().getStringExtra("EyeColor");
+                this.difficult = getIntent().getStringExtra("Difficult");
+                this.occasion = getIntent().getStringExtra("Occasion");
+                //new MakeupLoader("http://195.88.209.17/search").execute();
+                break;
+            case "hairstyle":
+                this.request = getIntent().getStringExtra("Request");
+                this.hairstyleType = getIntent().getStringExtra("HairstyleType");
+                break;
+            case "manicure":
+                this.request = getIntent().getStringExtra("Request");
+                this.manicureColors = getIntent().getStringArrayListExtra("ManicureColors");
+                this.shape = getIntent().getStringExtra("Shape");
+                this.design = getIntent().getStringExtra("Design");
+                break;
+        }
+        //new Get().execute();
     }
 
     private void initToolbar() {
@@ -93,7 +109,7 @@ public class SearchFeed extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    class Get extends AsyncTask<Void, Void, String> {
+    /*class Get extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection searchConnection = null;
         BufferedReader searchReader = null;
@@ -205,7 +221,7 @@ public class SearchFeed extends AppCompatActivity {
 
                 }
 
-                /*avatar = profileItem.getString("avatar");
+                *//*avatar = profileItem.getString("avatar");
                 layout_avatar = (ImageView) findViewById(R.id.avatar);
                 Picasso.with(getApplicationContext()).load(avatar).into(layout_avatar);
 
@@ -243,11 +259,11 @@ public class SearchFeed extends AppCompatActivity {
                 aid = profileItem.getString("aid");
                 registration_date = profileItem.getString("registration_date");
                 user_type = profileItem.getString("user_type");
-                nickname = profileItem.getString("nickname");*/
+                nickname = profileItem.getString("nickname");*//*
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             adapter.setData(searchData);
         }
-    }
+    }*/
 }

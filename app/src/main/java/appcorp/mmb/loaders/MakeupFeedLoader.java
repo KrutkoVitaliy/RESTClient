@@ -22,9 +22,11 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
 
     HttpURLConnection urlFeedConnection = null;
     BufferedReader reader = null;
-    String resultJsonFeed = "";
+    String resultJsonFeed = "", output = "";
     MakeupFeedFragmentAdapter adapter;
     int position;
+    private List<String> requestList = new ArrayList<>();
+    private String request;
 
     public MakeupFeedLoader(MakeupFeedFragmentAdapter adapter, int position) {
         this.adapter = adapter;
@@ -59,7 +61,7 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);
                     resultJsonFeed += buffer.toString();
-                    resultJsonFeed = resultJsonFeed.replace("][",",");
+                    resultJsonFeed = resultJsonFeed.replace("][", ",");
                 }
             }
         } catch (Exception e) {
@@ -90,11 +92,6 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     hashTags.add(tempTags[j]);
                 }
 
-                    /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                    availableDate = simpleDateFormat.format(new Date(tempDate));
-                    if ((currentDate - tempDate) <= 259200000)
-                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);*/
-
                 if (item.getString("published").equals("t") && !images.isEmpty()) {
                     MakeupDTO makeupDTO = new MakeupDTO(
                             item.getLong("id"),
@@ -110,7 +107,6 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                             item.getLong("likes"));
                     data.add(makeupDTO);
                 }
-
             }
             adapter.setData(data);
         } catch (JSONException e) {

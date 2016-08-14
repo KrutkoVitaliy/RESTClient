@@ -32,6 +32,7 @@ import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.classes.Storage;
 
 public class Search extends AppCompatActivity {
@@ -40,19 +41,20 @@ public class Search extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private String hashTag = "", request = "", eyeColor = "", difficult = "";
     private String arrayColors = "", category = "";
-    private EditText requestField;
+    private EditText requestField, hairstyleType;
     private Button search;
     private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
             eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
-    private Spinner occasion;
+    private Spinner occasion, shape, design;
     private ImageView c000000, c404040, cFF0000, cFF6A00, cFFD800, cB6FF00, c4CFF00, c00FF21, c00FF90,
             c00FFFF, c0094FF, c0026FF, c4800FF, cB200FF, cFF00DC, cFF006E, c808080, cFFFFFF, cF79F49,
             c8733DD, c62B922, cF9F58D, cA50909, c1D416F, cBCB693, c644949, cF9CBCB, cD6C880;
     private ImageView mc000000, mc404040, mcFF0000, mcFF6A00, mcFFD800, mcB6FF00, mc4CFF00, mc00FF21, mc00FF90,
             mc00FFFF, mc0094FF, mc0026FF, mc4800FF, mcB200FF, mcFF00DC, mcFF006E, mc808080, mcFFFFFF, mcF79F49,
             mc8733DD, mc62B922, mcF9F58D, mcA50909, mc1D416F, mcBCB693, mc644949, mcF9CBCB, mcD6C880;
-    private List<String> colors = new ArrayList<>();
+    private ArrayList<String> colors = new ArrayList<>();
+    private ArrayList<String> manicureColors = new ArrayList<>();
     private LinearLayout catMakeup, catManicure, catHairstyle, makeupFrame, hairstyleFrame, manicureFrame;
 
     @Override
@@ -157,7 +159,10 @@ public class Search extends AppCompatActivity {
 
     private void initViews() {
         occasion = (Spinner) findViewById(R.id.occasionField);
+        shape = (Spinner) findViewById(R.id.shape);
+        design = (Spinner) findViewById(R.id.design);
         requestField = (EditText) findViewById(R.id.requestField);
+        hairstyleType = (EditText) findViewById(R.id.hairstyleType);
         makeupFrame = (LinearLayout)findViewById(R.id.makeupFrame);
         hairstyleFrame = (LinearLayout)findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout)findViewById(R.id.manicureFrame);
@@ -169,15 +174,31 @@ public class Search extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), SearchFeed.class);
-                intent
-                        .putExtra("Category", category)
-                        .putExtra("Request", request)
-                        .putExtra("Colors", arrayColors)
-                        .putExtra("EyeColor", eyeColor)
-                        .putExtra("Difficult", difficult)
-                        .putExtra("Occasion", "" + occasion.getSelectedItemPosition());
-                startActivity(intent);
+                switch (category) {
+                    case "makeup":
+                        startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
+                                .putExtra("Category", "makeup")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putStringArrayListExtra("Colors", colors)
+                                .putExtra("EyeColor", eyeColor)
+                                .putExtra("Difficult", difficult)
+                                .putExtra("Occasion", "" + occasion.getSelectedItemPosition()));
+                        break;
+                    case "hairstyle":
+                        startActivity(new Intent(getApplicationContext(), SearchFeed.class)
+                                .putExtra("Category", "hairstyle")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putExtra("HairstyleType", hairstyleType.getText().toString()));
+                        break;
+                    case "manicure":
+                        startActivity(new Intent(getApplicationContext(), SearchFeed.class)
+                                .putExtra("Category", "manicure")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putStringArrayListExtra("ManicureColors", manicureColors)
+                                .putExtra("Shape", shape.getSelectedItemPosition())
+                                .putExtra("Design", design.getSelectedItemPosition()));
+                        break;
+                }
                 return true;
             }
         });
@@ -456,34 +477,34 @@ public class Search extends AppCompatActivity {
         mcF9CBCB = (ImageView) findViewById(R.id.mcF9CBCB);
         mcD6C880 = (ImageView) findViewById(R.id.mcD6C880);
 
-        setListener(mc000000, "000000");
-        setListener(mc404040, "404040");
-        setListener(mcFF0000, "FF0000");
-        setListener(mcFF6A00, "FF6A00");
-        setListener(mcFFD800, "FFD800");
-        setListener(mcB6FF00, "B6FF00");
-        setListener(mc4CFF00, "4CFF00");
-        setListener(mc00FF21, "00FF21");
-        setListener(mc00FF90, "00FF90");
-        setListener(mc00FFFF, "00FFFF");
-        setListener(mc0094FF, "0094FF");
-        setListener(mc0026FF, "0026FF");
-        setListener(mc4800FF, "4800FF");
-        setListener(mcB200FF, "B200FF");
-        setListener(mcFF00DC, "FF00DC");
-        setListener(mcFF006E, "FF006E");
-        setListener(mc808080, "808080");
-        setListener(mcFFFFFF, "FFFFFF");
-        setListener(mcF79F49, "F79F49");
-        setListener(mc8733DD, "8733DD");
-        setListener(mc62B922, "62B922");
-        setListener(mcF9F58D, "F9F58D");
-        setListener(mcA50909, "A50909");
-        setListener(mc1D416F, "1D416F");
-        setListener(mcBCB693, "BCB693");
-        setListener(mc644949, "644949");
-        setListener(mcF9CBCB, "F9CBCB");
-        setListener(mcD6C880, "D6C880");
+        setManicureListener(mc000000, "000000");
+        setManicureListener(mc404040, "404040");
+        setManicureListener(mcFF0000, "FF0000");
+        setManicureListener(mcFF6A00, "FF6A00");
+        setManicureListener(mcFFD800, "FFD800");
+        setManicureListener(mcB6FF00, "B6FF00");
+        setManicureListener(mc4CFF00, "4CFF00");
+        setManicureListener(mc00FF21, "00FF21");
+        setManicureListener(mc00FF90, "00FF90");
+        setManicureListener(mc00FFFF, "00FFFF");
+        setManicureListener(mc0094FF, "0094FF");
+        setManicureListener(mc0026FF, "0026FF");
+        setManicureListener(mc4800FF, "4800FF");
+        setManicureListener(mcB200FF, "B200FF");
+        setManicureListener(mcFF00DC, "FF00DC");
+        setManicureListener(mcFF006E, "FF006E");
+        setManicureListener(mc808080, "808080");
+        setManicureListener(mcFFFFFF, "FFFFFF");
+        setManicureListener(mcF79F49, "F79F49");
+        setManicureListener(mc8733DD, "8733DD");
+        setManicureListener(mc62B922, "62B922");
+        setManicureListener(mcF9F58D, "F9F58D");
+        setManicureListener(mcA50909, "A50909");
+        setManicureListener(mc1D416F, "1D416F");
+        setManicureListener(mcBCB693, "BCB693");
+        setManicureListener(mc644949, "644949");
+        setManicureListener(mcF9CBCB, "F9CBCB");
+        setManicureListener(mcD6C880, "D6C880");
     }
 
     private void setListener(final ImageView imageView, final String color) {
@@ -498,6 +519,23 @@ public class Search extends AppCompatActivity {
                     imageView.setAlpha(1F);
                     if (colors.contains(color))
                         colors.remove(color);
+                }
+            }
+        });
+    }
+
+    private void setManicureListener(final ImageView imageView, final String color) {
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (imageView.getAlpha() == 1F) {
+                    imageView.setAlpha(0.3F);
+                    if (!manicureColors.contains(color))
+                        manicureColors.add(color);
+                } else if (imageView.getAlpha() == 0.3F) {
+                    imageView.setAlpha(1F);
+                    if (manicureColors.contains(color))
+                        manicureColors.remove(color);
                 }
             }
         });

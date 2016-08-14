@@ -21,6 +21,33 @@
         <item>Праздничный</item>
     </string-array>
 
+    <!-- VALUES FROM MANICURE SHAPES -->
+    <string-array name="manicureShapes">
+        <item>Не выбрано</item>
+        <item>Квадратная</item>
+        <item>Овальная</item>
+        <item>Стилеты</item>
+    </string-array>
+
+    <!-- VALUES FROM MANICURE DESIGN -->
+    <string-array name="manicureDesign">
+        <item>Классический</item>
+        <item>Шеврон</item>
+        <item>Миллениум</item>
+        <item>Фан</item>
+        <item>Хрустальный</item>
+        <item>Цветной</item>
+        <item>Дизайнерский</item>
+        <item>Спа</item>
+        <item>Лунный</item>
+        <item>Художественная роспись</item>
+        <item>Дизайнерский</item>
+        <item>Объемный дизайн</item>
+        <item>Аквариумный дизайн</item>
+        <item>Американский дизайн</item>
+        <item>Фотодизайн</item>
+    </string-array>
+
     <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ЧТО ИЩЕМ" -->
     <string-array name="searchTypes">
         <item>Макияж</item>

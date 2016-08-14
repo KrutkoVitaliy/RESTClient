@@ -32,6 +32,7 @@ import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -66,7 +67,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         final MakeupDTO item = data.get(position);
 
         if (position == data.size() - 1) {
-            if (data.size()-1 % 100 != 8)
+            if (data.size() - 1 % 100 != 8)
                 MakeupFeed.addFeed(data.size() / 100 + 1);
         }
 
@@ -76,7 +77,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         String[] date = item.getAvailableDate().split("");
 
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
         holder.likesCount.setText("" + item.getLikes());
         if (!likes.contains(item.getId())) {
             holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
@@ -125,14 +126,19 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             hashTag.setTextColor(Color.argb(255, 51, 102, 153));
             hashTag.setTextSize(14);
             final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i) + " ");
+            if (!item.getHashTags().get(i).equals(""))
+                hashTag.setText("#" + item.getHashTags().get(i) + " ");
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchMakeupFeed.class)
+                            .putExtra("Category", "makeup")
+                            .putExtra("Request", item.getHashTags().get(finalI).toString())
+                            .putStringArrayListExtra("Colors", new ArrayList<String>())
+                            .putExtra("EyeColor", "")
+                            .putExtra("Difficult", "")
+                            .putExtra("Occasion", "")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);
@@ -195,34 +201,10 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
-                    if (item.getColors().contains("pink"))
-                        colors.addView(createCircle("#bb125b", "pink"));
-                    if (item.getColors().contains("purple"))
-                        colors.addView(createCircle("#9210ae", "purple"));
-                    if (item.getColors().contains("blue"))
-                        colors.addView(createCircle("#117dae", "blue"));
-                    if (item.getColors().contains("teal"))
-                        colors.addView(createCircle("#3b9670", "teal"));
-                    if (item.getColors().contains("green"))
-                        colors.addView(createCircle("#79bd14", "green"));
-                    if (item.getColors().contains("yellow"))
-                        colors.addView(createCircle("#d4b515", "yellow"));
-                    if (item.getColors().contains("orange"))
-                        colors.addView(createCircle("#d46915", "orange"));
-                    if (item.getColors().contains("red"))
-                        colors.addView(createCircle("#d42415", "red"));
-                    if (item.getColors().contains("neutral"))
-                        colors.addView(createCircle("#d2af7f", "neutral"));
-                    if (item.getColors().contains("copper"))
-                        colors.addView(createCircle("#b48f58", "copper"));
-                    if (item.getColors().contains("brown"))
-                        colors.addView(createCircle("#604e36", "brown"));
-                    if (item.getColors().contains("hazel"))
-                        colors.addView(createCircle("#70653f", "hazel"));
-                    if (item.getColors().contains("gray"))
-                        colors.addView(createCircle("#555555", "gray"));
-                    if (item.getColors().contains("black"))
-                        colors.addView(createCircle("#000000", "black"));
+                    String[] mColors = (item.getColors().split(","));
+                    for (int i = 0; i < mColors.length; i++) {
+                        colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                    }
                     moreContainer.addView(colors);
 
                     moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
