@@ -17,7 +17,24 @@
 
     <!-- VALUES FROM OCCASION FIELD -->
     <string-array name="occasions">
+        <item>Not selected</item>
         <item>Everyday</item>
+        <item>Celebrity</item>
+        <item>Dramatic</item>
+        <item>Holiday</item>
+    </string-array>
+
+    <!-- VALUES FROM MANICURE SHAPES -->
+    <string-array name="manicureShapes">
+        <item>Not selected</item>
+        <item>Square</item>
+        <item>Oval</item>
+        <item>Stiletto</item>
+    </string-array>
+
+    <!-- VALUES FROM MANICURE DESIGN -->
+    <string-array name="manicureDesign">
+        <item>Not selected</item>
         <item>Celebrity</item>
         <item>Dramatic</item>
         <item>Holiday</item>

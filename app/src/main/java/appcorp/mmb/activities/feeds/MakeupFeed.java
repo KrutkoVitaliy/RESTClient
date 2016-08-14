@@ -57,7 +57,6 @@ public class MakeupFeed extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
                 intent.putExtra("from", "makeupFeed");
                 startActivity(intent);
                 return true;

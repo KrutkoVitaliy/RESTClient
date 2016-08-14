@@ -58,7 +58,6 @@ public class ManicureFeed extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("hashTag", "empty");
                 intent.putExtra("from", "manicureFeed");
                 startActivity(intent);
                 return true;
