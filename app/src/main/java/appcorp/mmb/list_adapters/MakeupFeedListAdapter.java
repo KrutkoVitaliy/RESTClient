@@ -51,7 +51,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
-        height = (int) (width * 0.75F);
+        height = width;
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
@@ -137,7 +137,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                             .putStringArrayListExtra("Colors", new ArrayList<String>())
                             .putExtra("EyeColor", "")
                             .putExtra("Difficult", "")
-                            .putExtra("Occasion", "")
+                            .putExtra("Occasion", "0")
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });

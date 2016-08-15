@@ -66,7 +66,11 @@ public class SearchMakeupFeed extends AppCompatActivity {
         this.difficult = getIntent().getStringExtra("Difficult");
         this.occasion = getIntent().getStringExtra("Occasion");
 
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion).execute();
+        new SearchMakeup(request, colors, eyeColor, difficult, occasion, 1).execute();
+    }
+
+    public void addFeed(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
+        new SearchMakeup(request, colors, eyeColor, difficult, occasion, position).execute();
     }
 
     private void initToolbar() {
@@ -174,32 +178,51 @@ public class SearchMakeupFeed extends AppCompatActivity {
         private ArrayList<String> colors = new ArrayList<>();
         String colorsStr = "";
 
-        public SearchMakeup(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion) {
+        public SearchMakeup(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
             this.request = request;
             this.eyeColor = eyeColor;
             this.difficult = difficult;
-            if(occasion.equals("0"))
+            if (occasion.equals("0"))
                 this.occasion = "";
             this.colors = colors;
             for (int i = 0; i < colors.size(); i++) {
-                colorsStr += colors.get(i)+",";
+                this.colorsStr += colors.get(i) + ",";
             }
+            this.colorsStr = colorsStr.substring(0, colorsStr.length()-1);
+            this.position = position;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion);
-                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                urlFeedConnection.setRequestMethod("GET");
-                urlFeedConnection.connect();
-                InputStream inputStream = urlFeedConnection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
-                String line;
-                while ((line = reader.readLine()) != null)
-                    buffer.append(line);
-                resultJsonFeed += buffer.toString();
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuffer buffer = new StringBuffer();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -254,6 +277,5 @@ public class SearchMakeupFeed extends AppCompatActivity {
             if (word == null || word.isEmpty()) return "";
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
-
     }
 }

@@ -47,9 +47,7 @@ public class Search extends AppCompatActivity {
             eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
     private Spinner occasion, shape, design;
-    private ImageView c000000, c404040, cFF0000, cFF6A00, cFFD800, cB6FF00, c4CFF00, c00FF21, c00FF90,
-            c00FFFF, c0094FF, c0026FF, c4800FF, cB200FF, cFF00DC, cFF006E, c808080, cFFFFFF, cF79F49,
-            c8733DD, c62B922, cF9F58D, cA50909, c1D416F, cBCB693, c644949, cF9CBCB, cD6C880;
+    private ImageView cBB125B,c9210AE,c117DAE,c3B9670,c79BD14,cD4B515,cD46915,cD42415,cD2AF7F,cB48F58,c604E36,c555555,c000000;
     private ImageView mc000000, mc404040, mcFF0000, mcFF6A00, mcFFD800, mcB6FF00, mc4CFF00, mc00FF21, mc00FF90,
             mc00FFFF, mc0094FF, mc0026FF, mc4800FF, mcB200FF, mcFF00DC, mcFF006E, mc808080, mcFFFFFF, mcF79F49,
             mc8733DD, mc62B922, mcF9F58D, mcA50909, mc1D416F, mcBCB693, mc644949, mcF9CBCB, mcD6C880;
@@ -68,7 +66,7 @@ public class Search extends AppCompatActivity {
         initViews();
         checkLocation();
         initCategorySelector();
-        initColors();
+        initMakeupColors();
         initManicureColors();
         initEyeColors();
         initDifficult();
@@ -163,9 +161,9 @@ public class Search extends AppCompatActivity {
         design = (Spinner) findViewById(R.id.design);
         requestField = (EditText) findViewById(R.id.requestField);
         hairstyleType = (EditText) findViewById(R.id.hairstyleType);
-        makeupFrame = (LinearLayout)findViewById(R.id.makeupFrame);
-        hairstyleFrame = (LinearLayout)findViewById(R.id.hairstyleFrame);
-        manicureFrame = (LinearLayout)findViewById(R.id.manicureFrame);
+        makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
+        hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
+        manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
     }
 
     private void initToolbar() {
@@ -179,7 +177,7 @@ public class Search extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
                                 .putExtra("Category", "makeup")
                                 .putExtra("Request", requestField.getText().toString())
-                                .putStringArrayListExtra("Colors", colors)
+                                .putStringArrayListExtra("Colors", sortMakeupColors(colors))
                                 .putExtra("EyeColor", eyeColor)
                                 .putExtra("Difficult", difficult)
                                 .putExtra("Occasion", "" + occasion.getSelectedItemPosition()));
@@ -194,7 +192,7 @@ public class Search extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), SearchFeed.class)
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())
-                                .putStringArrayListExtra("ManicureColors", manicureColors)
+                                .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
                                 .putExtra("Shape", shape.getSelectedItemPosition())
                                 .putExtra("Design", design.getSelectedItemPosition()));
                         break;
@@ -203,6 +201,73 @@ public class Search extends AppCompatActivity {
             }
         });
         toolbar.inflateMenu(R.menu.menu_search);
+    }
+
+    private ArrayList<String> sortMakeupColors(ArrayList<String> colors) {
+        ArrayList<String> sortedColors = new ArrayList<>();
+        String[] colorsCodes = new String[]{
+                "BB125B",
+                "9210AE",
+                "117DAE",
+                "3B9670",
+                "79BD14",
+                "D4B515",
+                "D46915",
+                "D42415",
+                "D2AF7F",
+                "B48F58",
+                "604E36",
+                "555555",
+                "000000"
+        };
+        for (int i = 0; i < colorsCodes.length; i++) {
+            for (int j = 0; j < colors.size(); j++) {
+                if (colorsCodes[i].equals(colors.get(j)))
+                    sortedColors.add(colorsCodes[i]);
+            }
+        }
+        return sortedColors;
+    }
+
+    private ArrayList<String> sortManicureColors(ArrayList<String> colors) {
+        ArrayList<String> sortedColors = new ArrayList<>();
+        String[] colorsCodes = new String[]{
+                "000000",
+                "404040",
+                "FF0000",
+                "FF6A00",
+                "FFD800",
+                "B6FF00",
+                "4CFF00",
+                "00FF21",
+                "00FF90",
+                "00FFFF",
+                "0094FF",
+                "0026FF",
+                "4800FF",
+                "B200FF",
+                "FF00DC",
+                "FF006E",
+                "808080",
+                "FFFFFF",
+                "F79F49",
+                "8733DD",
+                "62B922",
+                "F9F58D",
+                "A50909",
+                "1D416F",
+                "BCB693",
+                "644949",
+                "F9CBCB",
+                "D6C880"
+        };
+        for (int i = 0; i < colorsCodes.length; i++) {
+            for (int j = 0; j < colors.size(); j++) {
+                if (colorsCodes[i].equals(colors.get(j)))
+                    sortedColors.add(colorsCodes[i]);
+            }
+        }
+        return sortedColors;
     }
 
     private void initNavigationView() {
@@ -387,64 +452,34 @@ public class Search extends AppCompatActivity {
         });
     }
 
-    private void initColors() {
+    private void initMakeupColors() {
+        cBB125B = (ImageView) findViewById(R.id.cBB125B);
+        c9210AE = (ImageView) findViewById(R.id.c9210AE);
+        c117DAE = (ImageView) findViewById(R.id.c117DAE);
+        c3B9670 = (ImageView) findViewById(R.id.c3B9670);
+        c79BD14 = (ImageView) findViewById(R.id.c79BD14);
+        cD4B515 = (ImageView) findViewById(R.id.cD4B515);
+        cD46915 = (ImageView) findViewById(R.id.cD46915);
+        cD42415 = (ImageView) findViewById(R.id.cD42415);
+        cD2AF7F = (ImageView) findViewById(R.id.cD2AF7F);
+        cB48F58 = (ImageView) findViewById(R.id.cB48F58);
+        c604E36 = (ImageView) findViewById(R.id.c604E36);
+        c555555 = (ImageView) findViewById(R.id.c555555);
         c000000 = (ImageView) findViewById(R.id.c000000);
-        c404040 = (ImageView) findViewById(R.id.c404040);
-        cFF0000 = (ImageView) findViewById(R.id.cFF0000);
-        cFF6A00 = (ImageView) findViewById(R.id.cFF6A00);
-        cFFD800 = (ImageView) findViewById(R.id.cFFD800);
-        cB6FF00 = (ImageView) findViewById(R.id.cB6FF00);
-        c4CFF00 = (ImageView) findViewById(R.id.c4CFF00);
-        c00FF21 = (ImageView) findViewById(R.id.c00FF21);
-        c00FF90 = (ImageView) findViewById(R.id.c00FF90);
-        c00FFFF = (ImageView) findViewById(R.id.c00FFFF);
-        c0094FF = (ImageView) findViewById(R.id.c0094FF);
-        c0026FF = (ImageView) findViewById(R.id.c0026FF);
-        c4800FF = (ImageView) findViewById(R.id.c4800FF);
-        cB200FF = (ImageView) findViewById(R.id.cB200FF);
-        cFF00DC = (ImageView) findViewById(R.id.cFF00DC);
-        cFF006E = (ImageView) findViewById(R.id.cFF006E);
-        c808080 = (ImageView) findViewById(R.id.c808080);
-        cFFFFFF = (ImageView) findViewById(R.id.cFFFFFF);
-        cF79F49 = (ImageView) findViewById(R.id.cF79F49);
-        c8733DD = (ImageView) findViewById(R.id.c8733DD);
-        c62B922 = (ImageView) findViewById(R.id.c62B922);
-        cF9F58D = (ImageView) findViewById(R.id.cF9F58D);
-        cA50909 = (ImageView) findViewById(R.id.cA50909);
-        c1D416F = (ImageView) findViewById(R.id.c1D416F);
-        cBCB693 = (ImageView) findViewById(R.id.cBCB693);
-        c644949 = (ImageView) findViewById(R.id.c644949);
-        cF9CBCB = (ImageView) findViewById(R.id.cF9CBCB);
-        cD6C880 = (ImageView) findViewById(R.id.cD6C880);
 
+        setListener(cBB125B, "BB125B");
+        setListener(c9210AE, "9210AE");
+        setListener(c117DAE, "117DAE");
+        setListener(c3B9670, "3B9670");
+        setListener(c79BD14, "79BD14");
+        setListener(cD4B515, "D4B515");
+        setListener(cD46915, "D46915");
+        setListener(cD42415, "D42415");
+        setListener(cD2AF7F, "D2AF7F");
+        setListener(cB48F58, "B48F58");
+        setListener(c604E36, "604E36");
+        setListener(c555555, "555555");
         setListener(c000000, "000000");
-        setListener(c404040, "404040");
-        setListener(cFF0000, "FF0000");
-        setListener(cFF6A00, "FF6A00");
-        setListener(cFFD800, "FFD800");
-        setListener(cB6FF00, "B6FF00");
-        setListener(c4CFF00, "4CFF00");
-        setListener(c00FF21, "00FF21");
-        setListener(c00FF90, "00FF90");
-        setListener(c00FFFF, "00FFFF");
-        setListener(c0094FF, "0094FF");
-        setListener(c0026FF, "0026FF");
-        setListener(c4800FF, "4800FF");
-        setListener(cB200FF, "B200FF");
-        setListener(cFF00DC, "FF00DC");
-        setListener(cFF006E, "FF006E");
-        setListener(c808080, "808080");
-        setListener(cFFFFFF, "FFFFFF");
-        setListener(cF79F49, "F79F49");
-        setListener(c8733DD, "8733DD");
-        setListener(c62B922, "62B922");
-        setListener(cF9F58D, "F9F58D");
-        setListener(cA50909, "A50909");
-        setListener(c1D416F, "1D416F");
-        setListener(cBCB693, "BCB693");
-        setListener(c644949, "644949");
-        setListener(cF9CBCB, "F9CBCB");
-        setListener(cD6C880, "D6C880");
     }
 
     private void initManicureColors() {
