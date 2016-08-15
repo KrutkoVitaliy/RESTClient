@@ -15,6 +15,7 @@
 
     <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ТИП МЕРОПРИЯТИЯ" -->
     <string-array name="occasions">
+        <item>Не выбрано</item>
         <item>На каждый день</item>
         <item>Селебрити</item>
         <item>Драматический</item>

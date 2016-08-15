@@ -178,7 +178,8 @@ public class SearchMakeupFeed extends AppCompatActivity {
             this.request = request;
             this.eyeColor = eyeColor;
             this.difficult = difficult;
-            this.occasion = occasion;
+            if(occasion.equals("0"))
+                this.occasion = "";
             this.colors = colors;
             for (int i = 0; i < colors.size(); i++) {
                 colorsStr += colors.get(i)+",";
@@ -188,7 +189,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult);
+                URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
