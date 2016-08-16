@@ -36,20 +36,21 @@ import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
-import appcorp.mmb.loaders.MakeupFeedLoader;
 
-public class SearchMakeupFeed extends AppCompatActivity {
+public class SearchHairstyleFeed extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
-    private MakeupFeedFragmentAdapter adapter;
-    private String request, eyeColor, difficult, occasion, hairstyleType, shape, design;
-    private ArrayList<String> colors = new ArrayList<>();
+    private HairstyleFeedFragmentAdapter adapter;
+    private String request, hairstyleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +62,13 @@ public class SearchMakeupFeed extends AppCompatActivity {
         initViewPager();
 
         this.request = getIntent().getStringExtra("Request");
-        this.colors = getIntent().getStringArrayListExtra("Colors");
-        this.eyeColor = getIntent().getStringExtra("EyeColor");
-        this.difficult = getIntent().getStringExtra("Difficult");
-        this.occasion = getIntent().getStringExtra("Occasion");
+        this.hairstyleType = getIntent().getStringExtra("HairstyleType");
 
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion, 1).execute();
+        new SearchHairstyle(request, hairstyleType, 1).execute();
     }
 
-    public void addFeed(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion, position).execute();
+    public void addFeed(String request, String hairstyleType, int position) {
+        new SearchHairstyle(request, hairstyleType, position).execute();
     }
 
     private void initToolbar() {
@@ -80,7 +78,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), Search.class)
-                        .putExtra("from", "makeupFeed"));
+                        .putExtra("from", "hairstyleFeed"));
                 return true;
             }
         });
@@ -88,12 +86,12 @@ public class SearchMakeupFeed extends AppCompatActivity {
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.makeupDrawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.hairstyleDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.makeupNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.hairstyleNavigation);
         initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -108,8 +106,8 @@ public class SearchMakeupFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
                         break;
-                    case R.id.navMenuHairstyle:
-                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
@@ -163,40 +161,21 @@ public class SearchMakeupFeed extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.makeupViewPager);
-        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>());
+        adapter = new HairstyleFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<HairstyleDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class SearchMakeup extends AsyncTask<Void, Void, String> {
+    public class SearchHairstyle extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
         String resultJsonFeed = "", output = "";
         int position;
-        private String request, eyeColor, difficult, occasion;
-        private ArrayList<String> colors = new ArrayList<>();
-        String colorsStr = "";
+        private String request, hairstyleType;
 
-        public SearchMakeup(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
+        public SearchHairstyle(String request, String hairstyleType, int position) {
             this.request = request;
-            this.eyeColor = eyeColor;
-            this.difficult = difficult;
-            if (occasion.equals("0"))
-                this.occasion = "";
-            else if(occasion.equals("1"))
-                this.occasion = "everyday";
-            else if(occasion.equals("2"))
-                this.occasion = "celebrity";
-            else if(occasion.equals("3"))
-                this.occasion = "dramatic";
-            else if(occasion.equals("4"))
-                this.occasion = "holiday";
-            this.colors = colors;
-            for (int i = 0; i < colors.size(); i++) {
-                this.colorsStr += colors.get(i) + ",";
-            }
-            if (colorsStr.length() > 0)
-                this.colorsStr = colorsStr.substring(0, colorsStr.length() - 1);
+            this.hairstyleType = hairstyleType;
             this.position = position;
         }
 
@@ -204,7 +183,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -217,7 +196,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
+                        URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();
@@ -240,7 +219,8 @@ public class SearchMakeupFeed extends AppCompatActivity {
         @Override
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
-            List<MakeupDTO> data = new ArrayList<>();
+
+            List<HairstyleDTO> data = new ArrayList<>();
 
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
@@ -254,25 +234,22 @@ public class SearchMakeupFeed extends AppCompatActivity {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    String[] tempTags = item.getString("tags").replace(" ", "").split(",");
+                    String[] tempTags = item.getString("tags").split(",");
                     for (int j = 0; j < tempTags.length; j++) {
                         hashTags.add(tempTags[j]);
                     }
 
-                    if (item.getString("published").equals("t") && !images.isEmpty()) {
-                        MakeupDTO makeupDTO = new MakeupDTO(
+                    if (item.getString("published").equals("t")) {
+                        HairstyleDTO hairstyleDTO = new HairstyleDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),
                                 item.getString("authorName"),
                                 item.getString("authorPhoto"),
+                                item.getString("hairstyleType"),
                                 images,
-                                item.getString("colors"),
-                                item.getString("eyeColor"),
-                                item.getString("occasion"),
-                                item.getString("difficult"),
                                 hashTags,
                                 item.getLong("likes"));
-                        data.add(makeupDTO);
+                        data.add(hairstyleDTO);
                     }
                     adapter.setData(data);
                 }

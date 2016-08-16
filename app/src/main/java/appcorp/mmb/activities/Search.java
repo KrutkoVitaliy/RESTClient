@@ -32,6 +32,7 @@ import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.classes.Storage;
 
@@ -183,13 +184,13 @@ public class Search extends AppCompatActivity {
                                 .putExtra("Occasion", "" + occasion.getSelectedItemPosition()));
                         break;
                     case "hairstyle":
-                        startActivity(new Intent(getApplicationContext(), SearchFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putExtra("HairstyleType", hairstyleType.getText().toString()));
                         break;
                     case "manicure":
-                        startActivity(new Intent(getApplicationContext(), SearchFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
