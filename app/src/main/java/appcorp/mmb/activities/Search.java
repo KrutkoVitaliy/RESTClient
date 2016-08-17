@@ -1,7 +1,6 @@
 package appcorp.mmb.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -10,28 +9,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
@@ -303,7 +296,7 @@ public class Search extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SelectCategory.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;

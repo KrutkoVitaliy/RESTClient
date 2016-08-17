@@ -9,7 +9,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import appcorp.mmb.activities.feeds.GlobalFeed;
+import appcorp.mmb.activities.SelectCategory;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 
@@ -66,7 +66,7 @@ public class StartApplication extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
+                startActivity(new Intent(getApplicationContext(), SelectCategory.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 
@@ -30,7 +29,7 @@ public class InternetNotification extends Activity {
             @Override
             public void onClick(View view) {
                 if(Intermediates.getInstance().isConnected(getApplicationContext()))
-                    startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    startActivity(new Intent(getApplicationContext(), SelectCategory.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
         });
     }

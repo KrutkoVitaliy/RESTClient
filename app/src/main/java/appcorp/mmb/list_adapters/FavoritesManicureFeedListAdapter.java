@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
@@ -18,30 +17,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.dto.TapeDTO;
-import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 import appcorp.mmb.network.GetRequest;
 
 public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<FavoritesManicureFeedListAdapter.TapeViewHolder> {
@@ -115,10 +101,12 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchManicureFeed.class)
+                            .putExtra("Request", item.getHashTags().get(finalI))
+                            .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
+                            .putExtra("Shape", "" + "0")
+                            .putExtra("Design", "" + "0")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);

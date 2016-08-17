@@ -31,7 +31,6 @@ import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.MakeupFeed;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;

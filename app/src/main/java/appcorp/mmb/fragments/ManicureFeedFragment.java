@@ -13,8 +13,6 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.dto.TapeDTO;
-import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
 import appcorp.mmb.list_adapters.ManicureFeedListAdapter;
 
 public class ManicureFeedFragment extends AbstractTabFragment{

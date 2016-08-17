@@ -23,7 +23,6 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.LipsFeed;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.LipsDTO;
 
@@ -88,10 +87,10 @@ public class LipsFeedListAdapter extends RecyclerView.Adapter<LipsFeedListAdapte
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
+                    /*Intent intent = new Intent(context, SearchLipsFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
                 }
             });
             holder.hashTags.addView(hashTag);

@@ -33,16 +33,13 @@ import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.MyProfile;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.feeds.GlobalFeed;
-import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.SelectCategory;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
-import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 
 public class SearchHairstyleFeed extends AppCompatActivity {
 
@@ -100,7 +97,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)

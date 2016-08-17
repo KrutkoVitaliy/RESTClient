@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,15 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.network.GetRequest;
 
 public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<FavoritesHairstyleFeedListAdapter.TapeViewHolder> {
@@ -100,10 +96,10 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                            .putExtra("Request", item.getHashTags().get(finalI))
+                            .putExtra("HairstyleType", "")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);

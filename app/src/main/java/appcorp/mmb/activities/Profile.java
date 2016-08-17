@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 import appcorp.mmb.classes.Storage;
@@ -110,7 +109,7 @@ public class Profile extends Activity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        startActivity(new Intent(getApplicationContext(), SelectCategory.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
@@ -136,7 +135,7 @@ public class Profile extends Activity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
     }
 
     class Get extends AsyncTask<Void, Void, String> {

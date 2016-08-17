@@ -24,7 +24,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -100,10 +100,14 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchMakeupFeed.class)
+                            .putExtra("Category", "makeup")
+                            .putExtra("Request", item.getHashTags().get(finalI).toString())
+                            .putStringArrayListExtra("Colors", new ArrayList<String>())
+                            .putExtra("EyeColor", "")
+                            .putExtra("Difficult", "")
+                            .putExtra("Occasion", "0")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);

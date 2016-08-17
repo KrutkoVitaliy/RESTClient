@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.fragments.AbstractTabFragment;
-import appcorp.mmb.fragments.GlobalFeedFragment;
 import appcorp.mmb.fragments.ManicureFeedFragment;
 
 public class ManicureFeedFragmentAdapter extends FragmentPagerAdapter {

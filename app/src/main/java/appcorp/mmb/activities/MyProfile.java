@@ -1,6 +1,5 @@
 package appcorp.mmb.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
@@ -55,7 +53,7 @@ public class MyProfile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
     }
 
 
@@ -94,7 +92,7 @@ public class MyProfile extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
                         break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)

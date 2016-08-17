@@ -16,15 +16,12 @@
         android:largeHeap="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.feeds.GlobalFeed"
+            android:name=".activities.SelectCategory"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FullscreenPreview"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <activity
-            android:name=".activities.search_feeds.SearchFeed"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Search"
             android:screenOrientation="portrait" />
