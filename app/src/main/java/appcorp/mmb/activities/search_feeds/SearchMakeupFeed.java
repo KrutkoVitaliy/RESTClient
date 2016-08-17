@@ -48,7 +48,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private MakeupFeedFragmentAdapter adapter;
-    private String request, eyeColor, difficult, occasion, hairstyleType, shape, design;
+    private String request, eyeColor, difficult, occasion;
     private ArrayList<String> colors = new ArrayList<>();
 
     @Override

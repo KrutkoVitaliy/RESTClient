@@ -32,6 +32,7 @@
 
     <!-- VALUES FROM MANICURE DESIGN -->
     <string-array name="manicureDesign">
+        <item>Не выбрано</item>
         <item>Классический</item>
         <item>Шеврон</item>
         <item>Миллениум</item>

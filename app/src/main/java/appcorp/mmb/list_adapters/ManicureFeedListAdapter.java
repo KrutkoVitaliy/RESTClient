@@ -50,7 +50,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         this.context = context;
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
-        height = (int) (width * 0.75F);
+        height = width;
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }

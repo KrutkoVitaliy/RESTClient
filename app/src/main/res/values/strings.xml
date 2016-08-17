@@ -34,6 +34,7 @@
 
     <!-- VALUES FROM MANICURE DESIGN -->
     <string-array name="manicureDesign">
+        <item>Not selected</item>
         <item>French classic</item>
         <item>French chevron</item>
         <item>French millennium</item>

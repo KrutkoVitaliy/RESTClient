@@ -39,46 +39,49 @@ import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
-import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
+import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 
-public class SearchHairstyleFeed extends AppCompatActivity {
+public class SearchManicureFeed extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
-    private HairstyleFeedFragmentAdapter adapter;
-    private String request, hairstyleType;
+    private ManicureFeedFragmentAdapter adapter;
+    private String request, shape, design;
+    private ArrayList<String> colors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hairstyle_feed);
+        setContentView(R.layout.activity_manicure_feed);
 
         initToolbar();
         initNavigationView();
         initViewPager();
 
         this.request = getIntent().getStringExtra("Request");
-        this.hairstyleType = getIntent().getStringExtra("HairstyleType");
+        this.colors = getIntent().getStringArrayListExtra("ManicureColors");
+        this.shape = getIntent().getStringExtra("Shape");
+        this.design = getIntent().getStringExtra("Design");
 
-        new SearchHairstyle(request, hairstyleType, 1).execute();
+        new SearchManicure(request, colors, shape, design, 1).execute();
     }
 
-    public void addFeed(String request, String hairstyleType, int position) {
-        new SearchHairstyle(request, hairstyleType, position).execute();
+    public void addFeed(String request, ArrayList<String> colors, String shape, String design, int position) {
+        new SearchManicure(request, colors, shape, design, position).execute();
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.hairstyleToolbar);
-        toolbar.setTitle(R.string.menu_item_hairstyle);
+        toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
+        toolbar.setTitle(R.string.menu_item_manicure);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), Search.class)
-                        .putExtra("from", "hairstyleFeed"));
+                        .putExtra("from", "manicureFeed"));
                 return true;
             }
         });
@@ -86,12 +89,12 @@ public class SearchHairstyleFeed extends AppCompatActivity {
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.hairstyleDrawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.manicureDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.hairstyleNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.manicureNavigation);
         initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -109,8 +112,8 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;
-                    case R.id.navMenuManicure:
-                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                    case R.id.navMenuHairstyle:
+                        startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
                         break;
                     case R.id.navMenuLips:
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
@@ -160,22 +163,71 @@ public class SearchHairstyleFeed extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        viewPager = (ViewPager) findViewById(R.id.hairstyleViewPager);
-        adapter = new HairstyleFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<HairstyleDTO>());
+        viewPager = (ViewPager) findViewById(R.id.manicureViewPager);
+        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class SearchHairstyle extends AsyncTask<Void, Void, String> {
-
+    public class SearchManicure extends AsyncTask<Void, Void, String> {
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
         String resultJsonFeed = "", output = "";
         int position;
-        private String request, hairstyleType;
+        private String request, shape, design;
+        private ArrayList<String> colors = new ArrayList<>();
+        String colorsStr = "";
 
-        public SearchHairstyle(String request, String hairstyleType, int position) {
+        public SearchManicure(String request, ArrayList<String> colors, String shape, String design, int position) {
             this.request = request;
-            this.hairstyleType = hairstyleType;
+
+            if (shape.equals("0"))
+                this.shape = "";
+            else if (shape.equals("1"))
+                this.shape = "square";
+            else if (shape.equals("2"))
+                this.shape = "oval";
+            else if (shape.equals("3"))
+                this.shape = "stiletto";
+
+            if (design.equals("0"))
+                this.design = "";
+            else if (shape.equals("1"))
+                this.design = "french_classic";
+            else if (shape.equals("2"))
+                this.design = "french_chevron";
+            else if (shape.equals("3"))
+                this.design = "french_millennium";
+            else if (shape.equals("4"))
+                this.design = "french_fun";
+            else if (shape.equals("5"))
+                this.design = "french_crystal";
+            else if (shape.equals("6"))
+                this.design = "french_colorful";
+            else if (shape.equals("7"))
+                this.design = "french_designer";
+            else if (shape.equals("8"))
+                this.design = "french_spa";
+            else if (shape.equals("9"))
+                this.design = "french_moon";
+            else if (shape.equals("10"))
+                this.design = "art";
+            else if (shape.equals("11"))
+                this.design = "designer";
+            else if (shape.equals("12"))
+                this.design = "volume";
+            else if (shape.equals("13"))
+                this.design = "aqua";
+            else if (shape.equals("14"))
+                this.design = "american";
+            else if (shape.equals("15"))
+                this.design = "photo";
+
+            this.colors = colors;
+            for (int i = 0; i < colors.size(); i++) {
+                this.colorsStr += colors.get(i) + ",";
+            }
+            if (colorsStr.length() > 0)
+                this.colorsStr = colorsStr.substring(0, colorsStr.length() - 1);
             this.position = position;
         }
 
@@ -183,7 +235,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -196,7 +248,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
+                        URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();
@@ -220,7 +272,9 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
 
-            List<HairstyleDTO> data = new ArrayList<>();
+            long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
+            List<ManicureDTO> data = new ArrayList<>();
+            String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
 
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
@@ -234,22 +288,25 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    String[] tempTags = item.getString("tags").split(",");
+                    id = item.getLong("id");
+                    authorPhoto = item.getString("authorPhoto");
+                    authorName = item.getString("authorName");
+                    availableDate = item.getString("uploadDate");
+                    tags = item.getString("tags");
+                    shape = item.getString("shape");
+                    design = item.getString("design");
+                    colors = item.getString("colors");
+                    likes = item.getLong("likes");
+                    published = item.getString("published");
+
+                    String[] tempTags = tags.split(",");
                     for (int j = 0; j < tempTags.length; j++) {
                         hashTags.add(tempTags[j]);
                     }
 
-                    if (item.getString("published").equals("t")) {
-                        HairstyleDTO hairstyleDTO = new HairstyleDTO(
-                                item.getLong("id"),
-                                item.getString("uploadDate"),
-                                item.getString("authorName"),
-                                item.getString("authorPhoto"),
-                                item.getString("hairstyleType"),
-                                images,
-                                hashTags,
-                                item.getLong("likes"));
-                        data.add(hairstyleDTO);
+                    if (published.equals("t")) {
+                        ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
+                        data.add(manicureDTO);
                     }
                     adapter.setData(data);
                 }

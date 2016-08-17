@@ -34,6 +34,7 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Storage;
 
 public class Search extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class Search extends AppCompatActivity {
             eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
     private Spinner occasion, shape, design;
-    private ImageView cBB125B,c9210AE,c117DAE,c3B9670,c79BD14,cD4B515,cD46915,cD42415,cD2AF7F,cB48F58,c604E36,c555555,c000000;
+    private ImageView cBB125B, c9210AE, c117DAE, c3B9670, c79BD14, cD4B515, cD46915, cD42415, cD2AF7F, cB48F58, c604E36, c555555, c000000;
     private ImageView mc000000, mc404040, mcFF0000, mcFF6A00, mcFFD800, mcB6FF00, mc4CFF00, mc00FF21, mc00FF90,
             mc00FFFF, mc0094FF, mc0026FF, mc4800FF, mcB200FF, mcFF00DC, mcFF006E, mc808080, mcFFFFFF, mcF79F49,
             mc8733DD, mc62B922, mcF9F58D, mcA50909, mc1D416F, mcBCB693, mc644949, mcF9CBCB, mcD6C880;
@@ -127,27 +128,40 @@ public class Search extends AppCompatActivity {
                 hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.VISIBLE);
                 break;
+            case "":
+                findViewById(R.id.catMakeup).setAlpha(1.0F);
+                findViewById(R.id.catHairstyle).setAlpha(1.0F);
+                findViewById(R.id.catManicure).setAlpha(1.0F);
+                makeupFrame.setVisibility(View.INVISIBLE);
+                hairstyleFrame.setVisibility(View.INVISIBLE);
+                manicureFrame.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
     public void checkLocation() {
-        switch (getIntent().getStringExtra("from").toString()) {
-            case "hairstyleFeed":
-                category = "hairstyle";
-                setUI("hairstyle");
-                break;
-            case "lipsFeed":
-                category = "lips";
-                setUI("lips");
-                break;
-            case "makeupFeed":
-                category = "makeup";
-                setUI("makeup");
-                break;
-            case "manicureFeed":
-                category = "manicure";
-                setUI("manicure");
-                break;
+        if (getIntent().getStringExtra("from") != null)
+            switch (getIntent().getStringExtra("from").toString()) {
+                case "hairstyleFeed":
+                    category = "hairstyle";
+                    setUI("hairstyle");
+                    break;
+                case "lipsFeed":
+                    category = "lips";
+                    setUI("lips");
+                    break;
+                case "makeupFeed":
+                    category = "makeup";
+                    setUI("makeup");
+                    break;
+                case "manicureFeed":
+                    category = "manicure";
+                    setUI("manicure");
+                    break;
+            }
+        else {
+            category = "makeup";
+            setUI("makeup");
         }
     }
 
@@ -181,21 +195,24 @@ public class Search extends AppCompatActivity {
                                 .putStringArrayListExtra("Colors", sortMakeupColors(colors))
                                 .putExtra("EyeColor", eyeColor)
                                 .putExtra("Difficult", difficult)
-                                .putExtra("Occasion", "" + occasion.getSelectedItemPosition()));
+                                .putExtra("Occasion", "" + occasion.getSelectedItemPosition())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case "hairstyle":
                         startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
-                                .putExtra("HairstyleType", hairstyleType.getText().toString()));
+                                .putExtra("HairstyleType", hairstyleType.getText().toString())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case "manicure":
                         startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
-                                .putExtra("Shape", shape.getSelectedItemPosition())
-                                .putExtra("Design", design.getSelectedItemPosition()));
+                                .putExtra("Shape", "" + shape.getSelectedItemPosition())
+                                .putExtra("Design", "" + design.getSelectedItemPosition())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                 }
                 return true;

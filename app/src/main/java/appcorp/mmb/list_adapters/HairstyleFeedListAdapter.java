@@ -32,6 +32,7 @@ import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
@@ -64,7 +65,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         final HairstyleDTO item = data.get(position);
 
         if (position == data.size() - 1) {
-            if (data.size()-1 % 100 != 8)
+            if (data.size() - 1 % 100 != 8)
                 HairstyleFeed.addFeed(data.size() / 100 + 1);
         }
 
@@ -74,7 +75,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         String[] date = item.getAvailableDate().split("");
 
         holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1]+date[2]+"-"+date[3]+date[4]+"-"+date[5]+date[6]+" "+date[7]+date[8]+":"+date[9]+date[10]);
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
         holder.likesCount.setText("" + item.getLikes());
 
         if (!likes.contains(item.getId())) {
@@ -128,10 +129,10 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SearchFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Request", item.getHashTags().get(finalI));
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                            .putExtra("Request", item.getHashTags().get(finalI))
+                            .putExtra("HairstyleType", "")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);
