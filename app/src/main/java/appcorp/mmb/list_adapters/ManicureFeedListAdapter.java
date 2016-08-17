@@ -32,6 +32,7 @@ import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
@@ -129,9 +130,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchFeed.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("Request", item.getHashTags().get(finalI)));
+                    context.startActivity(new Intent(context, SearchManicureFeed.class)
+                            .putExtra("Request", item.getHashTags().get(finalI))
+                            .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
+                            .putExtra("Shape", "" + "0")
+                            .putExtra("Design", "" + "0")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             holder.hashTags.addView(hashTag);
