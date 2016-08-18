@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,9 +48,10 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="right">
 
                     <TextView
                         android:id="@+id/name"
@@ -59,7 +60,7 @@
                         android:paddingLeft="16dp"
                         android:text="Name Lastname"
                         android:textColor="@color/author_title"
-                        android:textSize="8pt" />
+                        android:textSize="7pt" />
 
                     <TextView
                         android:id="@+id/location"
@@ -78,6 +79,37 @@
                         android:text="Phone number"
                         android:textColor="@color/author_title"
                         android:textSize="6pt"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_gplus"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_fb"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_vk"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_instagram"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_ok"
+                            android:layout_marginLeft="4dp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

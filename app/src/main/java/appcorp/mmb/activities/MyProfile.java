@@ -51,12 +51,6 @@ public class MyProfile extends AppCompatActivity {
         new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
-    }
-
-
     private void initViews() {
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);

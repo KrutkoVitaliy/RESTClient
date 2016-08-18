@@ -94,11 +94,6 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                     hashTags.add(tempTags[j]);
                 }
 
-                    /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                    availableDate = simpleDateFormat.format(new Date(tempDate));
-                    if ((currentDate - tempDate) <= 259200000)
-                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);*/
-
                 if (likesHairstyle.contains(item.getLong("id"))) {
                     HairstyleDTO hairstyleDTO = new HairstyleDTO(
                             item.getLong("id"),
