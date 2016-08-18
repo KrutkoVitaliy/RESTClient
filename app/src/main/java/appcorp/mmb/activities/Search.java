@@ -70,7 +70,7 @@ public class Search extends AppCompatActivity {
     public void initCategorySelector() {
         catMakeup = (LinearLayout) findViewById(R.id.catMakeup);
         catManicure = (LinearLayout) findViewById(R.id.catManicure);
-        catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
+        //catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
 
         catMakeup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +79,13 @@ public class Search extends AppCompatActivity {
                 setUI("makeup");
             }
         });
-        catHairstyle.setOnClickListener(new View.OnClickListener() {
+        /*catHairstyle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 category = "hairstyle";
                 setUI("hairstyle");
             }
-        });
+        });*/
         catManicure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,34 +99,34 @@ public class Search extends AppCompatActivity {
         switch (currentUI) {
             case "makeup":
                 findViewById(R.id.catMakeup).setAlpha(1.0F);
-                findViewById(R.id.catHairstyle).setAlpha(0.2F);
+                //findViewById(R.id.catHairstyle).setAlpha(0.2F);
                 findViewById(R.id.catManicure).setAlpha(0.2F);
                 makeupFrame.setVisibility(View.VISIBLE);
-                hairstyleFrame.setVisibility(View.INVISIBLE);
+                //hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.INVISIBLE);
                 break;
-            case "hairstyle":
+            /*case "hairstyle":
                 findViewById(R.id.catMakeup).setAlpha(0.2F);
                 findViewById(R.id.catHairstyle).setAlpha(1.0F);
                 findViewById(R.id.catManicure).setAlpha(0.2F);
                 makeupFrame.setVisibility(View.INVISIBLE);
                 hairstyleFrame.setVisibility(View.VISIBLE);
                 manicureFrame.setVisibility(View.INVISIBLE);
-                break;
+                break;*/
             case "manicure":
                 findViewById(R.id.catMakeup).setAlpha(0.2F);
-                findViewById(R.id.catHairstyle).setAlpha(0.2F);
+                //findViewById(R.id.catHairstyle).setAlpha(0.2F);
                 findViewById(R.id.catManicure).setAlpha(1.0F);
                 makeupFrame.setVisibility(View.INVISIBLE);
-                hairstyleFrame.setVisibility(View.INVISIBLE);
+                //hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.VISIBLE);
                 break;
             case "":
                 findViewById(R.id.catMakeup).setAlpha(1.0F);
-                findViewById(R.id.catHairstyle).setAlpha(1.0F);
+                //findViewById(R.id.catHairstyle).setAlpha(1.0F);
                 findViewById(R.id.catManicure).setAlpha(1.0F);
                 makeupFrame.setVisibility(View.INVISIBLE);
-                hairstyleFrame.setVisibility(View.INVISIBLE);
+                //hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.VISIBLE);
                 break;
         }
@@ -168,9 +168,9 @@ public class Search extends AppCompatActivity {
         shape = (Spinner) findViewById(R.id.shape);
         design = (Spinner) findViewById(R.id.design);
         requestField = (EditText) findViewById(R.id.requestField);
-        hairstyleType = (EditText) findViewById(R.id.hairstyleType);
+        //hairstyleType = (EditText) findViewById(R.id.hairstyleType);
         makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
-        hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
+        //hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
     }
 

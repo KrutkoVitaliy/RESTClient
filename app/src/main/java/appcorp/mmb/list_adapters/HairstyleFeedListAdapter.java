@@ -116,7 +116,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             }
         });*/
 
-        holder.hashTags.removeAllViews();
+        /*holder.hashTags.removeAllViews();
         for (int i = 0; i < item.getHashTags().size(); i++) {
             TextView hashTag = new TextView(context);
             hashTag.setTextColor(Color.argb(255, 51, 102, 153));
@@ -134,7 +134,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             });
             holder.hashTags.addView(hashTag);
         }
-
+*/
         holder.imageViewer.removeAllViews();
         holder.countImages.removeAllViews();
         for (int i = 0; i < item.getImages().size(); i++) {

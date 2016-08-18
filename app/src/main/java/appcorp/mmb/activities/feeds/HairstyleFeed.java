@@ -55,7 +55,7 @@ public class HairstyleFeed extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.hairstyleToolbar);
         toolbar.setTitle(R.string.menu_item_hairstyle);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getApplicationContext(), Search.class);
@@ -64,7 +64,7 @@ public class HairstyleFeed extends AppCompatActivity {
                 return true;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
+        toolbar.inflateMenu(R.menu.menu);*/
     }
 
     private void initNavigationView() {
