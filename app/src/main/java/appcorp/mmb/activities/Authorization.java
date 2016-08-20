@@ -2,17 +2,13 @@ package appcorp.mmb.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,18 +18,11 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import appcorp.mmb.R;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
 
-public class Authorization extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class Authorization extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private TextView logoText;
     private GoogleApiClient googleApiClient;
@@ -45,11 +34,9 @@ public class Authorization extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction);
-        Firebase.setAndroidContext(getApplicationContext());
 
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions

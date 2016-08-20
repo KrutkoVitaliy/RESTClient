@@ -1,21 +1,19 @@
 {
   "project_info": {
-    "project_number": "525480049577",
-    "firebase_url": "https://make-me-beauty-6666f.firebaseio.com",
-    "project_id": "make-me-beauty-6666f",
-    "storage_bucket": "make-me-beauty-6666f.appspot.com"
+    "project_number": "552985499572",
+    "project_id": "firebase-make-me-beauty"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525480049577:android:484e7979502e7f48",
+        "mobilesdk_app_id": "1:552985499572:android:484e7979502e7f48",
         "android_client_info": {
           "package_name": "appcorp.mmb"
         }
       },
       "oauth_client": [
         {
-          "client_id": "525480049577-418kj52bf0d3ko0u6irt6de2dc3fo6u1.apps.googleusercontent.com",
+          "client_id": "552985499572-67mqsc8bbf3fpci1iu58335t7dgch3m8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "appcorp.mmb",
@@ -23,13 +21,13 @@
           }
         },
         {
-          "client_id": "525480049577-rtmp6sve35dvnc10fnv3oshjmqu0h9ep.apps.googleusercontent.com",
+          "client_id": "552985499572-ivrotqi4logbclp6mgekmi1dut14hsug.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8BrIEEP1jsaeerK1bh2uFp0smhumcdRo"
+          "current_key": "AIzaSyAFk-1UqwwYNNuK5FsJSfvLlAcCNr9IxZ0"
         }
       ],
       "services": {
@@ -37,16 +35,11 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "525480049577-rtmp6sve35dvnc10fnv3oshjmqu0h9ep.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 2
+          "status": 1
         }
       }
     }
