@@ -123,9 +123,9 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         for (int i = 0; i < item.getHashTags().size(); i++) {
             TextView hashTag = new TextView(context);
             hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-            hashTag.setTextSize(14);
+            hashTag.setTextSize(16);
             final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i) + " ");
+            hashTag.setText("#" + item.getHashTags().get(i).replace(" ", "") + " ");
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -169,7 +169,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
             count.setText((i + 1) + "/" + item.getImages().size());
-            count.setTextSize(20);
+            count.setTextSize(24);
             count.setTextColor(Color.WHITE);
             count.setPadding(32, 32, 32, 32);
             count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
@@ -201,9 +201,9 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     }
                     moreContainer.addView(colors);
                     if (item.getShape().equals("square"))
-                        moreContainer.addView(createText("Форма ногтей: Квадратная форма", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Форма ногтей: Квадратная", Typeface.DEFAULT_BOLD, 16));
                     else if (item.getShape().equals("oval"))
-                        moreContainer.addView(createText("Форма ногтей: Овальная форма", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Форма ногтей: Овальная", Typeface.DEFAULT_BOLD, 16));
                     else if (item.getShape().equals("stiletto"))
                         moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16));
 

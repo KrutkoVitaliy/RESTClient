@@ -104,9 +104,9 @@ public class Favorites extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    case R.id.navMenuGlobalFeed:
+                    /*case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), SelectCategory.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
+                        break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
                         break;

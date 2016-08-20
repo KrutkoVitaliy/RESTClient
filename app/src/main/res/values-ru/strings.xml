@@ -86,9 +86,9 @@
     <string name="black_eyes">Черный цвет глаз</string>
     <!-- МЕРОПРИЯТИЕ -->
     <string name="occasion_everyday">Тип мероприятия: На каждый день</string>
-    <string name="occasion_celebrity">Тип мероприятия: Celebrity</string>
-    <string name="occasion_dramatic">Тип мероприятия: Dramatic</string>
-    <string name="occasion_holiday">Тип мероприятия: Holiday</string>
+    <string name="occasion_celebrity">Тип мероприятия: Звездный</string>
+    <string name="occasion_dramatic">Тип мероприятия: Яркий</string>
+    <string name="occasion_holiday">Тип мероприятия: Праздничный</string>
     <!-- СЛОЖНОСТЬ -->
     <string name="difficult_easy">Простой макияж</string>
     <string name="difficult_medium">Усложненный макияж</string>
@@ -101,4 +101,12 @@
     <string name="menu_item_style_types">Красота</string>
     <string name="account_hint_signed">Открыть профиль</string>
     <string name="account_hint_unsigned">Войти в аккаунт</string>
+    <string name="action_example">Пример действия</string>
+    <string name="action_settings">Настройки</string>
+    <string name="title_activity_main">Главная активность</string>
+    <string name="title_section1">Секция 1</string>
+    <string name="title_section2">Секция 2</string>
+    <string name="title_section3">Секция 3</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="navigation_drawer_open">Открыть меню</string>
 </resources>

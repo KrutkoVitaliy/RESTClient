@@ -1,51 +1,49 @@
 {
   "project_info": {
-    "project_number": "893231234040",
-    "firebase_url": "https://make-me-beauty.firebaseio.com",
-    "project_id": "make-me-beauty",
-    "storage_bucket": "make-me-beauty.appspot.com"
+    "project_number": "525480049577",
+    "firebase_url": "https://make-me-beauty-6666f.firebaseio.com",
+    "project_id": "make-me-beauty-6666f",
+    "storage_bucket": "make-me-beauty-6666f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:893231234040:android:484e7979502e7f48",
+        "mobilesdk_app_id": "1:525480049577:android:484e7979502e7f48",
         "android_client_info": {
           "package_name": "appcorp.mmb"
         }
       },
       "oauth_client": [
         {
-          "client_id": "893231234040-jd7si6t6od8albt4aat1efq035uj5m8i.apps.googleusercontent.com",
+          "client_id": "525480049577-418kj52bf0d3ko0u6irt6de2dc3fo6u1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "appcorp.mmb",
-            "certificate_hash": "4FCAB23E5BD848698E7C4D1A06E1432425CF962F"
+            "certificate_hash": "1A4FD0B76D0CC9D35EFF45D973F6020E0F7713E7"
           }
         },
         {
-          "client_id": "893231234040-1rrrecu78nqceb22u5u7uc6dg9kq1u51.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "893231234040-d2mbqnkrcto13n951c4v3fjct18nj0e4.apps.googleusercontent.com",
+          "client_id": "525480049577-rtmp6sve35dvnc10fnv3oshjmqu0h9ep.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDK4Sgg9bYOZjiRAjy_4RWR3Lo7_Wov56w"
+          "current_key": "AIzaSyC8BrIEEP1jsaeerK1bh2uFp0smhumcdRo"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-68427046-1"
-          }
+          "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525480049577-rtmp6sve35dvnc10fnv3oshjmqu0h9ep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

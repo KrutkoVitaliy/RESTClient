@@ -2,27 +2,28 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/menu_item_feed">
+    <!--<item android:title="@string/menu_item_feed">
         <menu>
             <item
                 android:id="@+id/navMenuGlobalFeed"
                 android:orderInCategory="1"
                 android:title="@string/menu_item_news"
                 android:icon="@mipmap/ic_format_list_bulleted"/>
-            <!--<item
+            &lt;!&ndash;<item
                 android:id="@+id/navMenuHotFeed"
                 android:orderInCategory="2"
                 android:title="@string/menu_item_hot"
-                android:icon="@mipmap/hot"/>-->
-            <item
-                android:id="@+id/navMenuSearch"
-                android:orderInCategory="3"
-                android:title="@string/menu_item_search"
-                android:icon="@mipmap/ic_magnify_dark"/>
+                android:icon="@mipmap/hot"/>&ndash;&gt;
+
         </menu>
-    </item>
+    </item>-->
     <item android:title="@string/menu_item_style_types">
         <menu>
+            <item
+            android:id="@+id/navMenuSearch"
+            android:orderInCategory="3"
+            android:title="@string/menu_item_search"
+            android:icon="@mipmap/ic_magnify_dark"/>
             <item
                 android:id="@+id/navMenuMakeup"
                 android:orderInCategory="4"

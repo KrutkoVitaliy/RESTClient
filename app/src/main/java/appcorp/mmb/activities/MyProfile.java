@@ -85,9 +85,9 @@ public class MyProfile extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    case R.id.navMenuGlobalFeed:
+                    /*case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), SelectCategory.class));
-                        break;
+                        break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
@@ -183,7 +183,7 @@ public class MyProfile extends AppCompatActivity {
                 JSONArray items = new JSONArray(s);
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    name.setText(item.getString("firstName") + " " + item.getString("lastName"));
+                    name.setText(Storage.getString("Name", "Make Me Beauty"));
                     location.setText(item.getString("city") + ", " + item.getString("address"));
                     phone.setText(item.getString("phoneNumber"));
                     String ss = item.getString("photo");

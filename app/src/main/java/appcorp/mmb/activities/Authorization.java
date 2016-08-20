@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -42,6 +45,7 @@ public class Authorization extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction);
+        Firebase.setAndroidContext(getApplicationContext());
 
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
@@ -101,7 +105,7 @@ public class Authorization extends AppCompatActivity implements GoogleApiClient.
             String email = "" + acct.getEmail();
             String photo = "" + acct.getPhotoUrl().toString();
 
-            new GetRequest("http://195.88.209.17/app/in/user.php?name=" + name + "&photo=" + photo + "&email=" + email).execute();
+            new GetRequest("http://195.88.209.17/app/in/user.php?photo=" + photo + "&email=" + email).execute();
 
             finish();
             startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

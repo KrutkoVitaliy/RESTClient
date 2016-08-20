@@ -52,6 +52,13 @@
         <item>Photo</item>
     </string-array>
 
+    <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ЧТО ИЩЕМ" -->
+    <string-array name="searchTypes">
+        <item>Makeup</item>
+        <!--<item>Hairstyles</item>-->
+        <item>Manicure</item>
+    </string-array>
+
     <!-- VALUES FROM NAVIGATION MENU -->
     <string name="menu_item_feed">Feed</string>
     <string name="menu_item_news">News</string>
