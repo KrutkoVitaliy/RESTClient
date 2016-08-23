@@ -120,7 +120,7 @@ public class HairstyleFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText("Click to open profile");
         } else {
             avatar.setImageResource(R.mipmap.icon);

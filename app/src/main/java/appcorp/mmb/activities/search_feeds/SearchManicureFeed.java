@@ -37,6 +37,7 @@ import appcorp.mmb.activities.SelectCategory;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -112,6 +113,9 @@ public class SearchManicureFeed extends AppCompatActivity {
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
                         break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
+                        break;
                     case R.id.navMenuLips:
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
@@ -138,7 +142,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText("Click to open profile");
         } else {
             avatar.setImageResource(R.mipmap.icon);
@@ -232,7 +236,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request.replace(" ", "%20") + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();

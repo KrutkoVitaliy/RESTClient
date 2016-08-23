@@ -3,7 +3,6 @@ package appcorp.mmb.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 import appcorp.mmb.R;
 import appcorp.mmb.classes.Intermediates;
@@ -44,9 +36,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction);
-
         firebaseAuth = FirebaseAuth.getInstance();
-
         progressDialog = new ProgressDialog(this);
 
         logoText = (TextView) findViewById(R.id.logoText);
@@ -74,7 +64,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
             registerUser();
         }
         if (view == signIn) {
-            /*registerUser();*/
+            startActivity(new Intent(getApplicationContext(), SignIn.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
@@ -83,6 +73,8 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         final String sPass = Intermediates.encodeToURL(pass.getText().toString().trim());
         final String sName = Intermediates.encodeToURL(name.getText().toString().trim());
         final String sLastname = Intermediates.encodeToURL(lastname.getText().toString().trim());
+        final String firebaseEmail = email.getText().toString().trim();
+        final String firebasePass = pass.getText().toString().trim();
 
         if (TextUtils.isEmpty(sEmail)) {
             Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
@@ -104,9 +96,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         progressDialog.setMessage("Registering...");
         progressDialog.show();
 
-
-
-        firebaseAuth.createUserWithEmailAndPassword(sEmail, sPass)
+        firebaseAuth.createUserWithEmailAndPassword(firebaseEmail, firebasePass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -115,11 +105,13 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
                             new GetRequest("http://195.88.209.17/app/in/user.php?name=" + sName + "%20" + sLastname + "&photo=mmbuser.jpg&email=" + sEmail).execute();
                             startActivity(new Intent(getApplicationContext(), MyProfile.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("Name", sName + " " + sLastname)
                                     .putExtra("PhotoURL", "mmbuser.jpg")
                                     .putExtra("E-mail", sEmail));
                             Storage.addString("Name", name.getText().toString().trim() + " " + lastname.getText().toString().trim());
                             Storage.addString("E-mail", email.getText().toString().trim());
+                            Storage.addString("PhotoURL", "mmbuser.jpg");
                         } else {
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         }

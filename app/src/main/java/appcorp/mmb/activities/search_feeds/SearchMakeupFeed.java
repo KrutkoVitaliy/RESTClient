@@ -36,6 +36,7 @@ import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.SelectCategory;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
+import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -110,6 +111,9 @@ public class SearchMakeupFeed extends AppCompatActivity {
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
                         break;
+                    case R.id.navMenuMakeup:
+                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
+                        break;
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
@@ -139,7 +143,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText("Click to open profile");
         } else {
             avatar.setImageResource(R.mipmap.icon);

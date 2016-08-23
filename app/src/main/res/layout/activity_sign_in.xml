@@ -20,45 +20,29 @@
         android:orientation="vertical"
         android:gravity="center_vertical">
         <EditText
-            android:inputType="textPersonName"
-            android:id="@+id/nameField"
-            android:hint="Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="#FFFFFF"
-            android:textColor="#FFFFFF"/>
-        <EditText
-            android:inputType="text"
-            android:id="@+id/lastnameField"
-            android:hint="Lastname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="#FFFFFF"
-            android:textColor="#FFFFFF"/>
-        <EditText
             android:inputType="textEmailAddress"
-            android:id="@+id/emailField"
+            android:id="@+id/signInEmailField"
             android:hint="E-Mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="#FFFFFF"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"/>
         <EditText
             android:inputType="textPassword"
-            android:id="@+id/passField"
+            android:id="@+id/signInPassField"
             android:hint="Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="#FFFFFF"
             android:textColor="#FFFFFF"/>
         <Button
-            android:id="@+id/submit"
-            android:text="Sign up"
+            android:id="@+id/signInSubmit"
+            android:text="Sign in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <TextView
-            android:text="Already registered? Sign in here"
-            android:id="@+id/signIn"
+            android:text="No account?\nCreate it here!"
+            android:id="@+id/signUp"
             android:gravity="center"
             android:layout_marginTop="8dp"
             android:textSize="8pt"

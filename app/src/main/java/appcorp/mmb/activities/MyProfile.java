@@ -37,8 +37,9 @@ public class MyProfile extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private TextView name, location, phone;
+    private TextView name, location, phone,likes,followers;
     private ImageView photo;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,9 @@ public class MyProfile extends AppCompatActivity {
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);
         phone = (TextView) findViewById(R.id.phone);
-        photo = (ImageView) findViewById(R.id.avatar);
+        photo = (ImageView) findViewById(R.id.myProfileAvatar);
+        likes = (TextView) findViewById(R.id.likes);
+        followers = (TextView) findViewById(R.id.followers);
     }
 
     private void initToolbar() {
@@ -64,7 +67,8 @@ public class MyProfile extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getApplicationContext(), EditMyProfile.class));
+                startActivity(new Intent(getApplicationContext(), EditMyProfile.class)
+                .putExtra("ID", id));
                 return true;
             }
         });
@@ -123,7 +127,7 @@ public class MyProfile extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load(Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText("Click to open profile");
         } else {
             avatar.setImageResource(R.mipmap.icon);
@@ -183,11 +187,14 @@ public class MyProfile extends AppCompatActivity {
                 JSONArray items = new JSONArray(s);
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    name.setText(Storage.getString("Name", "Make Me Beauty"));
-                    location.setText(item.getString("city") + ", " + item.getString("address"));
+                    name.setText(item.getString("firstName") + " " + item.getString("lastName"));
+                    location.setText(item.getString("city") + "  " + item.getString("address"));
                     phone.setText(item.getString("phoneNumber"));
+                    likes.setText(item.getString("likes"));
+                    followers.setText(item.getString("followers"));
+                    id = item.getString("id");
                     String ss = item.getString("photo");
-                    Picasso.with(getApplicationContext()).load(ss).into(photo);
+                    Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+ss).into(photo);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
