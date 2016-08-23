@@ -18,6 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -30,7 +31,10 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
+    }
+    productFlavors {
     }
 }
 
@@ -47,7 +51,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.2.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.firebase:firebase-auth:9.2.0'
-    compile 'com.google.android.gms:play-services-auth:9.2.1'
+    compile 'com.google.firebase:firebase-database:9.2.0'
 }
 apply plugin: 'com.google.gms.google-services'
 
