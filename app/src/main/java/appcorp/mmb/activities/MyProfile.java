@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
@@ -37,7 +39,7 @@ public class MyProfile extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private TextView name, location, phone,likes,followers;
+    private TextView name, location, phone, likes, followers;
     private ImageView photo;
     private String id;
 
@@ -68,7 +70,11 @@ public class MyProfile extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), EditMyProfile.class)
-                .putExtra("ID", id));
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("ID", id)
+                        .putExtra("Name", name.getText())
+                        .putExtra("Location", location.getText())
+                        .putExtra("Phone", phone.getText()));
                 return true;
             }
         });
@@ -127,7 +133,7 @@ public class MyProfile extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText("Click to open profile");
         } else {
             avatar.setImageResource(R.mipmap.icon);
@@ -194,7 +200,7 @@ public class MyProfile extends AppCompatActivity {
                     followers.setText(item.getString("followers"));
                     id = item.getString("id");
                     String ss = item.getString("photo");
-                    Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+ss).into(photo);
+                    Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + ss).into(photo);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
