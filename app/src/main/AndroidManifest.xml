@@ -81,6 +81,7 @@
         <activity
             android:name=".activities.SignIn"
             android:screenOrientation="portrait" />
+        <activity android:name=".activities.ProfileMediaViewer"></activity>
     </application>
 
 </manifest>

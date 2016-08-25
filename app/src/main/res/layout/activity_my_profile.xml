@@ -85,26 +85,31 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="8dp">
                         <ImageView
+                            android:id="@+id/gplusButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@mipmap/icon_gplus"
                             android:layout_marginLeft="4dp"/>
                         <ImageView
+                            android:id="@+id/fbButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@mipmap/icon_fb"
                             android:layout_marginLeft="4dp"/>
                         <ImageView
+                            android:id="@+id/vkButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@mipmap/icon_vk"
                             android:layout_marginLeft="4dp"/>
                         <ImageView
+                            android:id="@+id/instagramButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@mipmap/icon_instagram"
                             android:layout_marginLeft="4dp"/>
                         <ImageView
+                            android:id="@+id/okButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@mipmap/icon_ok"
@@ -201,6 +206,191 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#D0D0D0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <LinearLayout
+                    android:id="@+id/serviceMakeup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/makeup"/>
+                    <TextView
+                        android:id="@+id/serviceMakeupText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:text="Makeup"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/serviceManicure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/manicure"
+                        android:paddingRight="6dp"/>
+                    <TextView
+                        android:id="@+id/serviceManicureText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:text="Manicure"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/serviceHairstyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/hairstyle"
+                        android:paddingRight="4dp"/>
+                    <TextView
+                        android:id="@+id/serviceHairstyleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hairstyle"
+                        android:textColor="#000000"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ScrollView
+                    android:id="@+id/makeupUserGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesMakeup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                            <LinearLayout
+                                android:id="@+id/costsMakeup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="vertical">
+                            </LinearLayout>
+                        </FrameLayout>
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/addMakeupToGallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/ic_plus"/>
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView
+                    android:id="@+id/manicureUserGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesManicure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                            <LinearLayout
+                                android:id="@+id/costsManicure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
+                            </LinearLayout>
+                        </FrameLayout>
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/addManicureToGallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/ic_plus"/>
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView
+                    android:id="@+id/hairstyleUserGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesHairstyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                            <LinearLayout
+                                android:id="@+id/costsHairstyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
+                            </LinearLayout>
+                        </FrameLayout>
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/addHairstyleToGallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/ic_plus"/>
+                    </LinearLayout>
+                </ScrollView>
+            </FrameLayout>
+
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 

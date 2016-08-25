@@ -94,6 +94,7 @@ public class EditMyProfile extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+                //new UpdateData().execute;
                 finish();
                 return true;
             }
@@ -215,12 +216,11 @@ public class EditMyProfile extends AppCompatActivity {
                 JSONArray items = new JSONArray(s);
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-
                     editName.setText(item.getString("firstName"));
                     editLastname.setText(item.getString("lastName"));
                     editCity.setText(item.getString("city"));
                     editAddress.setText(item.getString("address"));
-                    editPhone.setText(item.getString("phone"));
+                    editPhone.setText(item.getString("phoneNumber"));
                     editGplus.setText(item.getString("gplus"));
                     editFB.setText(item.getString("facebook"));
                     editVK.setText(item.getString("vkontakte"));
