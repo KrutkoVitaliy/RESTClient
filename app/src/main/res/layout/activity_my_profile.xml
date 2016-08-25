@@ -69,7 +69,7 @@
                         android:paddingLeft="16dp"
                         android:text="City, Address"
                         android:textColor="@color/author_title"
-                        android:textSize="6pt" />
+                        android:textSize="5pt" />
 
                     <TextView
                         android:id="@+id/phone"
@@ -78,7 +78,7 @@
                         android:paddingLeft="16dp"
                         android:text="Phone number"
                         android:textColor="@color/author_title"
-                        android:textSize="6pt"/>
+                        android:textSize="5pt"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

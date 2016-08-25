@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
@@ -35,6 +36,7 @@ import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.network.GetRequest;
 
 public class EditMyProfile extends AppCompatActivity {
 
@@ -94,7 +96,18 @@ public class EditMyProfile extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //new UpdateData().execute;
+                new GetRequest("http://195.88.209.17/app/in/updateuser.php" +
+                        "?firstname=" + Intermediates.encodeToURL(editName.getText().toString()) +
+                        "&lastname=" + Intermediates.encodeToURL(editLastname.getText().toString()) +
+                        "&city=" + Intermediates.encodeToURL(editCity.getText().toString()) +
+                        "&address=" + Intermediates.encodeToURL(editAddress.getText().toString()) +
+                        "&phone=" + Intermediates.encodeToURL(editPhone.getText().toString()) +
+                        "&gplus=" + Intermediates.encodeToURL(editGplus.getText().toString()) +
+                        "&facebook=" + Intermediates.encodeToURL(editFB.getText().toString()) +
+                        "&vk=" + Intermediates.encodeToURL(editVK.getText().toString()) +
+                        "&instagram=" + Intermediates.encodeToURL(editInst.getText().toString()) +
+                        "&ok=" + Intermediates.encodeToURL(editOK.getText().toString()) +
+                        "&id=" + id).execute();
                 finish();
                 return true;
             }
