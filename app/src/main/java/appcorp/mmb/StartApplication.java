@@ -1,13 +1,16 @@
 package appcorp.mmb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import appcorp.mmb.activities.SelectCategory;
 import appcorp.mmb.classes.FireAnal;

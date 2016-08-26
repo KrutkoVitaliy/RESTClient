@@ -76,18 +76,6 @@ public class EditMyProfile extends AppCompatActivity {
         editVK = (EditText) findViewById(R.id.editVK);
         editInst = (EditText) findViewById(R.id.editInst);
         editOK = (EditText) findViewById(R.id.editOK);
-        /*String name = getIntent().getStringExtra("Name");
-        if (name.contains(" ") && name.length() > 1) {
-            String[] nameArray = name.split(" ");
-            editName.setText(nameArray[0]);
-            editLastname.setText(nameArray[1]);
-        }
-        String location = getIntent().getStringExtra("Location");
-        if (location.contains(" ") && name.length() > 1) {
-            String[] locationArray = location.split(" ");
-            editCity.setText(locationArray[0]);
-            editAddress.setText(locationArray[1]);
-        }*/
     }
 
     private void initToolbar() {

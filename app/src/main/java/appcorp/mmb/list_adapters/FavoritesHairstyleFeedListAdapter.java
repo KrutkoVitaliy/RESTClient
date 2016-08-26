@@ -33,6 +33,7 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
     private List<HairstyleDTO> hairstyleData;
     private Context context;
     private List<Long> likesId = new ArrayList<>();
+    boolean loaded = false;
 
     public FavoritesHairstyleFeedListAdapter(List<HairstyleDTO> hairstyleData, Context context) {
         this.hairstyleData = hairstyleData;
@@ -47,34 +48,35 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final HairstyleDTO item = hairstyleData.get(position);
+        if(!loaded){
+            final HairstyleDTO item = hairstyleData.get(position);
 
-        if (position == hairstyleData.size() - 1) {
-            if (hairstyleData.size() - 1 % 100 != 8)
-                Favorites.addManicureFeed(hairstyleData.size() / 100 + 1);
-        }
-
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
-
-        String[] date = item.getAvailableDate().split("");
-
-        holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-        holder.likesCount.setText("" + item.getLikes());
-
-        holder.likesCount.setText("");
-        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-
-        holder.addLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                holder.post.removeAllViews();
+            if (position == hairstyleData.size() - 1) {
+                if (hairstyleData.size() - 1 % 100 != 8)
+                    Favorites.addManicureFeed(hairstyleData.size() / 100 + 1);
             }
-        });
 
-        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
+            final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
+            final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+
+            String[] date = item.getAvailableDate().split("");
+
+            holder.title.setText(item.getAuthorName());
+            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+            holder.likesCount.setText("" + item.getLikes());
+
+            holder.likesCount.setText("");
+            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+
+            holder.addLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                    holder.post.removeAllViews();
+                }
+            });
+
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,84 +88,86 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
             }
         });*/
 
-        holder.hashTags.removeAllViews();
-        for (int i = 0; i < item.getHashTags().size(); i++) {
-            TextView hashTag = new TextView(context);
-            hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-            hashTag.setTextSize(14);
-            final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i) + " ");
-            hashTag.setOnClickListener(new View.OnClickListener() {
+            holder.hashTags.removeAllViews();
+            for (int i = 0; i < item.getHashTags().size(); i++) {
+                TextView hashTag = new TextView(context);
+                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                hashTag.setTextSize(14);
+                final int finalI = i;
+                hashTag.setText("#" + item.getHashTags().get(i) + " ");
+                hashTag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                                .putExtra("Request", item.getHashTags().get(finalI))
+                                .putExtra("HairstyleType", "")
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+                holder.hashTags.addView(hashTag);
+            }
+
+            holder.imageViewer.removeAllViews();
+            holder.countImages.removeAllViews();
+            for (int i = 0; i < item.getImages().size(); i++) {
+                ImageView screenShot = new ImageView(context);
+                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                screenShot.setMinimumHeight(Storage.getInt("Height", 854));
+                screenShot.setPadding(0, 0, 1, 0);
+                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Height", 854)).onlyScaleDown().into(screenShot);
+
+                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                final int finalI = i;
+                screenShot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.showMore.getText().equals(SHOW)) {
+                            Intent intent = new Intent(context, FullscreenPreview.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                            context.startActivity(intent);
+                        }
+                    }
+                });
+                holder.imageViewer.addView(screenShot);
+
+                LinearLayout countLayout = new LinearLayout(context);
+                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 854)));
+                TextView count = new TextView(context);
+                count.setText((i + 1) + "/" + item.getImages().size());
+                count.setTextSize(20);
+                count.setTextColor(Color.WHITE);
+                count.setPadding(32, 32, 32, 32);
+                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+                countLayout.addView(count);
+                holder.countImages.addView(countLayout);
+            }
+
+            holder.moreContainer.removeAllViews();
+            holder.showMore.setText(SHOW);
+            holder.showMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchHairstyleFeed.class)
-                            .putExtra("Request", item.getHashTags().get(finalI))
-                            .putExtra("HairstyleType", "")
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });
-            holder.hashTags.addView(hashTag);
-        }
 
-        holder.imageViewer.removeAllViews();
-        holder.countImages.removeAllViews();
-        for (int i = 0; i < item.getImages().size(); i++) {
-            ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-            screenShot.setMinimumHeight(Storage.getInt("Height", 854));
-            screenShot.setPadding(0, 0, 1, 0);
-            screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Height", 854)).onlyScaleDown().into(screenShot);
-
-            screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            final int finalI = i;
-            screenShot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
                     if (holder.showMore.getText().equals(SHOW)) {
-                        Intent intent = new Intent(context, FullscreenPreview.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                        context.startActivity(intent);
+                        holder.showMore.setText(HIDE);
+                        LinearLayout moreContainer = new LinearLayout(context);
+                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        moreContainer.setOrientation(LinearLayout.VERTICAL);
+                        moreContainer.setPadding(32, 32, 32, 0);
+
+                        holder.moreContainer.addView(moreContainer);
+                    } else if (holder.showMore.getText().equals(HIDE)) {
+                        holder.showMore.setText(SHOW);
+                        holder.moreContainer.removeAllViews();
                     }
                 }
             });
-            holder.imageViewer.addView(screenShot);
-
-            LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 854)));
-            TextView count = new TextView(context);
-            count.setText((i + 1) + "/" + item.getImages().size());
-            count.setTextSize(20);
-            count.setTextColor(Color.WHITE);
-            count.setPadding(32, 32, 32, 32);
-            count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-            countLayout.addView(count);
-            holder.countImages.addView(countLayout);
+            loaded = true;
         }
-
-        holder.moreContainer.removeAllViews();
-        holder.showMore.setText(SHOW);
-        holder.showMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (holder.showMore.getText().equals(SHOW)) {
-                    holder.showMore.setText(HIDE);
-                    LinearLayout moreContainer = new LinearLayout(context);
-                    moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    moreContainer.setOrientation(LinearLayout.VERTICAL);
-                    moreContainer.setPadding(32, 32, 32, 0);
-
-                    holder.moreContainer.addView(moreContainer);
-                } else if (holder.showMore.getText().equals(HIDE)) {
-                    holder.showMore.setText(SHOW);
-                    holder.moreContainer.removeAllViews();
-                }
-            }
-        });
     }
 
     private TextView createText(String title, Typeface tf, int padding) {

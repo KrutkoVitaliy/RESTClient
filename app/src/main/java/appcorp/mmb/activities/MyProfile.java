@@ -37,6 +37,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import appcorp.mmb.R;
@@ -46,6 +47,7 @@ import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.network.GetRequest;
 
 public class MyProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -195,6 +197,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 4, 0, 4);
                     c.setText(cost.getText().toString());
                     costsMakeup.addView(c);
+                    new GetRequest("http://195.88.209.17/app/in/addmakeupservice.php" +
+                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "&id=" + id).execute();
                 }
             }
         });
@@ -236,6 +242,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 4, 0, 4);
                     c.setText(cost.getText().toString());
                     costsManicure.addView(c);
+                    new GetRequest("http://195.88.209.17/app/in/addmanicureservice.php" +
+                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "&id=" + id).execute();
                 }
             }
         });
@@ -277,6 +287,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 4, 0, 4);
                     c.setText(cost.getText().toString());
                     costsHairstyle.addView(c);
+                    new GetRequest("http://195.88.209.17/app/in/addhairstyleservice.php" +
+                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "&id=" + id).execute();
                 }
             }
         });
@@ -501,6 +515,64 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         instagramButton.setAlpha(0.4F);
                     if (item.getString("odnoklassniki").equals(""))
                         okButton.setAlpha(0.4F);
+                    if (!item.getString("makeupServices").equals("")) {
+                        String[] makeupServicesArray = item.getString("makeupServices").substring(1, item.getString("makeupServices").length()).split(",");
+                        String[] makeupCostsArray = item.getString("makeupCosts").substring(1, item.getString("makeupCosts").length()).split(",");
+                        for (int j = 0; j < makeupServicesArray.length; j++) {
+                            TextView serviceTextView = new TextView(getApplicationContext());
+                            serviceTextView.setTextColor(Color.parseColor("#808080"));
+                            serviceTextView.setTextSize(16);
+                            serviceTextView.setPadding(0, 4, 0, 4);
+                            serviceTextView.setText(makeupServicesArray[j].toString());
+                            servicesMakeup.addView(serviceTextView);
+
+                            TextView costsTextView = new TextView(getApplicationContext());
+                            costsTextView.setTextColor(Color.parseColor("#404040"));
+                            costsTextView.setTextSize(16);
+                            costsTextView.setPadding(0, 4, 0, 4);
+                            costsTextView.setText(makeupCostsArray[j].toString());
+                            costsMakeup.addView(costsTextView);
+                        }
+                    }
+                    if (!item.getString("manicureServices").equals("")) {
+                        String[] manicureServicesArray = item.getString("manicureServices").substring(1, item.getString("manicureServices").length()).split(",");
+                        String[] manicureCostsArray = item.getString("manicureCosts").substring(1, item.getString("manicureCosts").length()).split(",");
+                        for (int j = 0; j < manicureServicesArray.length; j++) {
+                            TextView serviceTextView = new TextView(getApplicationContext());
+                            serviceTextView.setTextColor(Color.parseColor("#808080"));
+                            serviceTextView.setTextSize(16);
+                            serviceTextView.setPadding(0, 4, 0, 4);
+                            serviceTextView.setText(manicureServicesArray[j].toString());
+                            servicesManicure.addView(serviceTextView);
+
+                            TextView costsTextView = new TextView(getApplicationContext());
+                            costsTextView.setTextColor(Color.parseColor("#404040"));
+                            costsTextView.setTextSize(16);
+                            costsTextView.setPadding(0, 4, 0, 4);
+                            costsTextView.setText(manicureCostsArray[j].toString());
+                            costsManicure.addView(costsTextView);
+                        }
+                    }
+                    if (!item.getString("hairstyleServices").equals("")) {
+                        String[] hairstyleServicesArray = item.getString("hairstyleServices").substring(1, item.getString("hairstyleServices").length()).split(",");
+                        String[] hairstyleCostsArray = item.getString("hairstyleCosts").substring(1, item.getString("hairstyleCosts").length()).split(",");
+                        for (int j = 0; j < hairstyleServicesArray.length; j++) {
+                            TextView serviceTextView = new TextView(getApplicationContext());
+                            serviceTextView.setTextColor(Color.parseColor("#808080"));
+                            serviceTextView.setTextSize(16);
+                            serviceTextView.setPadding(0, 4, 0, 4);
+                            serviceTextView.setText(hairstyleServicesArray[j].toString());
+                            servicesHairstyle.addView(serviceTextView);
+
+                            TextView costsTextView = new TextView(getApplicationContext());
+                            costsTextView.setTextColor(Color.parseColor("#404040"));
+                            costsTextView.setTextSize(16);
+                            costsTextView.setPadding(0, 4, 0, 4);
+                            costsTextView.setText(hairstyleCostsArray[j].toString());
+                            costsHairstyle.addView(costsTextView);
+                        }
+                    }
+
                     String ss = item.getString("photo");
                     Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + ss).into(photo);
                 }
