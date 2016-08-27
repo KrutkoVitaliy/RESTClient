@@ -109,4 +109,13 @@
     <string name="title_section3">Секция 3</string>
     <string name="navigation_drawer_close">Закрыть меню</string>
     <string name="navigation_drawer_open">Открыть меню</string>
+
+    <string name="authorization_hint_name">Имя</string>
+    <string name="authorization_hint_last_name">Фамилия</string>
+    <string name="authorization_hint_email">Эл. почта</string>
+    <string name="authorization_hint_password">Пароль</string>
+    <string name="authorization_sign_up">Зарегистрировать</string>
+    <string name="authorization_sign_ip">Войти</string>
+    <string name="authorization_to_sign_up">Уже зарегистрированы? Войдите здесь!</string>
+    <string name="authorization_to_sign_in">Нет аккаунта? Создайте его!</string>
 </resources>
