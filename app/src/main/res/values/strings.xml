@@ -101,8 +101,6 @@
     <string name="difficult_easy">Easy difficult</string>
     <string name="difficult_medium">Medium difficult</string>
     <string name="difficult_hard">Hard difficult</string>
-    <string name="account_hint_unsigned">Click to sign in</string>
-    <string name="account_hint_signed">Click to open profile</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="title_section1">Section 1</string>
@@ -125,4 +123,7 @@
 
     <string name="internet_notification">Failed to connect to the Internet.\nCheck your Internet connection</string>
     <string name="try_again">Try again</string>
+
+    <string name="header_unauthorized_hint">Click to open profile</string>
+    <string name="header_authorized_hint">Click to sign in</string>
 </resources>

@@ -98,8 +98,6 @@
     <string name="menu_item_hot">Набирающее популярность</string>
     <string name="menu_item_hairstyle">Прически</string>
     <string name="menu_item_style_types">Красота</string>
-    <string name="account_hint_signed">Открыть профиль</string>
-    <string name="account_hint_unsigned">Войти в аккаунт</string>
     <string name="action_example">Пример действия</string>
     <string name="action_settings">Настройки</string>
     <string name="title_activity_main">Главная активность</string>
@@ -120,4 +118,7 @@
 
     <string name="internet_notification">Не удалось подключиться к интернету.\nПроверьте ваше интернет-соединение</string>
     <string name="try_again">Повторить попытку</string>
+
+    <string name="header_unauthorized_hint">Открыть профиль</string>
+    <string name="header_authorized_hint">Авторизоваться</string>
 </resources>

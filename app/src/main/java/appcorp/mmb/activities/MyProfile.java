@@ -435,10 +435,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
-            switcherHint.setText("Click to open profile");
+            switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
-            avatar.setImageResource(R.mipmap.icon);
-            switcherHint.setText("Click to sign in");
+            avatar.setImageResource(R.mipmap.nav_icon);
+            switcherHint.setText(R.string.header_authorized_hint);
         }
         TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
         accountName.setText(Storage.getString("Name", "Make Me Beauty"));
@@ -495,6 +495,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
                     name.setText(item.getString("firstName") + " " + item.getString("lastName"));
+                    Storage.addString("Name", item.getString("firstName") + " " + item.getString("lastName"));
                     location.setText(item.getString("city") + "  " + item.getString("address"));
                     phone.setText(item.getString("phoneNumber"));
                     likes.setText(item.getString("likes"));

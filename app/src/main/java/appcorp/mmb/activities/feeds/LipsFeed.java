@@ -121,10 +121,10 @@ public class LipsFeed extends AppCompatActivity {
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
-            switcherHint.setText("Click to open profile");
+            switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
-            avatar.setImageResource(R.mipmap.icon);
-            switcherHint.setText("Click to sign in");
+            avatar.setImageResource(R.mipmap.nav_icon);
+            switcherHint.setText(R.string.header_authorized_hint);
         }
         TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
         accountName.setText(Storage.getString("Name", "Make Me Beauty"));

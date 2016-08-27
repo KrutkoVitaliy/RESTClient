@@ -28,7 +28,8 @@
             android:hint="@string/authorization_hint_name"
             android:inputType="textPersonName"
             android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF" />
+            android:textColorHint="#FFFFFF"
+            android:layout_marginTop="?attr/actionBarSize" />
 
         <EditText
             android:id="@+id/lastnameField"
@@ -61,7 +62,8 @@
             android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/authorization_sign_up" />
+            android:text="@string/authorization_sign_up"
+            android:layout_marginTop="?attr/actionBarSize" />
 
         <TextView
             android:id="@+id/signIn"
