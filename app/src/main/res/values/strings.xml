@@ -2,7 +2,7 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4151792091524133/8805221291</string>
 
     <!-- MAIN VALUES -->
-    <string name="app_name">Make Me Beauty</string>
+    <string name="app_name" translatable="false">Make Me Beauty</string>
     <string name="drawer_toggle_open">Open</string>
     <string name="drawer_toggle_close">Close</string>
 
@@ -122,4 +122,7 @@
     <string name="authorization_sign_ip">Sign in</string>
     <string name="authorization_to_sign_up">Already registered? Sign in here!</string>
     <string name="authorization_to_sign_in">No account? Create it here!</string>
+
+    <string name="internet_notification">Failed to connect to the Internet.\nCheck your Internet connection</string>
+    <string name="try_again">Try again</string>
 </resources>

@@ -1,6 +1,5 @@
 <resources>
     <!-- ОСНОВНЫЕ ЗНАЧЕНИЯ -->
-    <string name="app_name">Сделай меня красивой</string>
     <string name="drawer_toggle_open">Открыть</string>
     <string name="drawer_toggle_close">Закрыть</string>
 
@@ -118,4 +117,7 @@
     <string name="authorization_sign_ip">Войти</string>
     <string name="authorization_to_sign_up">Уже зарегистрированы? Войдите здесь!</string>
     <string name="authorization_to_sign_in">Нет аккаунта? Создайте его!</string>
+
+    <string name="internet_notification">Не удалось подключиться к интернету.\nПроверьте ваше интернет-соединение</string>
+    <string name="try_again">Повторить попытку</string>
 </resources>

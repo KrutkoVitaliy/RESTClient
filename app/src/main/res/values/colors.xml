@@ -6,11 +6,8 @@
     <color name="navigationDrawer">#FFFFFF</color>
     <color name="author_title">#232323</color>
     <color name="description_title">#919191</color>
-
     <color name="horizontal_line">#dddddd</color>
-
     <color name="button_splash">#4CAF50</color>
-
     <color name="black_overlay">#66000000</color>
     <color name="white_overlay">#FFFFFFFF</color>
 </resources>
