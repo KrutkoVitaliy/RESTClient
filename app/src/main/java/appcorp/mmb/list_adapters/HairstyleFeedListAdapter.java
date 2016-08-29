@@ -46,7 +46,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         this.data = data;
         this.context = context;
         width = Storage.getInt("Width", 480);
-        height = (int) (width * 1.5F);
+        height = width;
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
@@ -116,13 +116,13 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             }
         });*/
 
-        /*holder.hashTags.removeAllViews();
+        holder.hashTags.removeAllViews();
         for (int i = 0; i < item.getHashTags().size(); i++) {
             TextView hashTag = new TextView(context);
             hashTag.setTextColor(Color.argb(255, 51, 102, 153));
             hashTag.setTextSize(14);
             final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i) + " ");
+            hashTag.setText("#" + item.getHashTags().get(i).toLowerCase() + " ");
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -134,7 +134,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             });
             holder.hashTags.addView(hashTag);
         }
-*/
+
         holder.imageViewer.removeAllViews();
         holder.countImages.removeAllViews();
         for (int i = 0; i < item.getImages().size(); i++) {
@@ -163,7 +163,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
-            count.setText((i + 1) + "/" + item.getImages().size());
+            count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
             count.setTextSize(20);
             count.setTextColor(Color.WHITE);
             count.setPadding(32, 32, 32, 32);

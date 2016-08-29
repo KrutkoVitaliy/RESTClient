@@ -143,7 +143,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 LinearLayout countLayout = new LinearLayout(context);
                 countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
                 TextView count = new TextView(context);
-                count.setText((i + 1) + "/" + item.getImages().size());
+                count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
                 count.setTextSize(20);
                 count.setTextColor(Color.WHITE);
                 count.setPadding(32, 32, 32, 32);

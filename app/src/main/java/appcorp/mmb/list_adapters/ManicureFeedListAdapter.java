@@ -168,7 +168,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
-            count.setText((i + 1) + "/" + item.getImages().size());
+            count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
             count.setTextSize(24);
             count.setTextColor(Color.WHITE);
             count.setPadding(32, 32, 32, 32);
