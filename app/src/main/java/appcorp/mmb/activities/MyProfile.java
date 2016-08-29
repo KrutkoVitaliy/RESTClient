@@ -169,16 +169,16 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
     private void newMakeup() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Add makeup service");
-        alert.setMessage("Please enter name of service and it cost");
+        alert.setTitle(R.string.add_makeup_service);
+        alert.setMessage(R.string.enter_service_name);
 
         final LinearLayout inputFields = new LinearLayout(getApplicationContext());
         inputFields.setOrientation(LinearLayout.VERTICAL);
         final EditText service = new EditText(this);
-        service.setHint("Service name");
+        service.setHint(R.string.service_name);
         inputFields.addView(service);
         final EditText cost = new EditText(this);
-        cost.setHint("Cost");
+        cost.setHint(R.string.service_cost);
         inputFields.addView(cost);
         alert.setView(inputFields);
 
@@ -204,7 +204,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 }
             }
         });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
             }
@@ -214,16 +214,16 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
     private void newManicure() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Add manicure service");
-        alert.setMessage("Please enter name of service and it cost");
+        alert.setTitle(R.string.add_manicure_service);
+        alert.setMessage(R.string.enter_service_name);
 
         final LinearLayout inputFields = new LinearLayout(getApplicationContext());
         inputFields.setOrientation(LinearLayout.VERTICAL);
         final EditText service = new EditText(this);
-        service.setHint("Service name");
+        service.setHint(R.string.service_name);
         inputFields.addView(service);
         final EditText cost = new EditText(this);
-        cost.setHint("Cost");
+        cost.setHint(R.string.service_cost);
         inputFields.addView(cost);
         alert.setView(inputFields);
 
@@ -249,7 +249,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 }
             }
         });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
             }
@@ -259,16 +259,16 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
     private void newHairstyle() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Add hairstyle service");
-        alert.setMessage("Please enter name of service and it cost");
+        alert.setTitle(R.string.add_hairstyle_service);
+        alert.setMessage(R.string.enter_service_name);
 
         final LinearLayout inputFields = new LinearLayout(getApplicationContext());
         inputFields.setOrientation(LinearLayout.VERTICAL);
         final EditText service = new EditText(this);
-        service.setHint("Service name");
+        service.setHint(R.string.service_name);
         inputFields.addView(service);
         final EditText cost = new EditText(this);
-        cost.setHint("Cost");
+        cost.setHint(R.string.service_cost);
         inputFields.addView(cost);
         alert.setView(inputFields);
 
@@ -294,7 +294,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 }
             }
         });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
             }
@@ -306,13 +306,13 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         AlertDialog.Builder builder = new AlertDialog.Builder(MyProfile.this);
         builder.setTitle(title);
         builder.setMessage(content);
-        builder.setNegativeButton("Cancel",
+        builder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //showMessage("Нажали Нет");
                     }
                 });
-        builder.setPositiveButton("Open",
+        builder.setPositiveButton(R.string.open,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(getApplicationContext(), ProfileMediaViewer.class)
@@ -322,13 +322,13 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 });
         // устанавливаем кнопку, которая отвечает за выбранный нами ответ
         // в данном случаем мы просто хотим всплывающее окно с отменой
-        builder.setNeutralButton("Copy",
+        builder.setNeutralButton(R.string.copy,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("", content);
                         clipboard.setPrimaryClip(clip);
-                        Toast.makeText(getApplicationContext(), "Copied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.copied, Toast.LENGTH_SHORT).show();
                     }
                 });
 

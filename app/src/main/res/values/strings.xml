@@ -121,9 +121,19 @@
     <string name="authorization_to_sign_up">Already registered? Sign in here!</string>
     <string name="authorization_to_sign_in">No account? Create it here!</string>
 
-    <string name="internet_notification">Failed to connect to the Internet.\nCheck your Internet connection</string>
+    <string name="internet_notification">Failed to connect to the Internet\nCheck your Internet connection</string>
     <string name="try_again">Try again</string>
 
     <string name="header_unauthorized_hint">Click to open profile</string>
     <string name="header_authorized_hint">Click to sign in</string>
+    <string name="add_hairstyle_service">Add hairstyle service</string>
+    <string name="add_makeup_service">Add makeup service</string>
+    <string name="add_manicure_service">Add manicure service</string>
+    <string name="enter_service_name">Please enter name of service and it cost</string>
+    <string name="service_name">Service name</string>
+    <string name="service_cost">Service cost</string>
+    <string name="cancel">Cancel</string>
+    <string name="open">Open</string>
+    <string name="copy">Copy</string>
+    <string name="copied">Copied</string>
 </resources>

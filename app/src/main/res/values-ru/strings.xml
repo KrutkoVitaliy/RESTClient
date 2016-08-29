@@ -86,7 +86,7 @@
     <!-- МЕРОПРИЯТИЕ -->
     <string name="occasion_everyday">Тип мероприятия: На каждый день</string>
     <string name="occasion_celebrity">Тип мероприятия: Звездный</string>
-    <string name="occasion_dramatic">Тип мероприятия: Яркий</string>
+    <string name="occasion_dramatic">Тип мероприятия: Драматический</string>
     <string name="occasion_holiday">Тип мероприятия: Праздничный</string>
     <!-- СЛОЖНОСТЬ -->
     <string name="difficult_easy">Простой макияж</string>
@@ -116,9 +116,19 @@
     <string name="authorization_to_sign_up">Уже зарегистрированы? Войдите здесь!</string>
     <string name="authorization_to_sign_in">Нет аккаунта? Создайте его!</string>
 
-    <string name="internet_notification">Не удалось подключиться к интернету.\nПроверьте ваше интернет-соединение</string>
+    <string name="internet_notification">Не удалось подключиться к интернету\nПроверьте ваше интернет-соединение</string>
     <string name="try_again">Повторить попытку</string>
 
     <string name="header_unauthorized_hint">Открыть профиль</string>
     <string name="header_authorized_hint">Авторизоваться</string>
+    <string name="add_hairstyle_service">Добавить прическу</string>
+    <string name="add_makeup_service">Добавить макияж</string>
+    <string name="add_manicure_service">Добавить маникюр</string>
+    <string name="enter_service_name">Пожалуйста, введите название и стоимость услуги</string>
+    <string name="service_cost">Стоимость услуги</string>
+    <string name="service_name">Название услуги</string>
+    <string name="cancel">Отмена</string>
+    <string name="copied">Скопировано</string>
+    <string name="copy">Копировать</string>
+    <string name="open">Открыть</string>
 </resources>
