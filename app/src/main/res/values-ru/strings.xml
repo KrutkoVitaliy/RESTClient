@@ -84,10 +84,10 @@
     <string name="hazel_eyes">Болотный цвет глаз</string>
     <string name="black_eyes">Черный цвет глаз</string>
     <!-- МЕРОПРИЯТИЕ -->
-    <string name="occasion_everyday">Тип мероприятия: На каждый день</string>
-    <string name="occasion_celebrity">Тип мероприятия: Звездный</string>
-    <string name="occasion_dramatic">Тип мероприятия: Драматический</string>
-    <string name="occasion_holiday">Тип мероприятия: Праздничный</string>
+    <string name="occasion_everyday">Событие: На каждый день</string>
+    <string name="occasion_celebrity">Событие: Звездный</string>
+    <string name="occasion_dramatic">Событие: Драматический</string>
+    <string name="occasion_holiday">Событие: Праздничный</string>
     <!-- СЛОЖНОСТЬ -->
     <string name="difficult_easy">Простой макияж</string>
     <string name="difficult_medium">Усложненный макияж</string>
@@ -113,7 +113,7 @@
     <string name="authorization_hint_password">Пароль</string>
     <string name="authorization_sign_up">Зарегистрировать</string>
     <string name="authorization_sign_ip">Войти</string>
-    <string name="authorization_to_sign_up">Уже зарегистрированы? Войдите здесь!</string>
+    <string name="authorization_to_sign_up">Уже зарегистрированы?\nВойдите здесь!</string>
     <string name="authorization_to_sign_in">Нет аккаунта? Создайте его!</string>
 
     <string name="internet_notification">Не удалось подключиться к интернету\nПроверьте ваше интернет-соединение</string>
@@ -131,4 +131,22 @@
     <string name="copied">Скопировано</string>
     <string name="copy">Копировать</string>
     <string name="open">Открыть</string>
+
+    <string name="shortHairstyle">Длина волос: Короткие</string>
+    <string name="mediumHairstyle">Длина волос: Средние</string>
+    <string name="longHairstyle">Длина волос: Длинные</string>
+
+    <string name="straightHairstyleType">Тип прически: Прямые</string>
+    <string name="braidHairstyleType">Тип прически: Коса</string>
+    <string name="tailHairstyleType">Тип прически: Хвост</string>
+    <string name="bunchHairstyleType">Тип прически: Пучок</string>
+    <string name="nettingHairstyleType">Тип прически: Плетения</string>
+    <string name="curlsHairstyleType">Тип прически: Кудри</string>
+    <string name="unstandartHairstyleType">Тип прически: Нестандартные</string>
+
+    <string name="forKids">Для детей</string>
+    <string name="forEveryday">На каждый день</string>
+    <string name="forWedding">Свадебные</string>
+    <string name="forEvening">Вечерние</string>
+    <string name="forExclusive">Другие</string>
 </resources>

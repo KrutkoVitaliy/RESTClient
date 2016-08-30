@@ -122,7 +122,9 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             hashTag.setTextColor(Color.argb(255, 51, 102, 153));
             hashTag.setTextSize(14);
             final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i).toLowerCase() + " ");
+            if(!item.getHashTags().get(i).toLowerCase().equals("")){
+                hashTag.setText("#" + item.getHashTags().get(i).toLowerCase() + " ");
+            }
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -187,6 +189,39 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
+                    if (item.getHlenght().equals("short"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.shortHairstyle), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHlenght().equals("medium"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.mediumHairstyle), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHlenght().equals("long"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.longHairstyle), Typeface.DEFAULT_BOLD, 16));
+
+                    if (item.getHtype().equals("straight"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.straightHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("braid"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.braidHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("tail"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.tailHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("bunch"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.bunchHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("netting"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.nettingHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("curls"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.curlsHairstyleType), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHtype().equals("unstandart"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16));
+
+                    if (item.getHfor().equals("kids"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.forKids), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHfor().equals("everyday"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.forEveryday), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHfor().equals("wedding"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.forWedding), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHfor().equals("evening"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.forEvening), Typeface.DEFAULT_BOLD, 16));
+                    else if (item.getHfor().equals("exclusive"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context,R.string.forExclusive), Typeface.DEFAULT_BOLD, 16));
+
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
                     holder.showMore.setText(SHOW);
@@ -197,6 +232,16 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
     }
 
     private TextView createText(String title, Typeface tf, int padding) {
+        TextView tw = new TextView(context);
+        tw.setText("" + title);
+        tw.setPadding(0, padding, 0, padding);
+        tw.setTextSize(14);
+        tw.setTextColor(Color.argb(255, 50, 50, 50));
+        //tw.setTypeface(tf);
+        return tw;
+    }
+
+    private TextView createText(int title, Typeface tf, int padding) {
         TextView tw = new TextView(context);
         tw.setText("" + title);
         tw.setPadding(0, padding, 0, padding);

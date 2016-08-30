@@ -249,7 +249,10 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                                 item.getString("hairstyleType"),
                                 images,
                                 hashTags,
-                                item.getLong("likes"));
+                                item.getLong("likes"),
+                                item.getString("length"),
+                                item.getString("type"),
+                                item.getString("for"));
                         data.add(hairstyleDTO);
                     }
                     adapter.setData(data);

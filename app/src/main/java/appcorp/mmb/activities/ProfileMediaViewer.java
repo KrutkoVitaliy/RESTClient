@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import appcorp.mmb.R;
 
@@ -17,17 +18,8 @@ public class ProfileMediaViewer extends Activity {
         setContentView(R.layout.activity_profile_media_viewer);
 
         webView = (WebView) findViewById(R.id.webViewProfile);
-        webView.loadUrl(getIntent().getStringExtra("URL"));
-        new CountDownTimer(5000, 1000) {
-            @Override
-            public void onTick(long l) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                finish();
-            }
-        }.start();
+        webView.setWebViewClient(new WebViewClient());
+        if (!getIntent().getStringExtra("URL").contains("http://") || !getIntent().getStringExtra("URL").contains("https://"))
+            webView.loadUrl("http://" + getIntent().getStringExtra("URL"));
     }
 }

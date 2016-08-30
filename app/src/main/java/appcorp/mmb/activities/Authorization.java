@@ -107,11 +107,11 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("Name", sName + " " + sLastname)
-                                    .putExtra("PhotoURL", "mmbuser.jpg")
+                                    .putExtra("PhotoURL", "mmbuserunauth.jpg")
                                     .putExtra("E-mail", sEmail));
                             Storage.addString("Name", name.getText().toString().trim() + " " + lastname.getText().toString().trim());
                             Storage.addString("E-mail", email.getText().toString().trim());
-                            Storage.addString("PhotoURL", "mmbuser.jpg");
+                            Storage.addString("PhotoURL", "mmbuserunauth.jpg");
                         } else {
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         }

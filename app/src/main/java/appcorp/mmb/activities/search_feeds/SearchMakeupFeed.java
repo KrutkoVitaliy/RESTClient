@@ -70,7 +70,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
     }
 
     public void addFeed(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion, position).execute();
+        //new SearchMakeup(request, colors, eyeColor, difficult, occasion, position).execute();
     }
 
     private void initToolbar() {

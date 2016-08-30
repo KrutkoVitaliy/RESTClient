@@ -103,7 +103,10 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                             item.getString("hairstyleType"),
                             images,
                             hashTags,
-                            item.getLong("likes"));
+                            item.getLong("likes"),
+                            item.getString("length"),
+                            item.getString("type"),
+                            item.getString("for"));
                     hairstyleData.add(hairstyleDTO);
                 }
             }

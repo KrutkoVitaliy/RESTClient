@@ -118,7 +118,7 @@
     <string name="authorization_hint_password">Password</string>
     <string name="authorization_sign_up">Sign up</string>
     <string name="authorization_sign_ip">Sign in</string>
-    <string name="authorization_to_sign_up">Already registered? Sign in here!</string>
+    <string name="authorization_to_sign_up">Already registered?\nSign in here!</string>
     <string name="authorization_to_sign_in">No account? Create it here!</string>
 
     <string name="internet_notification">Failed to connect to the Internet\nCheck your Internet connection</string>
@@ -136,4 +136,22 @@
     <string name="open">Open</string>
     <string name="copy">Copy</string>
     <string name="copied">Copied</string>
+
+    <string name="shortHairstyle">Hair length: Short</string>
+    <string name="mediumHairstyle">Hair length: Medium</string>
+    <string name="longHairstyle">Hair length: Long</string>
+
+    <string name="straightHairstyleType">Hair type: Straight</string>
+    <string name="braidHairstyleType">Hair type: Braid</string>
+    <string name="tailHairstyleType">Hair type: Tail</string>
+    <string name="bunchHairstyleType">Hair type: Bunch</string>
+    <string name="nettingHairstyleType">Hair type: Netting</string>
+    <string name="curlsHairstyleType">Hair type: Curls</string>
+    <string name="unstandartHairstyleType">Hair type: Custom</string>
+
+    <string name="forKids">For kids</string>
+    <string name="forEveryday">Everyday</string>
+    <string name="forWedding">Wedding</string>
+    <string name="forEvening">Evening</string>
+    <string name="forExclusive">Exclusive</string>
 </resources>
