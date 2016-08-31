@@ -52,7 +52,7 @@
     <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ЧТО ИЩЕМ" -->
     <string-array name="searchTypes">
         <item>Макияж</item>
-        <!--<item>Прически</item>-->
+        <item>Прически</item>
         <item>Маникюр</item>
     </string-array>
 
@@ -149,4 +149,31 @@
     <string name="forWedding">Свадебные</string>
     <string name="forEvening">Вечерние</string>
     <string name="forExclusive">Другие</string>
+
+    <string-array name="hairstyleLength">
+        <item>Не выбрано</item>
+        <item>Короткие</item>
+        <item>Средние</item>
+        <item>Длинные</item>
+    </string-array>
+
+    <string-array name="hairstyleType">
+        <item>Не выбрано</item>
+        <item>Прямые</item>
+        <item>Коса</item>
+        <item>Хвост</item>
+        <item>Пучок</item>
+        <item>Плетения</item>
+        <item>Кудри</item>
+        <item>Нестандартные</item>
+    </string-array>
+
+    <string-array name="hairstyleFor">
+        <item>Не выбрано</item>
+        <item>Для детей</item>
+        <item>На каждый день</item>
+        <item>Свадебные</item>
+        <item>Вечерние</item>
+        <item>Другие</item>
+    </string-array>
 </resources>

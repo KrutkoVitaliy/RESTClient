@@ -36,7 +36,8 @@ public class Search extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private String hashTag = "", request = "", eyeColor = "", difficult = "";
     private String arrayColors = "", category = "";
-    private EditText requestField, hairstyleType;
+    private EditText requestField;
+    private Spinner hairstyleLength, hairstyleType, hairstyleFor;
     private Button search;
     private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
             eyeGrayCircle, eyeBlackCircle;
@@ -55,7 +56,6 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-
         initToolbar();
         initNavigationView();
         initViews();
@@ -70,7 +70,7 @@ public class Search extends AppCompatActivity {
     public void initCategorySelector() {
         catMakeup = (LinearLayout) findViewById(R.id.catMakeup);
         catManicure = (LinearLayout) findViewById(R.id.catManicure);
-        //catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
+        catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
 
         catMakeup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +79,13 @@ public class Search extends AppCompatActivity {
                 setUI("makeup");
             }
         });
-        /*catHairstyle.setOnClickListener(new View.OnClickListener() {
+        catHairstyle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 category = "hairstyle";
                 setUI("hairstyle");
             }
-        });*/
+        });
         catManicure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,34 +99,34 @@ public class Search extends AppCompatActivity {
         switch (currentUI) {
             case "makeup":
                 findViewById(R.id.catMakeup).setAlpha(1.0F);
-                //findViewById(R.id.catHairstyle).setAlpha(0.2F);
+                findViewById(R.id.catHairstyle).setAlpha(0.2F);
                 findViewById(R.id.catManicure).setAlpha(0.2F);
                 makeupFrame.setVisibility(View.VISIBLE);
-                //hairstyleFrame.setVisibility(View.INVISIBLE);
+                hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.INVISIBLE);
                 break;
-            /*case "hairstyle":
+            case "hairstyle":
                 findViewById(R.id.catMakeup).setAlpha(0.2F);
                 findViewById(R.id.catHairstyle).setAlpha(1.0F);
                 findViewById(R.id.catManicure).setAlpha(0.2F);
                 makeupFrame.setVisibility(View.INVISIBLE);
                 hairstyleFrame.setVisibility(View.VISIBLE);
                 manicureFrame.setVisibility(View.INVISIBLE);
-                break;*/
+                break;
             case "manicure":
                 findViewById(R.id.catMakeup).setAlpha(0.2F);
-                //findViewById(R.id.catHairstyle).setAlpha(0.2F);
+                findViewById(R.id.catHairstyle).setAlpha(0.2F);
                 findViewById(R.id.catManicure).setAlpha(1.0F);
                 makeupFrame.setVisibility(View.INVISIBLE);
-                //hairstyleFrame.setVisibility(View.INVISIBLE);
+                hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.VISIBLE);
                 break;
             case "":
                 findViewById(R.id.catMakeup).setAlpha(1.0F);
-                //findViewById(R.id.catHairstyle).setAlpha(1.0F);
+                findViewById(R.id.catHairstyle).setAlpha(1.0F);
                 findViewById(R.id.catManicure).setAlpha(1.0F);
                 makeupFrame.setVisibility(View.INVISIBLE);
-                //hairstyleFrame.setVisibility(View.INVISIBLE);
+                hairstyleFrame.setVisibility(View.INVISIBLE);
                 manicureFrame.setVisibility(View.VISIBLE);
                 break;
         }
@@ -168,9 +168,11 @@ public class Search extends AppCompatActivity {
         shape = (Spinner) findViewById(R.id.shape);
         design = (Spinner) findViewById(R.id.design);
         requestField = (EditText) findViewById(R.id.requestField);
-        //hairstyleType = (EditText) findViewById(R.id.hairstyleType);
+        hairstyleLength = (Spinner) findViewById(R.id.hairstyleLength);
+        hairstyleType = (Spinner) findViewById(R.id.hairstyleType);
+        hairstyleFor = (Spinner) findViewById(R.id.hairstyleFor);
         makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
-        //hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
+        hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
     }
 
@@ -195,7 +197,9 @@ public class Search extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
-                                .putExtra("HairstyleType", hairstyleType.getText().toString())
+                                .putExtra("HairstyleLength", ""+hairstyleLength.getSelectedItemPosition())
+                                .putExtra("HairstyleType", ""+hairstyleType.getSelectedItemPosition())
+                                .putExtra("HairstyleFor", ""+hairstyleFor.getSelectedItemPosition())
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case "manicure":

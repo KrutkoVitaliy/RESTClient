@@ -168,7 +168,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
-            count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
+            count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
             count.setTextSize(24);
             count.setTextColor(Color.WHITE);
             count.setPadding(32, 32, 32, 32);
@@ -192,51 +192,51 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
                     for (int i = 0; i < mColors.length; i++) {
-                        colors.addView(createCircle("#"+mColors[i], mColors[i]));
+                        colors.addView(createCircle("#" + mColors[i], mColors[i]));
                     }
                     moreContainer.addView(colors);
                     if (item.getShape().equals("square"))
-                        moreContainer.addView(createText("Форма ногтей: Квадратная", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Форма ногтей: Квадратная", Typeface.DEFAULT_BOLD, 16, "Shape", "1"));
                     else if (item.getShape().equals("oval"))
-                        moreContainer.addView(createText("Форма ногтей: Овальная", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Форма ногтей: Овальная", Typeface.DEFAULT_BOLD, 16, "Shape", "2"));
                     else if (item.getShape().equals("stiletto"))
-                        moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16, "Shape", "3"));
 
                     if (item.getDesign().equals("french_classic"))
-                        moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16, "Design", "1"));
                     else if (item.getDesign().equals("french_chevron"))
-                        moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16, "Design", "2"));
                     else if (item.getDesign().equals("french_millennium"))
-                        moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16, "Design", "3"));
                     else if (item.getDesign().equals("french_fun"))
-                        moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16, "Design", "4"));
                     else if (item.getDesign().equals("french_crystal"))
-                        moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16, "Design", "5"));
                     else if (item.getDesign().equals("french_colorful"))
-                        moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16, "Design", "6"));
                     else if (item.getDesign().equals("french_designer"))
-                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16, "Design", "7"));
                     else if (item.getDesign().equals("french_spa"))
-                        moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16, "Design", "8"));
                     else if (item.getDesign().equals("french_moon"))
-                        moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16, "Design", "9"));
                     else if (item.getDesign().equals("art"))
-                        moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16, "Design", "10"));
                     else if (item.getDesign().equals("designer"))
-                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16, "Design", "11"));
                     else if (item.getDesign().equals("volume"))
-                        moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "12"));
                     else if (item.getDesign().equals("aqua"))
-                        moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "13"));
                     else if (item.getDesign().equals("american"))
-                        moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "14"));
                     else if (item.getDesign().equals("photo"))
-                        moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16));
+                        moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16, "Design", "15"));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -247,40 +247,40 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         });
     }
 
-    private TextView createText(String title, Typeface tf, int padding) {
+    private TextView createText(String title, final Typeface tf, int padding, final String type, final String index) {
         TextView tw = new TextView(context);
         tw.setText("" + title);
         tw.setPadding(0, padding, 0, padding);
         tw.setTextSize(14);
         tw.setTextColor(Color.argb(255, 50, 50, 50));
+
+        tw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == "Shape") {
+                    ArrayList<String> manicureColors = new ArrayList<>();
+                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Request", "");
+                    intent.putExtra("Shape", ""+index);
+                    intent.putExtra("Design", "0");
+                    context.startActivity(intent);
+                }
+                if (type == "Design") {
+                    ArrayList<String> manicureColors = new ArrayList<>();
+                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Request", "");
+                    intent.putExtra("Shape", "0");
+                    intent.putExtra("Design", ""+index);
+                    context.startActivity(intent);
+                }
+            }
+        });
         //tw.setTypeface(tf);
         return tw;
-    }
-
-    private LinearLayout difficult(String difficult) {
-        ImageView imageView = new ImageView(context);
-        LinearLayout layout = new LinearLayout(context);
-        layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        TextView text = new TextView(context);
-        text.setTextSize(14);
-        text.setTextColor(Color.argb(255, 100, 100, 100));
-        text.setPadding(16, 0, 0, 0);
-        if (difficult.equals("easy")) {
-            imageView.setImageResource(R.mipmap.easy);
-            text.setText(R.string.difficult_easy);
-        }
-        if (difficult.equals("medium")) {
-            imageView.setImageResource(R.mipmap.medium);
-            text.setText(R.string.difficult_medium);
-        }
-        if (difficult.equals("hard")) {
-            imageView.setImageResource(R.mipmap.hard);
-            text.setText(R.string.difficult_hard);
-        }
-        layout.addView(imageView);
-        layout.addView(text);
-        return layout;
     }
 
     private ImageView createCircle(String color, final String searchParameter) {
@@ -294,13 +294,59 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
+                ArrayList<String> manicureColors = new ArrayList<>();
+                manicureColors.add(searchParameter);
+                Intent intent = new Intent(context, SearchManicureFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", searchParameter);
+                intent.putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors));
+                intent.putExtra("Request", "");
+                intent.putExtra("Shape", "0");
+                intent.putExtra("Design", "0");
                 context.startActivity(intent);
             }
         });
         return imageView;
+    }
+
+    private ArrayList<String> sortManicureColors(ArrayList<String> colors) {
+        ArrayList<String> sortedColors = new ArrayList<>();
+        String[] colorsCodes = new String[]{
+                "000000",
+                "404040",
+                "FF0000",
+                "FF6A00",
+                "FFD800",
+                "B6FF00",
+                "4CFF00",
+                "00FF21",
+                "00FF90",
+                "00FFFF",
+                "0094FF",
+                "0026FF",
+                "4800FF",
+                "B200FF",
+                "FF00DC",
+                "FF006E",
+                "808080",
+                "FFFFFF",
+                "F79F49",
+                "8733DD",
+                "62B922",
+                "F9F58D",
+                "A50909",
+                "1D416F",
+                "BCB693",
+                "644949",
+                "F9CBCB",
+                "D6C880"
+        };
+        for (int i = 0; i < colorsCodes.length; i++) {
+            for (int j = 0; j < colors.size(); j++) {
+                if (colorsCodes[i].equals(colors.get(j)))
+                    sortedColors.add(colorsCodes[i]);
+            }
+        }
+        return sortedColors;
     }
 
     String colorName;

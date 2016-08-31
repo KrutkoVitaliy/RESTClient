@@ -76,7 +76,7 @@
                                 android:text="Makeup" />
                         </LinearLayout>
 
-                        <!--<LinearLayout
+                        <LinearLayout
                             android:id="@+id/catHairstyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="Hairstyle" />
-                        </LinearLayout>-->
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/catManicure"
@@ -467,7 +467,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!--<LinearLayout
+                    <LinearLayout
                         android:id="@+id/hairstyleFrame"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -478,16 +478,51 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="Длина волос"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/hairstyleLength"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:entries="@array/hairstyleLength"
+                            android:spinnerMode="dialog" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="Тип прически"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
 
-                        <EditText
+                        <Spinner
                             android:id="@+id/hairstyleType"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>-->
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:entries="@array/hairstyleType"
+                            android:spinnerMode="dialog" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Применение"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/hairstyleFor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:entries="@array/hairstyleFor"
+                            android:spinnerMode="dialog" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/manicureFrame"

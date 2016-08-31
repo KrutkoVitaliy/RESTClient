@@ -48,7 +48,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private HairstyleFeedFragmentAdapter adapter;
-    private String request, hairstyleType;
+    private String request, hairstyleLength, hairstyleType, hairstyleFor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,15 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         initViewPager();
 
         this.request = getIntent().getStringExtra("Request");
+        this.hairstyleLength = getIntent().getStringExtra("HairstyleLength");
         this.hairstyleType = getIntent().getStringExtra("HairstyleType");
+        this.hairstyleFor = getIntent().getStringExtra("HairstyleFor");
 
-        new SearchHairstyle(request, hairstyleType, 1).execute();
+        new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
     }
 
-    public void addFeed(String request, String hairstyleType, int position) {
-        new SearchHairstyle(request, hairstyleType, position).execute();
+    public void addFeed(String request, String hairstyleLength, String hairstyleType, String hairstyleFor, int position) {
+        new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, position).execute();
     }
 
     private void initToolbar() {
@@ -139,7 +141,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -172,19 +174,58 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         BufferedReader reader = null;
         String resultJsonFeed = "", output = "";
         int position;
-        private String request, hairstyleType;
+        private String request, hairstyleLength, hairstyleType, hairstyleFor;
 
-        public SearchHairstyle(String request, String hairstyleType, int position) {
+        public SearchHairstyle(String request, String hairstyleLength, String hairstyleType, String hairstyleFor, int position) {
             this.request = request;
-            this.hairstyleType = hairstyleType;
+            this.hairstyleFor = hairstyleFor;
             this.position = position;
+
+            if (hairstyleLength.equals("0"))
+                this.hairstyleLength = "";
+            else if (hairstyleLength.equals("1"))
+                this.hairstyleLength = "short";
+            else if (hairstyleLength.equals("2"))
+                this.hairstyleLength = "medium";
+            else if (hairstyleLength.equals("3"))
+                this.hairstyleLength = "long";
+
+            if (hairstyleType.equals("0"))
+                this.hairstyleType = "";
+            else if (hairstyleType.equals("1"))
+                this.hairstyleType = "straight";
+            else if (hairstyleType.equals("2"))
+                this.hairstyleType = "braid";
+            else if (hairstyleType.equals("3"))
+                this.hairstyleType = "tail";
+            else if (hairstyleType.equals("4"))
+                this.hairstyleType = "bunch";
+            else if (hairstyleType.equals("5"))
+                this.hairstyleType = "netting";
+            else if (hairstyleType.equals("6"))
+                this.hairstyleType = "curls";
+            else if (hairstyleType.equals("7"))
+                this.hairstyleType = "custom";
+
+            if (hairstyleFor.equals("0"))
+                this.hairstyleFor = "";
+            else if (hairstyleFor.equals("1"))
+                this.hairstyleFor = "kids";
+            else if (hairstyleFor.equals("2"))
+                this.hairstyleFor = "everyday";
+            else if (hairstyleFor.equals("3"))
+                this.hairstyleFor = "wedding";
+            else if (hairstyleFor.equals("4"))
+                this.hairstyleFor = "evening";
+            else if (hairstyleFor.equals("5"))
+                this.hairstyleFor = "exclusive";
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -197,7 +238,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_type="+ hairstyleType +"&position=" + position);
+                        URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();

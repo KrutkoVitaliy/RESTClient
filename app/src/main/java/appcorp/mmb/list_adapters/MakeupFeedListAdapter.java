@@ -32,6 +32,7 @@ import appcorp.mmb.activities.FullscreenPreview;
 import appcorp.mmb.activities.Search;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -171,7 +172,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
             TextView count = new TextView(context);
-            count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
+            count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
             count.setTextSize(20);
             count.setTextColor(Color.WHITE);
             count.setPadding(32, 32, 32, 32);
@@ -195,9 +196,9 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
                     moreContainer.addView(createImage(item.getEye_color()));
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
@@ -206,28 +207,16 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     }
                     moreContainer.addView(colors);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
                     moreContainer.addView(difficult(item.getDifficult()));
-                    TextView occasion = createText(item.getOccasion(), Typeface.DEFAULT, 16);
                     if (item.getOccasion().equals("everyday"))
-                        occasion.setText(R.string.occasion_everyday);
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
                     else if (item.getOccasion().equals("celebrity"))
-                        occasion.setText(R.string.occasion_celebrity);
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
                     else if (item.getOccasion().equals("dramatic"))
-                        occasion.setText(R.string.occasion_dramatic);
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
                     else if (item.getOccasion().equals("holiday"))
-                        occasion.setText(R.string.occasion_holiday);
-
-                    occasion.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, Search.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("hashTag", item.getOccasion());
-                            context.startActivity(intent);
-                        }
-                    });
-                    moreContainer.addView(occasion);
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -238,17 +227,60 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         });
     }
 
-    private TextView createText(String title, Typeface tf, int padding) {
+
+    private TextView createText(String title, Typeface tf, int padding, final String type, final String index) {
         TextView tw = new TextView(context);
         tw.setText("" + title);
         tw.setPadding(0, padding, 0, padding);
         tw.setTextSize(14);
         tw.setTextColor(Color.argb(255, 50, 50, 50));
+        tw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == "Occasion") {
+                    ArrayList<String> makeupColors = new ArrayList<>();
+                    Intent intent = new Intent(context, SearchMakeupFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Request", "");
+                    intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                    intent.putExtra("EyeColor", "");
+                    intent.putExtra("Difficult", "");
+                    intent.putExtra("Occasion", "" + index);
+                    context.startActivity(intent);
+                }
+            }
+        });
         //tw.setTypeface(tf);
         return tw;
     }
 
-    private LinearLayout difficult(String difficult) {
+    private ArrayList<String> sortMakeupColors(ArrayList<String> colors) {
+        ArrayList<String> sortedColors = new ArrayList<>();
+        String[] colorsCodes = new String[]{
+                "BB125B",
+                "9210AE",
+                "117DAE",
+                "3B9670",
+                "79BD14",
+                "D4B515",
+                "D46915",
+                "D42415",
+                "D2AF7F",
+                "B48F58",
+                "604E36",
+                "555555",
+                "000000"
+        };
+        for (int i = 0; i < colorsCodes.length; i++) {
+            for (int j = 0; j < colors.size(); j++) {
+                if (colorsCodes[i].equals(colors.get(j)))
+                    sortedColors.add(colorsCodes[i]);
+            }
+        }
+        return sortedColors;
+    }
+
+    private LinearLayout difficult(final String difficult) {
         ImageView imageView = new ImageView(context);
         LinearLayout layout = new LinearLayout(context);
         layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -269,6 +301,34 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             imageView.setImageResource(R.mipmap.hard);
             text.setText(R.string.difficult_hard);
         }
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", difficult);
+                intent.putExtra("Occasion", "0");
+                context.startActivity(intent);
+            }
+        });
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", difficult);
+                intent.putExtra("Occasion", "0");
+                context.startActivity(intent);
+            }
+        });
         layout.addView(imageView);
         layout.addView(text);
         return layout;
@@ -285,19 +345,26 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
+                ArrayList<String> makeupColors = new ArrayList<>();
+                makeupColors.add(searchParameter);
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", searchParameter);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", "");
+                intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
             }
         });
+
         return imageView;
     }
 
 
     String colorName;
 
-    private LinearLayout createImage(String color) {
+    private LinearLayout createImage(final String color) {
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -340,9 +407,14 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", colorName);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", color);
+                intent.putExtra("Difficult", "");
+                intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
             }
         });

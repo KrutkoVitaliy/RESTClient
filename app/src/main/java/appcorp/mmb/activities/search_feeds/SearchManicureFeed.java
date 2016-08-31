@@ -192,35 +192,35 @@ public class SearchManicureFeed extends AppCompatActivity {
 
             if (design.equals("0"))
                 this.design = "";
-            else if (shape.equals("1"))
+            else if (design.equals("1"))
                 this.design = "french_classic";
-            else if (shape.equals("2"))
+            else if (design.equals("2"))
                 this.design = "french_chevron";
-            else if (shape.equals("3"))
+            else if (design.equals("3"))
                 this.design = "french_millennium";
-            else if (shape.equals("4"))
+            else if (design.equals("4"))
                 this.design = "french_fun";
-            else if (shape.equals("5"))
+            else if (design.equals("5"))
                 this.design = "french_crystal";
-            else if (shape.equals("6"))
+            else if (design.equals("6"))
                 this.design = "french_colorful";
-            else if (shape.equals("7"))
+            else if (design.equals("7"))
                 this.design = "french_designer";
-            else if (shape.equals("8"))
+            else if (design.equals("8"))
                 this.design = "french_spa";
-            else if (shape.equals("9"))
+            else if (design.equals("9"))
                 this.design = "french_moon";
-            else if (shape.equals("10"))
+            else if (design.equals("10"))
                 this.design = "art";
-            else if (shape.equals("11"))
+            else if (design.equals("11"))
                 this.design = "designer";
-            else if (shape.equals("12"))
+            else if (design.equals("12"))
                 this.design = "volume";
-            else if (shape.equals("13"))
+            else if (design.equals("13"))
                 this.design = "aqua";
-            else if (shape.equals("14"))
+            else if (design.equals("14"))
                 this.design = "american";
-            else if (shape.equals("15"))
+            else if (design.equals("15"))
                 this.design = "photo";
 
             this.colors = colors;
