@@ -119,7 +119,7 @@
     <string name="authorization_sign_up">Sign up</string>
     <string name="authorization_sign_ip">Sign in</string>
     <string name="authorization_to_sign_up">Already registered?\nSign in here!</string>
-    <string name="authorization_to_sign_in">No account? Create it here!</string>
+    <string name="authorization_to_sign_in">No account?\nCreate it here!</string>
 
     <string name="internet_notification">Failed to connect to the Internet\nCheck your Internet connection</string>
     <string name="try_again">Try again</string>
@@ -154,6 +154,11 @@
     <string name="forWedding">Wedding</string>
     <string name="forEvening">Evening</string>
     <string name="forExclusive">Exclusive</string>
+
+    <string name="doubleClickToExit">Click again to exit</string>
+    <string name="chooseAction">Choose action</string>
+    <string name="call">Call</string>
+    <string name="records">Records</string>
 
     <string-array name="hairstyleLength">
         <item>Not selected</item>

@@ -96,7 +96,7 @@ public class EditMyProfile extends AppCompatActivity {
                         "&instagram=" + Intermediates.encodeToURL(editInst.getText().toString()) +
                         "&ok=" + Intermediates.encodeToURL(editOK.getText().toString()) +
                         "&id=" + id).execute();
-                finish();
+                startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 return true;
             }
         });
@@ -170,9 +170,13 @@ public class EditMyProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });

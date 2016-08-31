@@ -2,6 +2,7 @@ package appcorp.mmb.activities.feeds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +36,7 @@ public class MakeupFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private static MakeupFeedFragmentAdapter adapter;
+    private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,27 @@ public class MakeupFeed extends AppCompatActivity {
     public static void addFeed(int position) {
         new MakeupFeedLoader(adapter, position).execute();
     }
+
+
+    /*@Override
+    public void onBackPressed() {
+        new CountDownTimer(3000, 1000) {
+            @Override
+            public void onTick(long l) {
+                if(toExit != 0) {
+                    toExit--;
+                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                toExit = 2;
+            }
+        }.start();
+    }*/
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.makeupToolbar);
@@ -132,9 +156,13 @@ public class MakeupFeed extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });

@@ -38,6 +38,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
@@ -156,9 +157,13 @@ public class SearchMakeupFeed extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });
@@ -263,6 +268,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t") && !images.isEmpty()) {
+                        toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
                         MakeupDTO makeupDTO = new MakeupDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -123,6 +124,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         addMakeup.setOnClickListener(this);
         addManicure.setOnClickListener(this);
         addHairstyle.setOnClickListener(this);
+        phone.setOnClickListener(this);
     }
 
     @Override
@@ -165,6 +167,45 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         if (view == addHairstyle) {
             newHairstyle();
         }
+        if (view == phone) {
+            call();
+        }
+    }
+
+    private void call() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.chooseAction);
+        alert.setMessage(phone.getText());
+
+        alert.setNegativeButton(R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //showMessage("Нажали Нет");
+                    }
+                });
+        alert.setPositiveButton(R.string.call,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (phone != null) {
+                            try {
+                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText())));
+                            } catch (SecurityException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+        alert.setNeutralButton(R.string.copy,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("", phone.getText().toString());
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(getApplicationContext(), R.string.copied, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        alert.show();
     }
 
     private void newMakeup() {
@@ -371,7 +412,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), EditMyProfile.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                         .putExtra("ID", id)
                         .putExtra("Name", name.getText())
                         .putExtra("Location", location.getText())
@@ -447,9 +488,13 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });

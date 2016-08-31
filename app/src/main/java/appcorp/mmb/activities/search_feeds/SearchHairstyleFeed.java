@@ -38,6 +38,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
@@ -154,9 +155,13 @@ public class SearchHairstyleFeed extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });
@@ -282,6 +287,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t")) {
+                        toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
                         HairstyleDTO hairstyleDTO = new HairstyleDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

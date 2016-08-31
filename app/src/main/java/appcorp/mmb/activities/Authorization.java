@@ -64,7 +64,9 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
             registerUser();
         }
         if (view == signIn) {
-            startActivity(new Intent(getApplicationContext(), SignIn.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(new Intent(getApplicationContext(), SignIn.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
         }
     }
 

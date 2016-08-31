@@ -38,6 +38,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -155,9 +156,13 @@ public class SearchManicureFeed extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });
@@ -289,6 +294,7 @@ public class SearchManicureFeed extends AppCompatActivity {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
+                    toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
                     id = item.getLong("id");
                     authorPhoto = item.getString("authorPhoto");
                     authorName = item.getString("authorName");

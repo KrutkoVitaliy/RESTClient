@@ -2,6 +2,7 @@ package appcorp.mmb.activities.feeds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +36,7 @@ public class HairstyleFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private static HairstyleFeedFragmentAdapter adapter;
+    private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,26 @@ public class HairstyleFeed extends AppCompatActivity {
 
         new HairstyleFeedLoader(adapter, 1).execute();
     }
+
+    /*@Override
+    public void onBackPressed() {
+        new CountDownTimer(3000, 1000) {
+            @Override
+            public void onTick(long l) {
+                if(toExit != 0) {
+                    toExit--;
+                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                toExit = 2;
+            }
+        }.start();
+    }*/
 
     public static void addFeed(int position) {
         new HairstyleFeedLoader(adapter, position).execute();
@@ -120,7 +143,7 @@ public class HairstyleFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -133,9 +156,13 @@ public class HairstyleFeed extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
         });

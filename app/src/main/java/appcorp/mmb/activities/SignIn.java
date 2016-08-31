@@ -60,7 +60,9 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
             signInUser();
         }
         if (view == signUp) {
-            startActivity(new Intent(getApplicationContext(), Authorization.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(new Intent(getApplicationContext(), Authorization.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
         }
     }
 

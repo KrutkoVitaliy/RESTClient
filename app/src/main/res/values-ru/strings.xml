@@ -114,7 +114,7 @@
     <string name="authorization_sign_up">Зарегистрировать</string>
     <string name="authorization_sign_ip">Войти</string>
     <string name="authorization_to_sign_up">Уже зарегистрированы?\nВойдите здесь!</string>
-    <string name="authorization_to_sign_in">Нет аккаунта? Создайте его!</string>
+    <string name="authorization_to_sign_in">Нет аккаунта?\nСоздайте его!</string>
 
     <string name="internet_notification">Не удалось подключиться к интернету\nПроверьте ваше интернет-соединение</string>
     <string name="try_again">Повторить попытку</string>
@@ -150,6 +150,10 @@
     <string name="forEvening">Вечерние</string>
     <string name="forExclusive">Другие</string>
 
+    <string name="doubleClickToExit">Нажмите еще раз для выхода</string>
+    <string name="chooseAction">Выберите действие</string>
+    <string name="call">Позвонить</string>
+
     <string-array name="hairstyleLength">
         <item>Не выбрано</item>
         <item>Короткие</item>
@@ -176,4 +180,5 @@
         <item>Вечерние</item>
         <item>Другие</item>
     </string-array>
+    <string name="records">Записей</string>
 </resources>
