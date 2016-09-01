@@ -43,7 +43,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Что ищем"
+                        android:text="@string/whatFind"
                         android:textColor="@color/description_title"
                         android:textSize="8pt"
                         android:textStyle="bold" />
@@ -73,7 +73,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Makeup" />
+                                android:text="@string/menu_item_makeup" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -95,7 +95,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Hairstyle" />
+                                android:text="@string/menu_item_hairstyle" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -117,7 +117,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Manicure" />
+                                android:text="@string/menu_item_manicure" />
                         </LinearLayout>
 
                         <!--<LinearLayout
@@ -154,7 +154,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Теги (через запятую)"
+                        android:text="@string/tags"
                         android:textColor="@color/description_title"
                         android:textSize="8pt"
                         android:textStyle="bold" />
@@ -182,7 +182,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:paddingTop="4dp"
-                            android:text="Выберите цвет глаз"
+                            android:text="@string/chooseEyeColor"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -235,7 +235,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:paddingTop="4dp"
-                            android:text="Отметьте используемые цвета"
+                            android:text="@string/checkUsedColors"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -364,7 +364,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:paddingTop="4dp"
-                            android:text="Сложность макияжа"
+                            android:text="@string/title_difficult"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -394,7 +394,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Easy" />
+                                    android:text="@string/makeup_easy" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -416,7 +416,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Medium" />
+                                    android:text="@string/makeup_medium" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -438,7 +438,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Hard" />
+                                    android:text="@string/makeup_hard" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -452,7 +452,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="4dp"
                                 android:paddingTop="4dp"
-                                android:text="Мероприятие"
+                                android:text="@string/occasion"
                                 android:textColor="@color/description_title"
                                 android:textSize="8pt"
                                 android:textStyle="bold" />
@@ -478,7 +478,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Длина волос"
+                            android:text="@string/hairLength"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -494,7 +494,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Тип прически"
+                            android:text="@string/hairType"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -510,7 +510,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Применение"
+                            android:text="@string/hairFor"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -535,7 +535,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Форма ногтей"
+                            android:text="@string/manicureShape"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -551,7 +551,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Дизайн"
+                            android:text="@string/manicureDesign"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold" />
@@ -567,7 +567,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Используемые цвета"
+                            android:text="@string/checkUsedColors"
                             android:textColor="@color/description_title"
                             android:textSize="8pt"
                             android:textStyle="bold"

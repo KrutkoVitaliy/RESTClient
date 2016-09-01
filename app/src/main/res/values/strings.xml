@@ -186,4 +186,18 @@
         <item>Evening</item>
         <item>Exclusive</item>
     </string-array>
+
+    <string name="whatFind">What find?</string>
+    <string name="tags">Tags</string>
+    <string name="chooseEyeColor">Choose eye color</string>
+    <string name="checkUsedColors">Note used colors</string>
+    <string name="occasion">Occasion</string>
+    <string name="hairLength">Hair length</string>
+    <string name="hairType">Hair type</string>
+    <string name="hairFor">Applicability</string>
+    <string name="manicureShape">Nails shape</string>
+    <string name="manicureDesign">Nails design</string>
+    <string name="makeup_easy">Easy</string>
+    <string name="makeup_medium">Medium</string>
+    <string name="makeup_hard">Hard</string>
 </resources>

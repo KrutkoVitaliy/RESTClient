@@ -181,4 +181,19 @@
         <item>Другие</item>
     </string-array>
     <string name="records">Записей</string>
+
+
+    <string name="whatFind">Что ищем?</string>
+    <string name="tags">Теги</string>
+    <string name="chooseEyeColor">Выберите цвет глаз</string>
+    <string name="checkUsedColors">Отметьте используемые цвета</string>
+    <string name="occasion">Мероприятие</string>
+    <string name="hairLength">Длина волос</string>
+    <string name="hairType">Тип прически</string>
+    <string name="hairFor">Применение</string>
+    <string name="manicureShape">Форма ногтей</string>
+    <string name="manicureDesign">Дизайн ногтей</string>
+    <string name="makeup_easy">Простой</string>
+    <string name="makeup_medium">Средний</string>
+    <string name="makeup_hard">Сложный</string>
 </resources>
