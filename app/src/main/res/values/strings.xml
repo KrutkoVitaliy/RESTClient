@@ -200,4 +200,21 @@
     <string name="makeup_easy">Easy</string>
     <string name="makeup_medium">Medium</string>
     <string name="makeup_hard">Hard</string>
+    <string name="nameLastname">Name, last name</string>
+    <string name="cityAddress">City, address</string>
+    <string name="phoneNumber">Phone number</string>
+    <string name="likes">Likes</string>
+    <string name="followers">Followers</string>
+
+    <string name="editProfile">Edit profile</string>
+    <string name="editName">Name</string>
+    <string name="editLastname">Lastname</string>
+    <string name="editCity">City</string>
+    <string name="editAddress">Address</string>
+    <string name="editPhoneNumber">Phone number</string>
+    <string name="editgplus">Google Plus</string>
+    <string name="editFacebook">Facebook</string>
+    <string name="editVK">VK</string>
+    <string name="editInstagram">Instagram</string>
+    <string name="editOK">OK</string>
 </resources>

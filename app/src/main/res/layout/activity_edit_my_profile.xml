@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:title="Редактирование профиля"/>
+            android:title="@string/editProfile"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -48,35 +48,35 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="Name"/>
+                        android:hint="@string/editName"/>
                     <EditText
                         android:id="@+id/editLastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="Lastname"/>
+                        android:hint="@string/editLastname"/>
                     <EditText
                         android:id="@+id/editCity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="City"/>
+                        android:hint="@string/editCity"/>
                     <EditText
                         android:id="@+id/editAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="Address"/>
+                        android:hint="@string/editAddress"/>
                     <EditText
                         android:id="@+id/editPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:hint="Phone"/>
+                        android:hint="@string/editPhoneNumber"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
-                            android:hint="Google plus"/>
+                            android:hint="@string/editgplus"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
-                            android:hint="Facebook"/>
+                            android:hint="@string/editFacebook"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
-                            android:hint="VK"/>
+                            android:hint="@string/editVK"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
-                            android:hint="Instagram"/>
+                            android:hint="@string/editInstagram"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
-                            android:hint="OK"/>
+                            android:hint="@string/editOK"/>
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

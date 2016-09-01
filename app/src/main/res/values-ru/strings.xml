@@ -196,4 +196,21 @@
     <string name="makeup_easy">Простой</string>
     <string name="makeup_medium">Средний</string>
     <string name="makeup_hard">Сложный</string>
+    <string name="nameLastname">Имя, Фамилия</string>
+    <string name="cityAddress">Город, адрес</string>
+    <string name="phoneNumber">Номер телефона</string>
+    <string name="likes">Оценили</string>
+    <string name="followers">Подписались</string>
+
+    <string name="editProfile">Редактирование профиля</string>
+    <string name="editName">Имя</string>
+    <string name="editLastname">Фамилия</string>
+    <string name="editCity">Город</string>
+    <string name="editAddress">Адрес</string>
+    <string name="editPhoneNumber">Номер телефона</string>
+    <string name="editgplus">Google Plus</string>
+    <string name="editFacebook">Facebook</string>
+    <string name="editVK">VK</string>
+    <string name="editInstagram">Instagram</string>
+    <string name="editOK">OK</string>
 </resources>

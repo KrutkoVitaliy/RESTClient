@@ -1,5 +1,6 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;

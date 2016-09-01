@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="Name Lastname"
+                        android:text="@string/nameLastname"
                         android:textColor="@color/author_title"
                         android:textSize="7pt" />
 
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="City, Address"
+                        android:text="@string/cityAddress"
                         android:textColor="@color/author_title"
                         android:textSize="5pt" />
 
@@ -76,7 +76,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="Phone number"
+                        android:text="@string/phoneNumber"
                         android:textColor="#336699"
                         android:textSize="7pt"
                         android:layout_marginTop="8dp"/>
@@ -152,7 +152,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="1724"
+                            android:text="0"
                             android:textSize="6pt"
                             android:textStyle="bold" />
 
@@ -160,7 +160,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="Оценки"
+                            android:text="@string/likes"
                             android:textSize="5pt" />
                     </LinearLayout>
                 </LinearLayout>
@@ -189,7 +189,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="886"
+                            android:text="0"
                             android:textSize="6pt"
                             android:textStyle="bold" />
 
@@ -197,7 +197,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="Подписки"
+                            android:text="@string/followers"
                             android:textSize="5pt" />
                     </LinearLayout>
                 </LinearLayout>
