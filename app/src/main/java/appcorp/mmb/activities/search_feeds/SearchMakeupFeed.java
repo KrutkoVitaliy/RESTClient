@@ -268,7 +268,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t") && !images.isEmpty()) {
-                        toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
+                        toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
                         MakeupDTO makeupDTO = new MakeupDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

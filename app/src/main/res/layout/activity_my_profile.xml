@@ -77,13 +77,14 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
                         android:text="Phone number"
-                        android:textColor="@color/author_title"
-                        android:textSize="7pt"/>
+                        android:textColor="#336699"
+                        android:textSize="7pt"
+                        android:layout_marginTop="8dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="16dp">
                         <ImageView
                             android:id="@+id/gplusButton"
                             android:layout_width="25dp"

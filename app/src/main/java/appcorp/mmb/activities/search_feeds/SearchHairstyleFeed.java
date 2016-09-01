@@ -45,11 +45,12 @@ import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
 
 public class SearchHairstyleFeed extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
-    private HairstyleFeedFragmentAdapter adapter;
-    private String request, hairstyleLength, hairstyleType, hairstyleFor;
+    private static Toolbar toolbar;
+    private static DrawerLayout drawerLayout;
+    private static ViewPager viewPager;
+    private static HairstyleFeedFragmentAdapter adapter;
+    private static String request, hairstyleLength, hairstyleType, hairstyleFor;
+    public static SearchHairstyleFeed instance = new SearchHairstyleFeed();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,11 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
     }
 
-    public void addFeed(String request, String hairstyleLength, String hairstyleType, String hairstyleFor, int position) {
+    public static SearchHairstyleFeed getInstance() {
+        return instance;
+    }
+
+    public void addFeed(int position) {
         new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, position).execute();
     }
 
@@ -287,7 +292,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t")) {
-                        toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
+                        toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
                         HairstyleDTO hairstyleDTO = new HairstyleDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

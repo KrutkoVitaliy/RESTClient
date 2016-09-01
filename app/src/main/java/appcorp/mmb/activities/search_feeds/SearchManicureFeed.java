@@ -294,7 +294,7 @@ public class SearchManicureFeed extends AppCompatActivity {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    toolbar.setTitle(item.getString("count")+" "+ Intermediates.convertToString(getApplicationContext(),R.string.records));
+                    toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
                     id = item.getLong("id");
                     authorPhoto = item.getString("authorPhoto");
                     authorName = item.getString("authorName");
