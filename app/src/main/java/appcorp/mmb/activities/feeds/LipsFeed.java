@@ -18,11 +18,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
-import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.MyProfile;
-import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.SelectCategory;
+import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.Favorites;
+import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.LipsDTO;
 import appcorp.mmb.fragment_adapters.LipsFeedFragmentAdapter;

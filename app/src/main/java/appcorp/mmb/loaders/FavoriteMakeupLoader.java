@@ -16,18 +16,18 @@ import java.util.List;
 
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
-import appcorp.mmb.fragment_adapters.FavoritesManicureFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
 
 public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
 
     private HttpURLConnection urlFeedConnection = null;
     private BufferedReader reader = null;
     private String resultJsonFeed = "";
-    private FavoritesManicureFeedFragmentAdapter adapter;
+    private FavoritesFragmentAdapter adapter;
     private int position;
     private List<Long> likesMakeup = new ArrayList<>();
 
-    public FavoriteMakeupLoader(FavoritesManicureFeedFragmentAdapter adapter, int position) {
+    public FavoriteMakeupLoader(FavoritesFragmentAdapter adapter, int position) {
         this.adapter = adapter;
         this.position = position;
         new Get("http://195.88.209.17/app/in/favoritesMakeup.php?email=" + Storage.getString("E-mail", "")).execute();

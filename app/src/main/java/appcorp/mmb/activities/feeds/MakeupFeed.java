@@ -2,7 +2,6 @@ package appcorp.mmb.activities.feeds;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,18 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
-import appcorp.mmb.activities.Favorites;
-import appcorp.mmb.activities.MyProfile;
-import appcorp.mmb.activities.Search;
-import appcorp.mmb.activities.SelectCategory;
+import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.Favorites;
+import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;

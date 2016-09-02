@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.user;
 
 import android.app.Activity;
 import android.os.Bundle;

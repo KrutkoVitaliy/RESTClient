@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.user;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,13 +19,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.network.GetRequest;
 
-public class SignIn extends AppCompatActivity implements View.OnClickListener {
+public class Authorization extends AppCompatActivity implements View.OnClickListener {
 
     private TextView logoText;
-    private TextView signUp;
-    private EditText email, pass;
+    private TextView signIn;
+    private EditText email, pass, name, lastname;
     private Button submit;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -33,19 +35,21 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_introduction);
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
 
-        signUp = (TextView) findViewById(R.id.signUp);
-        email = (EditText) findViewById(R.id.signInEmailField);
-        pass = (EditText) findViewById(R.id.signInPassField);
-        submit = (Button) findViewById(R.id.signInSubmit);
+        signIn = (TextView) findViewById(R.id.signIn);
+        email = (EditText) findViewById(R.id.emailField);
+        pass = (EditText) findViewById(R.id.passField);
+        name = (EditText) findViewById(R.id.nameField);
+        lastname = (EditText) findViewById(R.id.lastnameField);
+        submit = (Button) findViewById(R.id.submit);
 
-        signUp.setOnClickListener(this);
+        signIn.setOnClickListener(this);
         submit.setOnClickListener(this);
     }
 
@@ -57,18 +61,22 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == submit) {
-            signInUser();
+            registerUser();
         }
-        if (view == signUp) {
-            startActivity(new Intent(getApplicationContext(), Authorization.class)
+        if (view == signIn) {
+            startActivity(new Intent(getApplicationContext(), SignIn.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
         }
     }
 
-    private void signInUser() {
-        final String sEmail = email.getText().toString().trim();
-        final String sPass = pass.getText().toString().trim();
+    private void registerUser() {
+        final String sEmail = Intermediates.encodeToURL(email.getText().toString().trim());
+        final String sPass = Intermediates.encodeToURL(pass.getText().toString().trim());
+        final String sName = Intermediates.encodeToURL(name.getText().toString().trim());
+        final String sLastname = Intermediates.encodeToURL(lastname.getText().toString().trim());
+        final String firebaseEmail = email.getText().toString().trim();
+        final String firebasePass = pass.getText().toString().trim();
 
         if (TextUtils.isEmpty(sEmail)) {
             Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
@@ -78,28 +86,38 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (TextUtils.isEmpty(sName)) {
+            Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(sLastname)) {
+            Toast.makeText(getApplicationContext(), "Please enter your lastname", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        progressDialog.setMessage("Sign in...");
+        progressDialog.setMessage("Registering...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(sEmail, sPass)
+        firebaseAuth.createUserWithEmailAndPassword(firebaseEmail, firebasePass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             finish();
+                            new GetRequest("http://195.88.209.17/app/in/user.php?name=" + sName + "%20" + sLastname + "&photo=mmbuser.jpg&email=" + sEmail).execute();
                             startActivity(new Intent(getApplicationContext(), MyProfile.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    .putExtra("Name", sName + " " + sLastname)
                                     .putExtra("PhotoURL", "mmbuserunauth.jpg")
                                     .putExtra("E-mail", sEmail));
+                            Storage.addString("Name", name.getText().toString().trim() + " " + lastname.getText().toString().trim());
                             Storage.addString("E-mail", email.getText().toString().trim());
                             Storage.addString("PhotoURL", "mmbuserunauth.jpg");
                         } else {
-                            Toast.makeText(getApplicationContext(), "Cannot sign in! Please try again!", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 }
-

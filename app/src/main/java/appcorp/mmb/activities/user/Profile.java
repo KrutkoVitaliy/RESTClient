@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.user;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +24,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import appcorp.mmb.activities.other.FullscreenPreview;
+import appcorp.mmb.activities.search_feeds.Search;
+import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.R;
 import appcorp.mmb.classes.Storage;

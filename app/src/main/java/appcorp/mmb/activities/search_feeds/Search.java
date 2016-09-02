@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.search_feeds;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +28,9 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
+import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.Favorites;
+import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.classes.Storage;
 
 public class Search extends AppCompatActivity {

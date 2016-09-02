@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import appcorp.mmb.activities.Favorites;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.ManicureDTO;
@@ -18,7 +17,7 @@ import appcorp.mmb.fragments.FavoritesHairstyleFeedFragment;
 import appcorp.mmb.fragments.FavoritesMakeupFeedFragment;
 import appcorp.mmb.fragments.FavoritesManicureFeedFragment;
 
-public class FavoritesManicureFeedFragmentAdapter extends FragmentPagerAdapter {
+public class FavoritesFragmentAdapter extends FragmentPagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
@@ -29,7 +28,7 @@ public class FavoritesManicureFeedFragmentAdapter extends FragmentPagerAdapter {
     private FavoritesMakeupFeedFragment favoritesMakeupFeedFragment;
     private FavoritesHairstyleFeedFragment favoritesHairstyleFeedFragment;
 
-    public FavoritesManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> manicureData, List<MakeupDTO> makeupData, List<HairstyleDTO> hairstyleData) {
+    public FavoritesFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> manicureData, List<MakeupDTO> makeupData, List<HairstyleDTO> hairstyleData) {
         super(fm);
         this.manicureData = manicureData;
         this.makeupData = makeupData;

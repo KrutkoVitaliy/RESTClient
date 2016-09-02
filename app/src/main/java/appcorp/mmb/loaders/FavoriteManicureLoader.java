@@ -16,18 +16,18 @@ import java.util.List;
 
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.fragment_adapters.FavoritesManicureFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
 
 public class FavoriteManicureLoader extends AsyncTask<Void, Void, String> {
 
     private HttpURLConnection urlFeedConnection = null;
     private BufferedReader reader = null;
     private String resultJsonFeed = "";
-    private FavoritesManicureFeedFragmentAdapter adapter;
+    private FavoritesFragmentAdapter adapter;
     private int position;
     private List<Long> likesManicure = new ArrayList<>();
 
-    public FavoriteManicureLoader(FavoritesManicureFeedFragmentAdapter adapter, int position) {
+    public FavoriteManicureLoader(FavoritesFragmentAdapter adapter, int position) {
         this.adapter = adapter;
         this.position = position;
         new Get("http://195.88.209.17/app/in/favoritesManicure.php?email=" + Storage.getString("E-mail", "")).execute();

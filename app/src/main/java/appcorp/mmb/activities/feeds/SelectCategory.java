@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.feeds;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,10 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.InternetNotification;
-import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.MakeupFeed;
-import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.other.InternetNotification;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 

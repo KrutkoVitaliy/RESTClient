@@ -20,8 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.FullscreenPreview;
-import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.other.FullscreenPreview;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.LipsDTO;

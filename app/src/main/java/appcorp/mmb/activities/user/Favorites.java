@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
@@ -27,7 +28,7 @@ import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.fragment_adapters.FavoritesManicureFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
 import appcorp.mmb.loaders.FavoriteHairstyleLoader;
 import appcorp.mmb.loaders.FavoriteMakeupLoader;
 import appcorp.mmb.loaders.FavoriteManicureLoader;
@@ -37,7 +38,7 @@ public class Favorites extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
-    private static FavoritesManicureFeedFragmentAdapter adapter;
+    private static FavoritesFragmentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class Favorites extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.favoritesViewPager);
-        adapter = new FavoritesManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<MakeupDTO>(), new ArrayList<HairstyleDTO>());
+        adapter = new FavoritesFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<MakeupDTO>(), new ArrayList<HairstyleDTO>());
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.favoritesTabLayout);

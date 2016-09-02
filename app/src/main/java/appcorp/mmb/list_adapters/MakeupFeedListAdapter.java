@@ -1,6 +1,5 @@
 package appcorp.mmb.list_adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,12 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
-import appcorp.mmb.activities.FullscreenPreview;
-import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
-import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;

@@ -1,4 +1,4 @@
-package appcorp.mmb.activities;
+package appcorp.mmb.activities.other;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,6 +1,5 @@
 package appcorp.mmb.loaders;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.dto.MakeupDTO;
-import appcorp.mmb.dto.TapeDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 
 public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {

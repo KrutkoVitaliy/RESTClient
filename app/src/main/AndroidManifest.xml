@@ -22,29 +22,29 @@
         android:largeHeap="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.SelectCategory"
+            android:name=".activities.feeds.SelectCategory"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.FullscreenPreview"
+            android:name=".activities.other.FullscreenPreview"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".activities.Search"
+            android:name=".activities.search_feeds.Search"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Profile"
+            android:name=".activities.user.Profile"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Authorization"
+            android:name=".activities.user.Authorization"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Favorites"
+            android:name=".activities.user.Favorites"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.InternetNotification"
+            android:name=".activities.other.InternetNotification"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MyProfile"
+            android:name=".activities.user.MyProfile"
             android:screenOrientation="portrait" />
         <activity
             android:name=".StartApplication"
@@ -68,7 +68,7 @@
             android:name=".activities.feeds.MakeupFeed"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.EditMyProfile"
+            android:name=".activities.user.EditMyProfile"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.search_feeds.SearchMakeupFeed"
@@ -80,10 +80,10 @@
             android:name=".activities.search_feeds.SearchManicureFeed"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.SignIn"
+            android:name=".activities.user.SignIn"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ProfileMediaViewer"
+            android:name=".activities.user.ProfileMediaViewer"
             android:screenOrientation="portrait" />
     </application>
 

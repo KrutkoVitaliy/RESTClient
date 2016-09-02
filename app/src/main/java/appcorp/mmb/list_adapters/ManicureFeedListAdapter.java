@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.Authorization;
-import appcorp.mmb.activities.FullscreenPreview;
-import appcorp.mmb.activities.Search;
+import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.other.FullscreenPreview;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.classes.Intermediates;
