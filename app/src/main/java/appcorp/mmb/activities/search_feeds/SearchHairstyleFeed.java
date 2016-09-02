@@ -289,7 +289,8 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t")) {
-                        toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
+                        if (!this.request.isEmpty())
+                            toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                         HairstyleDTO hairstyleDTO = new HairstyleDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

@@ -141,7 +141,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -188,13 +188,13 @@ public class SearchMakeupFeed extends AppCompatActivity {
             this.difficult = difficult;
             if (occasion.equals("0"))
                 this.occasion = "";
-            else if(occasion.equals("1"))
+            else if (occasion.equals("1"))
                 this.occasion = "everyday";
-            else if(occasion.equals("2"))
+            else if (occasion.equals("2"))
                 this.occasion = "celebrity";
-            else if(occasion.equals("3"))
+            else if (occasion.equals("3"))
                 this.occasion = "dramatic";
-            else if(occasion.equals("4"))
+            else if (occasion.equals("4"))
                 this.occasion = "holiday";
             this.colors = colors;
             for (int i = 0; i < colors.size(); i++) {
@@ -265,7 +265,8 @@ public class SearchMakeupFeed extends AppCompatActivity {
                     }
 
                     if (item.getString("published").equals("t") && !images.isEmpty()) {
-                        toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
+                        if (!this.request.isEmpty())
+                            toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                         MakeupDTO makeupDTO = new MakeupDTO(
                                 item.getLong("id"),
                                 item.getString("uploadDate"),

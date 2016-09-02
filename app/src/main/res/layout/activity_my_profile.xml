@@ -297,13 +297,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:orientation="vertical"/>
-                            <LinearLayout
-                                android:id="@+id/costsMakeup"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="right"
-                                android:orientation="vertical">
-                            </LinearLayout>
                         </FrameLayout>
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/addMakeupToGallery"
@@ -336,13 +329,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:orientation="vertical"/>
-                            <LinearLayout
-                                android:id="@+id/costsManicure"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="right"
-                                android:orientation="vertical">
-                            </LinearLayout>
                         </FrameLayout>
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/addManicureToGallery"
@@ -375,13 +361,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:orientation="vertical"/>
-                            <LinearLayout
-                                android:id="@+id/costsHairstyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="right"
-                                android:orientation="vertical">
-                            </LinearLayout>
                         </FrameLayout>
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/addHairstyleToGallery"

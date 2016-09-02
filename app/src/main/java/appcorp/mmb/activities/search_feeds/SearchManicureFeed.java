@@ -140,7 +140,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -291,7 +291,8 @@ public class SearchManicureFeed extends AppCompatActivity {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    toolbar.setTitle("#"+this.request+" - "+item.getString("count"));
+                    if (!this.request.isEmpty())
+                        toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                     id = item.getLong("id");
                     authorPhoto = item.getString("authorPhoto");
                     authorName = item.getString("authorName");
