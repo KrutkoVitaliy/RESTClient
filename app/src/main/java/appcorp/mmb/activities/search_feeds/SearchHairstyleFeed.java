@@ -39,15 +39,16 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchHairstyleFeedFragmentAdapter;
+import appcorp.mmb.loaders.SearchHairstyleFeedLoader;
 
 public class SearchHairstyleFeed extends AppCompatActivity {
 
     private static Toolbar toolbar;
     private static DrawerLayout drawerLayout;
     private static ViewPager viewPager;
-    private static HairstyleFeedFragmentAdapter adapter;
+    private static SearchHairstyleFeedFragmentAdapter adapter;
     private static String request, hairstyleLength, hairstyleType, hairstyleFor;
-    public static SearchHairstyleFeed instance = new SearchHairstyleFeed();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +64,11 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         this.hairstyleType = getIntent().getStringExtra("HairstyleType");
         this.hairstyleFor = getIntent().getStringExtra("HairstyleFor");
 
-        new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
+        new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
     }
 
-    public static SearchHairstyleFeed getInstance() {
-        return instance;
-    }
-
-    public void addFeed(int position) {
-        new SearchHairstyle(request, hairstyleLength, hairstyleType, hairstyleFor, position).execute();
+    public static void addFeed(int position) {
+        new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, position).execute();
     }
 
     private void initToolbar() {
@@ -171,11 +168,11 @@ public class SearchHairstyleFeed extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.hairstyleViewPager);
-        adapter = new HairstyleFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<HairstyleDTO>());
+        adapter = new SearchHairstyleFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<HairstyleDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class SearchHairstyle extends AsyncTask<Void, Void, String> {
+    /*public class SearchHairstyle extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
@@ -316,5 +313,5 @@ public class SearchHairstyleFeed extends AppCompatActivity {
             if (word == null || word.isEmpty()) return "";
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
-    }
+    }*/
 }

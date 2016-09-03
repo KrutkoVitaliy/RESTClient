@@ -39,15 +39,17 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchManicureFeedFragmentAdapter;
+import appcorp.mmb.loaders.SearchManicureFeedLoader;
 
 public class SearchManicureFeed extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
-    private ManicureFeedFragmentAdapter adapter;
-    private String request, shape, design;
-    private ArrayList<String> colors = new ArrayList<>();
+    private static Toolbar toolbar;
+    private static DrawerLayout drawerLayout;
+    private static ViewPager viewPager;
+    private static SearchManicureFeedFragmentAdapter adapter;
+    private static String request, shape, design;
+    private static ArrayList<String> colors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,11 @@ public class SearchManicureFeed extends AppCompatActivity {
         this.shape = getIntent().getStringExtra("Shape");
         this.design = getIntent().getStringExtra("Design");
 
-        new SearchManicure(request, colors, shape, design, 1).execute();
+        new SearchManicureFeedLoader(toolbar, adapter, request, colors, shape, design, 1).execute();
     }
 
-    public void addFeed(String request, ArrayList<String> colors, String shape, String design, int position) {
-        new SearchManicure(request, colors, shape, design, position).execute();
+    public static void addFeed(int position) {
+        new SearchManicureFeedLoader(toolbar, adapter, request, colors, shape, design, position).execute();
     }
 
     private void initToolbar() {
@@ -167,11 +169,11 @@ public class SearchManicureFeed extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.manicureViewPager);
-        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
+        adapter = new SearchManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class SearchManicure extends AsyncTask<Void, Void, String> {
+    /*public class SearchManicure extends AsyncTask<Void, Void, String> {
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
         String resultJsonFeed = "", output = "";
@@ -324,5 +326,5 @@ public class SearchManicureFeed extends AppCompatActivity {
             if (word == null || word.isEmpty()) return "";
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
-    }
+    }*/
 }

@@ -22,7 +22,7 @@
                 android:id="@+id/user_avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/icon" />
 
             <ImageView
                 android:layout_width="50dp"

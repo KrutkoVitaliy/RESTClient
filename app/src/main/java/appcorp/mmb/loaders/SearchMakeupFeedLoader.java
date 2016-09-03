@@ -1,7 +1,7 @@
 package appcorp.mmb.loaders;
 
 import android.os.AsyncTask;
-import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,30 +15,52 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import appcorp.mmb.classes.Storage;
-import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
+import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchMakeupFeedFragmentAdapter;
 
-public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
+public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
 
-    private HttpURLConnection urlFeedConnection = null;
-    private BufferedReader reader = null;
-    private String resultJsonFeed = "";
-    private FavoritesFragmentAdapter adapter;
-    private int position;
-    private List<Long> likesHairstyle = new ArrayList<>();
+    HttpURLConnection urlFeedConnection = null;
+    BufferedReader reader = null;
+    String resultJsonFeed = "", output = "";
+    int position;
+    private String request, eyeColor, difficult, occasion;
+    private ArrayList<String> colors = new ArrayList<>();
+    String colorsStr = "";
+    private SearchMakeupFeedFragmentAdapter adapter;
+    private Toolbar toolbar;
 
-    public FavoriteHairstyleLoader(FavoritesFragmentAdapter adapter, int position) {
+    public SearchMakeupFeedLoader(Toolbar toolbar, SearchMakeupFeedFragmentAdapter adapter, String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
+        this.toolbar = toolbar;
         this.adapter = adapter;
+        this.request = request;
+        this.eyeColor = eyeColor;
+        this.difficult = difficult;
+        if (occasion.equals("0"))
+            this.occasion = "";
+        else if (occasion.equals("1"))
+            this.occasion = "everyday";
+        else if (occasion.equals("2"))
+            this.occasion = "celebrity";
+        else if (occasion.equals("3"))
+            this.occasion = "dramatic";
+        else if (occasion.equals("4"))
+            this.occasion = "holiday";
+        this.colors = colors;
+        for (int i = 0; i < colors.size(); i++) {
+            this.colorsStr += colors.get(i) + ",";
+        }
+        if (colorsStr.length() > 0)
+            this.colorsStr = colorsStr.substring(0, colorsStr.length() - 1);
         this.position = position;
-        new Get("http://195.88.209.17/app/in/favoritesHairstyle.php?email=" + Storage.getString("E-mail", "")).execute();
     }
 
     @Override
     protected String doInBackground(Void... params) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
+                URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -51,7 +73,7 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + i + ".html");
+                    URL feedURL = new URL("http://195.88.209.17/search/makeup.php?request=" + request + "&colors=" + colorsStr + "&eye_color=" + eyeColor + "&difficult=" + difficult + "&occasion=" + occasion + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -62,7 +84,7 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);
                     resultJsonFeed += buffer.toString();
-                    resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    resultJsonFeed = resultJsonFeed.replace("][", "");
                 }
             }
         } catch (Exception e) {
@@ -74,8 +96,7 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
-
-        List<HairstyleDTO> hairstyleData = new ArrayList<>();
+        List<MakeupDTO> data = new ArrayList<>();
 
         try {
             JSONArray items = new JSONArray(resultJsonFeed);
@@ -89,71 +110,37 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                     if (!item.getString("screen" + j).equals("empty.jpg"))
                         images.add(item.getString("screen" + j));
 
-                String[] tempTags = item.getString("tags").split(",");
+                String[] tempTags = item.getString("tags").replace(" ", "").split(",");
                 for (int j = 0; j < tempTags.length; j++) {
                     hashTags.add(tempTags[j]);
                 }
 
-                if (likesHairstyle.contains(item.getLong("id"))) {
-                    HairstyleDTO hairstyleDTO = new HairstyleDTO(
+                if (item.getString("published").equals("t") && !images.isEmpty()) {
+                    if (!this.request.isEmpty())
+                        toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                    MakeupDTO makeupDTO = new MakeupDTO(
                             item.getLong("id"),
                             item.getString("uploadDate"),
                             item.getString("authorName"),
                             item.getString("authorPhoto"),
-                            item.getString("hairstyleType"),
                             images,
+                            item.getString("colors"),
+                            item.getString("eyeColor"),
+                            item.getString("occasion"),
+                            item.getString("difficult"),
                             hashTags,
-                            item.getLong("likes"),
-                            item.getString("length"),
-                            item.getString("type"),
-                            item.getString("for"));
-                    hairstyleData.add(hairstyleDTO);
+                            item.getLong("likes"));
+                    data.add(makeupDTO);
                 }
+                adapter.setData(data);
             }
-            adapter.setHairstyleData(hairstyleData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public class Get extends AsyncTask<Void,Void,String> {
-
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-
-        public Get(String url) {
-            this.url = url;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                URL feedURL = new URL(url);
-                connection = (HttpURLConnection) feedURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
-                String profileLine;
-                while ((profileLine = reader.readLine()) != null) {
-                    profileBuffer.append(profileLine);
-                }
-                result = profileBuffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String[] set = s.split(",");
-            for (int i = 0; i < set.length; i++)
-                if (!set[i].equals(""))
-                    likesHairstyle.add(new Long(set[i]));
-        }
+    private String upperCaseFirst(String word) {
+        if (word == null || word.isEmpty()) return "";
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

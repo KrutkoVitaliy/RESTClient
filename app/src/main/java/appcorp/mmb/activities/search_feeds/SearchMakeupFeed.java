@@ -39,15 +39,17 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
+import appcorp.mmb.fragment_adapters.SearchMakeupFeedFragmentAdapter;
+import appcorp.mmb.loaders.SearchMakeupFeedLoader;
 
 public class SearchMakeupFeed extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
-    private MakeupFeedFragmentAdapter adapter;
-    private String request, eyeColor, difficult, occasion;
-    private ArrayList<String> colors = new ArrayList<>();
+    private static Toolbar toolbar;
+    private static DrawerLayout drawerLayout;
+    private static ViewPager viewPager;
+    private static SearchMakeupFeedFragmentAdapter adapter;
+    private static String request, eyeColor, difficult, occasion;
+    private static ArrayList<String> colors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,11 @@ public class SearchMakeupFeed extends AppCompatActivity {
         this.difficult = getIntent().getStringExtra("Difficult");
         this.occasion = getIntent().getStringExtra("Occasion");
 
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion, 1).execute();
+        new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1).execute();
     }
 
-    public void addFeed(String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
-        new SearchMakeup(request, colors, eyeColor, difficult, occasion, position).execute();
+    public static void addFeed(int position) {
+        new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, position).execute();
     }
 
     private void initToolbar() {
@@ -168,11 +170,11 @@ public class SearchMakeupFeed extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.makeupViewPager);
-        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>());
+        adapter = new SearchMakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class SearchMakeup extends AsyncTask<Void, Void, String> {
+    /*public class SearchMakeup extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection urlFeedConnection = null;
         BufferedReader reader = null;
@@ -292,5 +294,5 @@ public class SearchMakeupFeed extends AppCompatActivity {
             if (word == null || word.isEmpty()) return "";
             return word.substring(0, 1).toUpperCase() + word.substring(1);
         }
-    }
+    }*/
 }
