@@ -189,6 +189,7 @@
         android:layout_height="10dp"
         android:background="#dddddd" />
 
+
 <!--
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

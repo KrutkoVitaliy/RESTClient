@@ -35,7 +35,6 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
         try {
             if (position == 1) {
                 URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
-                //URL feedURL = new URL(Intermediates.URL.GET_FEED);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -49,7 +48,6 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
             } else {
                 for (int i = 1; i <= position; i++) {
                     URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + i + ".html");
-                    //URL feedURL = new URL(Intermediates.URL.GET_FEED);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -74,10 +72,8 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
         super.onPostExecute(resultJsonFeed);
 
         List<HairstyleDTO> data = new ArrayList<>();
-
         try {
             JSONArray items = new JSONArray(resultJsonFeed);
-
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 List<String> images = new ArrayList<>();
@@ -91,11 +87,6 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                 for (int j = 0; j < tempTags.length; j++) {
                     hashTags.add(tempTags[j]);
                 }
-
-                    /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                    availableDate = simpleDateFormat.format(new Date(tempDate));
-                    if ((currentDate - tempDate) <= 259200000)
-                        availableDate = Intermediates.calculateAvailableTime(tempDate, currentDate);*/
 
                 if (item.getString("published").equals("t")) {
                     HairstyleDTO hairstyleDTO = new HairstyleDTO(

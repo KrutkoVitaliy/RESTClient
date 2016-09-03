@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,11 +35,15 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
     private List<HairstyleDTO> hairstyleData;
     private Context context;
     private List<Long> likesId = new ArrayList<>();
-    boolean loaded = false;
+    Display display;
+    int width, height;
 
     public FavoritesHairstyleFeedListAdapter(List<HairstyleDTO> hairstyleData, Context context) {
         this.hairstyleData = hairstyleData;
         this.context = context;
+        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
+        width = display.getWidth();
+        height = width;
     }
 
     @Override
@@ -48,35 +54,34 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        if(!loaded){
-            final HairstyleDTO item = hairstyleData.get(position);
+        final HairstyleDTO item = hairstyleData.get(position);
 
-            if (position == hairstyleData.size() - 1) {
-                if (hairstyleData.size() - 1 % 100 != 8)
-                    Favorites.addManicureFeed(hairstyleData.size() / 100 + 1);
+        if (position == hairstyleData.size() - 1) {
+            if (hairstyleData.size() - 1 % 100 != 8)
+                Favorites.addManicureFeed(hairstyleData.size() / 100 + 1);
+        }
+
+        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
+        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+
+        String[] date = item.getAvailableDate().split("");
+
+        holder.title.setText(item.getAuthorName());
+        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+        holder.likesCount.setText("" + item.getLikes());
+
+        holder.likesCount.setText("");
+        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+
+        holder.addLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                holder.post.removeAllViews();
             }
+        });
 
-            final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-            final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
-
-            String[] date = item.getAvailableDate().split("");
-
-            holder.title.setText(item.getAuthorName());
-            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-            holder.likesCount.setText("" + item.getLikes());
-
-            holder.likesCount.setText("");
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-
-            holder.addLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    holder.post.removeAllViews();
-                }
-            });
-
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
+        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,86 +93,160 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
             }
         });*/
 
-            holder.hashTags.removeAllViews();
-            for (int i = 0; i < item.getHashTags().size(); i++) {
-                TextView hashTag = new TextView(context);
-                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-                hashTag.setTextSize(14);
-                final int finalI = i;
-                hashTag.setText("#" + item.getHashTags().get(i) + " ");
-                hashTag.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        context.startActivity(new Intent(context, SearchHairstyleFeed.class)
-                                .putExtra("Request", item.getHashTags().get(finalI))
-                                .putExtra("HairstyleType", "")
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                });
-                holder.hashTags.addView(hashTag);
-            }
-
-            holder.imageViewer.removeAllViews();
-            holder.countImages.removeAllViews();
-            for (int i = 0; i < item.getImages().size(); i++) {
-                ImageView screenShot = new ImageView(context);
-                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-                screenShot.setMinimumHeight(Storage.getInt("Height", 854));
-                screenShot.setPadding(0, 0, 1, 0);
-                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Height", 854)).onlyScaleDown().into(screenShot);
-
-                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                final int finalI = i;
-                screenShot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (holder.showMore.getText().equals(SHOW)) {
-                            Intent intent = new Intent(context, FullscreenPreview.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                            context.startActivity(intent);
-                        }
-                    }
-                });
-                holder.imageViewer.addView(screenShot);
-
-                LinearLayout countLayout = new LinearLayout(context);
-                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 854)));
-                TextView count = new TextView(context);
-                count.setText("< "+(i + 1) + "/" + item.getImages().size()+" >");
-                count.setTextSize(20);
-                count.setTextColor(Color.WHITE);
-                count.setPadding(32, 32, 32, 32);
-                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-                countLayout.addView(count);
-                holder.countImages.addView(countLayout);
-            }
-
-            holder.moreContainer.removeAllViews();
-            holder.showMore.setText(SHOW);
-            holder.showMore.setOnClickListener(new View.OnClickListener() {
+        holder.hashTags.removeAllViews();
+        for (int i = 0; i < item.getHashTags().size(); i++) {
+            TextView hashTag = new TextView(context);
+            hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+            hashTag.setTextSize(14);
+            final int finalI = i;
+            hashTag.setText("#" + item.getHashTags().get(i) + " ");
+            hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                            .putExtra("Request", item.getHashTags().get(finalI))
+                            .putExtra("HairstyleType", "")
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            });
+            holder.hashTags.addView(hashTag);
+        }
 
+        holder.imageViewer.removeAllViews();
+        holder.countImages.removeAllViews();
+        for (int i = 0; i < item.getImages().size(); i++) {
+            ImageView screenShot = new ImageView(context);
+            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+            screenShot.setMinimumHeight(Storage.getInt("Height", 854));
+            screenShot.setPadding(0, 0, 1, 0);
+            screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).onlyScaleDown().into(screenShot);
+
+            screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            final int finalI = i;
+            screenShot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     if (holder.showMore.getText().equals(SHOW)) {
-                        holder.showMore.setText(HIDE);
-                        LinearLayout moreContainer = new LinearLayout(context);
-                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        moreContainer.setOrientation(LinearLayout.VERTICAL);
-                        moreContainer.setPadding(32, 32, 32, 0);
-
-                        holder.moreContainer.addView(moreContainer);
-                    } else if (holder.showMore.getText().equals(HIDE)) {
-                        holder.showMore.setText(SHOW);
-                        holder.moreContainer.removeAllViews();
+                        Intent intent = new Intent(context, FullscreenPreview.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                        context.startActivity(intent);
                     }
                 }
             });
-            loaded = true;
+            holder.imageViewer.addView(screenShot);
+
+            LinearLayout countLayout = new LinearLayout(context);
+            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Height", 854)));
+            TextView count = new TextView(context);
+            count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
+            count.setTextSize(20);
+            count.setTextColor(Color.WHITE);
+            count.setPadding(32, 32, 32, 32);
+            count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+            countLayout.addView(count);
+            holder.countImages.addView(countLayout);
         }
+
+        holder.moreContainer.removeAllViews();
+        holder.showMore.setText(SHOW);
+        holder.showMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (holder.showMore.getText().equals(SHOW)) {
+                    holder.showMore.setText(HIDE);
+                    LinearLayout moreContainer = new LinearLayout(context);
+                    moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    moreContainer.setOrientation(LinearLayout.VERTICAL);
+                    moreContainer.setPadding(32, 32, 32, 0);
+
+                    if (item.getHlenght().equals("short"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.shortHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "1"));
+                    else if (item.getHlenght().equals("medium"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.mediumHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "2"));
+                    else if (item.getHlenght().equals("long"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.longHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "3"));
+
+                    if (item.getHtype().equals("straight"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.straightHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "1"));
+                    else if (item.getHtype().equals("braid"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.braidHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "2"));
+                    else if (item.getHtype().equals("tail"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.tailHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "3"));
+                    else if (item.getHtype().equals("bunch"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.bunchHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "4"));
+                    else if (item.getHtype().equals("netting"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.nettingHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "5"));
+                    else if (item.getHtype().equals("curls"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.curlsHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "6"));
+                    else if (item.getHtype().equals("unstandart"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
+
+                    if (item.getHfor().equals("kids"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                    else if (item.getHfor().equals("everyday"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                    else if (item.getHfor().equals("wedding"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                    else if (item.getHfor().equals("evening"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                    else if (item.getHfor().equals("exclusive"))
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", ""));
+
+
+                    holder.moreContainer.addView(moreContainer);
+                } else if (holder.showMore.getText().equals(HIDE)) {
+                    holder.showMore.setText(SHOW);
+                    holder.moreContainer.removeAllViews();
+                }
+            }
+        });
+    }
+
+    private TextView createText(String title, Typeface tf, int padding, final String type, final String index) {
+        TextView tw = new TextView(context);
+        tw.setText("" + title);
+        tw.setPadding(0, padding, 0, padding);
+        tw.setTextSize(14);
+        tw.setTextColor(Color.argb(255, 50, 50, 50));
+        tw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == "Length") {
+                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Request", "");
+                    intent.putExtra("HairstyleLength", "" + index);
+                    intent.putExtra("HairstyleType", "0");
+                    intent.putExtra("HairstyleFor", "0");
+                    context.startActivity(intent);
+                }
+                if (type == "Type") {
+                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Request", "");
+                    intent.putExtra("HairstyleLength", "0");
+                    intent.putExtra("HairstyleType", "" + index);
+                    intent.putExtra("HairstyleFor", "0");
+                    context.startActivity(intent);
+                }
+                if (type == "For") {
+                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Request", "");
+                    intent.putExtra("HairstyleLength", "0");
+                    intent.putExtra("HairstyleType", "0");
+                    intent.putExtra("HairstyleFor", "" + index);
+                    context.startActivity(intent);
+                }
+            }
+        });
+        //tw.setTypeface(tf);
+        return tw;
     }
 
     private TextView createText(String title, Typeface tf, int padding) {
@@ -292,24 +371,24 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
         this.hairstyleData = hairstyleData;
     }
 
-    public static class TapeViewHolder extends RecyclerView.ViewHolder {
-        TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
-        ImageView user_avatar, addLike;
+public static class TapeViewHolder extends RecyclerView.ViewHolder {
+    TextView title, availableDate, showMore, likesCount;
+    LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
+    ImageView user_avatar, addLike;
 
-        public TapeViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            availableDate = (TextView) itemView.findViewById(R.id.available_date);
-            showMore = (TextView) itemView.findViewById(R.id.show_more);
-            imageViewer = (LinearLayout) itemView.findViewById(R.id.imageViewer);
-            countImages = (LinearLayout) itemView.findViewById(R.id.countImages);
-            hashTags = (LinearLayout) itemView.findViewById(R.id.hash_tags);
-            likesCount = (TextView) itemView.findViewById(R.id.likesCount);
-            user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
-            moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
-            post = (LinearLayout) itemView.findViewById(R.id.post);
-            addLike = (ImageView) itemView.findViewById(R.id.addLike);
-        }
+    public TapeViewHolder(View itemView) {
+        super(itemView);
+        title = (TextView) itemView.findViewById(R.id.title);
+        availableDate = (TextView) itemView.findViewById(R.id.available_date);
+        showMore = (TextView) itemView.findViewById(R.id.show_more);
+        imageViewer = (LinearLayout) itemView.findViewById(R.id.imageViewer);
+        countImages = (LinearLayout) itemView.findViewById(R.id.countImages);
+        hashTags = (LinearLayout) itemView.findViewById(R.id.hash_tags);
+        likesCount = (TextView) itemView.findViewById(R.id.likesCount);
+        user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
+        moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
+        post = (LinearLayout) itemView.findViewById(R.id.post);
+        addLike = (ImageView) itemView.findViewById(R.id.addLike);
     }
+}
 }

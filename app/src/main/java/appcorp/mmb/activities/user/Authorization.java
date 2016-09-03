@@ -104,7 +104,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             finish();
-                            new GetRequest("http://195.88.209.17/app/in/user.php?name=" + sName + "%20" + sLastname + "&photo=mmbuser.jpg&email=" + sEmail).execute();
+                            new GetRequest("http://195.88.209.17/app/in/user.php?name=" + sName + "%20" + sLastname + "&photo=mmbuser.jpg&email=" + sEmail.toLowerCase()).execute();
                             startActivity(new Intent(getApplicationContext(), MyProfile.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

@@ -50,7 +50,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
         height = width;
-        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+        if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 

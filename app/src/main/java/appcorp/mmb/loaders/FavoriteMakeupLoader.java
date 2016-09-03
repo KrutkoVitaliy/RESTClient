@@ -27,17 +27,37 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
     private int position;
     private List<Long> likesMakeup = new ArrayList<>();
 
+    HttpURLConnection connectionGet = null;
+    String resultGet = "";
+    String ids;
+
     public FavoriteMakeupLoader(FavoritesFragmentAdapter adapter, int position) {
         this.adapter = adapter;
         this.position = position;
-        new Get("http://195.88.209.17/app/in/favoritesMakeup.php?email=" + Storage.getString("E-mail", "")).execute();
     }
 
     @Override
     protected String doInBackground(Void... params) {
         try {
+            URL feedURL = new URL("http://195.88.209.17/app/in/favoritesMakeup.php?email=" + Storage.getString("E-mail", ""));
+            connectionGet = (HttpURLConnection) feedURL.openConnection();
+            connectionGet.setRequestMethod("GET");
+            connectionGet.connect();
+            InputStream inputStream = connectionGet.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuffer profileBuffer = new StringBuffer();
+            String profileLine;
+            while ((profileLine = reader.readLine()) != null) {
+                profileBuffer.append(profileLine);
+            }
+            resultGet = profileBuffer.toString();
+            ids = resultGet;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + position + ".html");
+                URL feedURL = new URL("http://195.88.209.17/favorites/makeup.php?position=" + position + "&ids=" + ids);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -50,7 +70,7 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + i + ".html");
+                    URL feedURL = new URL("http://195.88.209.17/favorites/makeup.php?position=" + position + "&ids=" + ids);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -61,7 +81,7 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);
                     resultJsonFeed += buffer.toString();
-                    resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    resultJsonFeed = resultJsonFeed.replace("][", "");
                 }
             }
         } catch (Exception e) {
@@ -92,66 +112,23 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
                     hashTags.add(tempTags[j]);
                 }
 
-                if (likesMakeup.contains(item.getLong("id"))) {
-                    MakeupDTO makeupDTO = new MakeupDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            images,
-                            item.getString("colors"),
-                            item.getString("eyeColor"),
-                            item.getString("occasion"),
-                            item.getString("difficult"),
-                            hashTags,
-                            item.getLong("likes"));
-                    makeupData.add(makeupDTO);
-                }
+                MakeupDTO makeupDTO = new MakeupDTO(
+                        item.getLong("id"),
+                        item.getString("uploadDate"),
+                        item.getString("authorName"),
+                        item.getString("authorPhoto"),
+                        images,
+                        item.getString("colors"),
+                        item.getString("eyeColor"),
+                        item.getString("occasion"),
+                        item.getString("difficult"),
+                        hashTags,
+                        item.getLong("likes"));
+                makeupData.add(makeupDTO);
+                adapter.setMakeupData(makeupData);
             }
-            adapter.setMakeupData(makeupData);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    public class Get extends AsyncTask<Void,Void,String> {
-
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-
-        public Get(String url) {
-            this.url = url;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                URL feedURL = new URL(url);
-                connection = (HttpURLConnection) feedURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
-                String profileLine;
-                while ((profileLine = reader.readLine()) != null) {
-                    profileBuffer.append(profileLine);
-                }
-                result = profileBuffer.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String[] set = s.split(",");
-            for (int i = 0; i < set.length; i++)
-                if (!set[i].equals(""))
-                    likesMakeup.add(new Long(set[i]));
         }
     }
 }

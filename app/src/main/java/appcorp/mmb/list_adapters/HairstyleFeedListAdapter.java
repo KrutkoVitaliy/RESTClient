@@ -47,7 +47,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         this.context = context;
         width = Storage.getInt("Width", 480);
         height = width;
-        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+        if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 
@@ -85,7 +85,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         holder.addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                if (!Storage.getString("E-mail", "").equals("")) {
                     if (!likes.contains(item.getId())) {
                         holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
                         likes.add(item.getId());

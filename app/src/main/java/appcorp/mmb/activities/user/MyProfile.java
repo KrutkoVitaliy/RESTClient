@@ -505,7 +505,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         View menuHeader = navigationView.getHeaderView(0);
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
-        if (!Storage.getString("PhotoURL", "").equals("")) {
+        if (!Storage.getString("E-mail", "").equals("")) {
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {

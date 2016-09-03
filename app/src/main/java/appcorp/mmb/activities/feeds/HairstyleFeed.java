@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.feeds;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -118,13 +120,13 @@ public class HairstyleFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
@@ -139,7 +141,7 @@ public class HairstyleFeed extends AppCompatActivity {
         View menuHeader = navigationView.getHeaderView(0);
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
-        if (!Storage.getString("PhotoURL", "").equals("")) {
+        if (!Storage.getString("E-mail", "").equals("")){
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {

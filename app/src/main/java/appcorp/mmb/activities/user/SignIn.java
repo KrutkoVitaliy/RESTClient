@@ -94,8 +94,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("PhotoURL", "mmbuserunauth.jpg")
-                                    .putExtra("E-mail", sEmail));
-                            Storage.addString("E-mail", email.getText().toString().trim());
+                                    .putExtra("E-mail", sEmail.toLowerCase()));
+                            Storage.addString("E-mail", email.getText().toString().trim().toLowerCase());
                             Storage.addString("PhotoURL", "mmbuserunauth.jpg");
                         } else {
                             Toast.makeText(getApplicationContext(), "Cannot sign in! Please try again!", Toast.LENGTH_SHORT);

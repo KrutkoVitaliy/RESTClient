@@ -119,13 +119,13 @@ public class ManicureFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), LipsFeed.class));
                         break;
                     case R.id.navMenuProfile:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
@@ -140,7 +140,7 @@ public class ManicureFeed extends AppCompatActivity {
         View menuHeader = navigationView.getHeaderView(0);
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
-        if (!Storage.getString("PhotoURL", "").equals("")) {
+        if (!Storage.getString("E-mail", "").equals("")) {
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
