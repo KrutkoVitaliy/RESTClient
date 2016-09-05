@@ -62,9 +62,6 @@
             android:name=".activities.feeds.HairstyleFeed"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.feeds.LipsFeed"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.feeds.MakeupFeed"
             android:screenOrientation="portrait" />
         <activity

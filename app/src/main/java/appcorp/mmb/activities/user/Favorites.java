@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Storage;
@@ -120,11 +119,17 @@ public class Favorites extends AppCompatActivity {
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
-                    case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
-                        break;
                     case R.id.navMenuProfile:
-                        startActivity(new Intent(getApplicationContext(), MyProfile.class));
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), MyProfile.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                        break;
+                    case R.id.navMenuFavorites:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), Favorites.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                 }
                 return true;

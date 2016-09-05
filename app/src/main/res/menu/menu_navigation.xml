@@ -39,12 +39,6 @@
                 android:orderInCategory="6"
                 android:title="@string/menu_item_manicure"
                 android:icon="@mipmap/manicure"/>
-            <item
-                android:id="@+id/navMenuLips"
-                android:orderInCategory="6"
-                android:title="@string/menu_item_lips"
-                android:icon="@mipmap/lips"
-                android:visible="false"/>
         </menu>
     </item>
     <item android:title="@string/menu_item_user">

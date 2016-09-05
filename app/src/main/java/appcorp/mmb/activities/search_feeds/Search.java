@@ -22,12 +22,8 @@ import java.util.ArrayList;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
-import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
-import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
@@ -318,17 +314,14 @@ public class Search extends AppCompatActivity {
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
-                    case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
-                        break;
                     case R.id.navMenuProfile:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));

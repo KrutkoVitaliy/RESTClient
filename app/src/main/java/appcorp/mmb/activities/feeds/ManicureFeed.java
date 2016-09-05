@@ -121,9 +121,6 @@ public class ManicureFeed extends AppCompatActivity {
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
                         break;
-                    case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
-                        break;
                     case R.id.navMenuProfile:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));

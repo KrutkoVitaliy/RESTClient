@@ -45,7 +45,6 @@ import java.net.URL;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Intermediates;
@@ -495,13 +494,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
-                    case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
-                        break;
                     case R.id.navMenuProfile:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), MyProfile.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (name != null)
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));

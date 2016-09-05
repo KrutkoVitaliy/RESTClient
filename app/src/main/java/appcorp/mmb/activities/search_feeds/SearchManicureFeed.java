@@ -2,7 +2,6 @@ package appcorp.mmb.activities.search_feeds;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
@@ -17,30 +16,18 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchManicureFeedFragmentAdapter;
 import appcorp.mmb.loaders.SearchManicureFeedLoader;
 
@@ -122,17 +109,14 @@ public class SearchManicureFeed extends AppCompatActivity {
                     case R.id.navMenuManicure:
                         startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
-                    case R.id.navMenuLips:
-                        startActivity(new Intent(getApplicationContext(), LipsFeed.class));
-                        break;
                     case R.id.navMenuProfile:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
                         break;
                     case R.id.navMenuFavorites:
-                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
+                        if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
                             startActivity(new Intent(getApplicationContext(), Authorization.class));
