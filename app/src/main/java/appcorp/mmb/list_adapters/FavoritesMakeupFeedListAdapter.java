@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -140,6 +141,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                     }
                 });
                 holder.imageViewer.addView(screenShot);
+                holder.imageViewerHorizontal.scrollTo(0,0);
 
                 LinearLayout countLayout = new LinearLayout(context);
                 countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
@@ -381,6 +383,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         TextView title, availableDate, showMore, likesCount;
         LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
         ImageView user_avatar, addLike;
+        HorizontalScrollView imageViewerHorizontal;
 
         public TapeViewHolder(View itemView) {
             super(itemView);
@@ -388,6 +391,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             availableDate = (TextView) itemView.findViewById(R.id.available_date);
             showMore = (TextView) itemView.findViewById(R.id.show_more);
             imageViewer = (LinearLayout) itemView.findViewById(R.id.imageViewer);
+            imageViewerHorizontal = (HorizontalScrollView) itemView.findViewById(R.id.imageViewerHorizontal);
             countImages = (LinearLayout) itemView.findViewById(R.id.countImages);
             hashTags = (LinearLayout) itemView.findViewById(R.id.hash_tags);
             likesCount = (TextView) itemView.findViewById(R.id.likesCount);
