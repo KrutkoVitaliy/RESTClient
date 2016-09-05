@@ -204,7 +204,8 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(hairstyleDTO);
                 }
                 adapter.setData(data);
-                progressDialog.hide();
+                if (progressDialog != null)
+                    progressDialog.hide();
             }
         } catch (JSONException e) {
             e.printStackTrace();

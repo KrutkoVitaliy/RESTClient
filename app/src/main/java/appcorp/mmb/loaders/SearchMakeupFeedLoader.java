@@ -162,7 +162,8 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(makeupDTO);
                 }
                 adapter.setData(data);
-                progressDialog.hide();
+                if (progressDialog != null)
+                    progressDialog.hide();
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -226,6 +226,8 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(manicureDTO);
                 }
                 adapter.setData(data);
+                if (progressDialog != null)
+                    progressDialog.hide();
             }
         } catch (JSONException e) {
             e.printStackTrace();
