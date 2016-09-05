@@ -1,5 +1,6 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.Toolbar;
 
@@ -30,6 +31,64 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
     String colorsStr = "";
     private SearchManicureFeedFragmentAdapter adapter;
     private Toolbar toolbar;
+    ProgressDialog progressDialog;
+
+    public SearchManicureFeedLoader(Toolbar toolbar, SearchManicureFeedFragmentAdapter adapter, String request, ArrayList<String> colors, String shape, String design, int position, ProgressDialog progressDialog) {
+        this.toolbar = toolbar;
+        this.progressDialog = progressDialog;
+        this.adapter = adapter;
+        this.request = request;
+
+        if (shape.equals("0"))
+            this.shape = "";
+        else if (shape.equals("1"))
+            this.shape = "square";
+        else if (shape.equals("2"))
+            this.shape = "oval";
+        else if (shape.equals("3"))
+            this.shape = "stiletto";
+
+        if (design.equals("0"))
+            this.design = "";
+        else if (design.equals("1"))
+            this.design = "french_classic";
+        else if (design.equals("2"))
+            this.design = "french_chevron";
+        else if (design.equals("3"))
+            this.design = "french_millennium";
+        else if (design.equals("4"))
+            this.design = "french_fun";
+        else if (design.equals("5"))
+            this.design = "french_crystal";
+        else if (design.equals("6"))
+            this.design = "french_colorful";
+        else if (design.equals("7"))
+            this.design = "french_designer";
+        else if (design.equals("8"))
+            this.design = "french_spa";
+        else if (design.equals("9"))
+            this.design = "french_moon";
+        else if (design.equals("10"))
+            this.design = "art";
+        else if (design.equals("11"))
+            this.design = "designer";
+        else if (design.equals("12"))
+            this.design = "volume";
+        else if (design.equals("13"))
+            this.design = "aqua";
+        else if (design.equals("14"))
+            this.design = "american";
+        else if (design.equals("15"))
+            this.design = "photo";
+
+        this.colors = colors;
+        for (int i = 0; i < colors.size(); i++) {
+            this.colorsStr += colors.get(i) + ",";
+        }
+        if (colorsStr.length() > 0)
+            this.colorsStr = colorsStr.substring(0, colorsStr.length() - 1);
+        this.position = position;
+    }
 
     public SearchManicureFeedLoader(Toolbar toolbar, SearchManicureFeedFragmentAdapter adapter, String request, ArrayList<String> colors, String shape, String design, int position) {
         this.toolbar = toolbar;

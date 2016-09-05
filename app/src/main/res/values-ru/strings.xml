@@ -213,4 +213,6 @@
     <string name="editVK">VK</string>
     <string name="editInstagram">Instagram</string>
     <string name="editOK">OK</string>
+
+    <string name="loading">Загрузка...</string>
 </resources>

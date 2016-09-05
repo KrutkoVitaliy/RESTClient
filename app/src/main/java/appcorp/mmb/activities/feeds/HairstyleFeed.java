@@ -20,10 +20,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
-import appcorp.mmb.activities.search_feeds.Search;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
@@ -47,7 +48,11 @@ public class HairstyleFeed extends AppCompatActivity {
         initNavigationView();
         initViewPager();
 
-        new HairstyleFeedLoader(adapter, 1).execute();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
+
+        new HairstyleFeedLoader(adapter, 1,progressDialog).execute();
     }
 
     /*@Override

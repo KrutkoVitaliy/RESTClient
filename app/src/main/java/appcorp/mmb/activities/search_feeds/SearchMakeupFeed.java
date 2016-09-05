@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.search_feeds;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
@@ -60,13 +62,17 @@ public class SearchMakeupFeed extends AppCompatActivity {
         initNavigationView();
         initViewPager();
 
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
+
         this.request = getIntent().getStringExtra("Request");
         this.colors = getIntent().getStringArrayListExtra("Colors");
         this.eyeColor = getIntent().getStringExtra("EyeColor");
         this.difficult = getIntent().getStringExtra("Difficult");
         this.occasion = getIntent().getStringExtra("Occasion");
 
-        new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1).execute();
+        new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1, progressDialog).execute();
     }
 
     public static void addFeed(int position) {

@@ -1,5 +1,6 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -24,6 +25,13 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
     String resultJsonFeed = "";
     ManicureFeedFragmentAdapter adapter;
     int position;
+    ProgressDialog progressDialog;
+
+    public ManicureFeedLoader(ManicureFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
+        this.adapter = adapter;
+        this.position = position;
+        this.progressDialog = progressDialog;
+    }
 
     public ManicureFeedLoader(ManicureFeedFragmentAdapter adapter, int position) {
         this.adapter = adapter;
@@ -116,6 +124,7 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
                 }
             }
             adapter.setData(data);
+            progressDialog.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }

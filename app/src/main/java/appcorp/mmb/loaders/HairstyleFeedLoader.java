@@ -1,5 +1,6 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -24,6 +25,13 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     String resultJsonFeed = "";
     HairstyleFeedFragmentAdapter adapter;
     int position;
+    ProgressDialog progressDialog;
+
+    public HairstyleFeedLoader(HairstyleFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
+        this.adapter = adapter;
+        this.position = position;
+        this.progressDialog = progressDialog;
+    }
 
     public HairstyleFeedLoader(HairstyleFeedFragmentAdapter adapter, int position) {
         this.adapter = adapter;
@@ -105,6 +113,7 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                 }
             }
             adapter.setData(data);
+            progressDialog.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.Toolbar;
 
@@ -28,6 +29,55 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     private String request, hairstyleLength, hairstyleType, hairstyleFor;
     private SearchHairstyleFeedFragmentAdapter adapter;
     private Toolbar toolbar;
+    ProgressDialog progressDialog;
+
+    public SearchHairstyleFeedLoader(Toolbar toolbar, SearchHairstyleFeedFragmentAdapter adapter, String request, String hairstyleLength, String hairstyleType, String hairstyleFor, int position, ProgressDialog progressDialog) {
+        this.toolbar = toolbar;
+        this.adapter = adapter;
+        this.request = request;
+        this.hairstyleFor = hairstyleFor;
+        this.position = position;
+        this.progressDialog = progressDialog;
+
+        if (hairstyleLength.equals("0"))
+            this.hairstyleLength = "";
+        else if (hairstyleLength.equals("1"))
+            this.hairstyleLength = "short";
+        else if (hairstyleLength.equals("2"))
+            this.hairstyleLength = "medium";
+        else if (hairstyleLength.equals("3"))
+            this.hairstyleLength = "long";
+
+        if (hairstyleType.equals("0"))
+            this.hairstyleType = "";
+        else if (hairstyleType.equals("1"))
+            this.hairstyleType = "straight";
+        else if (hairstyleType.equals("2"))
+            this.hairstyleType = "braid";
+        else if (hairstyleType.equals("3"))
+            this.hairstyleType = "tail";
+        else if (hairstyleType.equals("4"))
+            this.hairstyleType = "bunch";
+        else if (hairstyleType.equals("5"))
+            this.hairstyleType = "netting";
+        else if (hairstyleType.equals("6"))
+            this.hairstyleType = "curls";
+        else if (hairstyleType.equals("7"))
+            this.hairstyleType = "custom";
+
+        if (hairstyleFor.equals("0"))
+            this.hairstyleFor = "";
+        else if (hairstyleFor.equals("1"))
+            this.hairstyleFor = "kids";
+        else if (hairstyleFor.equals("2"))
+            this.hairstyleFor = "everyday";
+        else if (hairstyleFor.equals("3"))
+            this.hairstyleFor = "wedding";
+        else if (hairstyleFor.equals("4"))
+            this.hairstyleFor = "evening";
+        else if (hairstyleFor.equals("5"))
+            this.hairstyleFor = "exclusive";
+    }
 
     public SearchHairstyleFeedLoader(Toolbar toolbar, SearchHairstyleFeedFragmentAdapter adapter, String request, String hairstyleLength, String hairstyleType, String hairstyleFor, int position) {
         this.toolbar = toolbar;
@@ -154,6 +204,7 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(hairstyleDTO);
                 }
                 adapter.setData(data);
+                progressDialog.hide();
             }
         } catch (JSONException e) {
             e.printStackTrace();

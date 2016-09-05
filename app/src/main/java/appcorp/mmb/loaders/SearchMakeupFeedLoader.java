@@ -1,7 +1,9 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.Toolbar;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +32,33 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
     String colorsStr = "";
     private SearchMakeupFeedFragmentAdapter adapter;
     private Toolbar toolbar;
+    ProgressDialog progressDialog;
+
+    public SearchMakeupFeedLoader(Toolbar toolbar, SearchMakeupFeedFragmentAdapter adapter, String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position, ProgressDialog progressDialog) {
+        this.toolbar = toolbar;
+        this.progressDialog = progressDialog;
+        this.adapter = adapter;
+        this.request = request;
+        this.eyeColor = eyeColor;
+        this.difficult = difficult;
+        if (occasion.equals("0"))
+            this.occasion = "";
+        else if (occasion.equals("1"))
+            this.occasion = "everyday";
+        else if (occasion.equals("2"))
+            this.occasion = "celebrity";
+        else if (occasion.equals("3"))
+            this.occasion = "dramatic";
+        else if (occasion.equals("4"))
+            this.occasion = "holiday";
+        this.colors = colors;
+        for (int i = 0; i < colors.size(); i++) {
+            this.colorsStr += colors.get(i) + ",";
+        }
+        if (colorsStr.length() > 0)
+            this.colorsStr = colorsStr.substring(0, colorsStr.length() - 1);
+        this.position = position;
+    }
 
     public SearchMakeupFeedLoader(Toolbar toolbar, SearchMakeupFeedFragmentAdapter adapter, String request, ArrayList<String> colors, String eyeColor, String difficult, String occasion, int position) {
         this.toolbar = toolbar;
@@ -133,6 +162,7 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(makeupDTO);
                 }
                 adapter.setData(data);
+                progressDialog.hide();
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.feeds;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.search_feeds.Search;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -45,7 +47,11 @@ public class ManicureFeed extends AppCompatActivity {
         initNavigationView();
         initViewPager();
 
-        new ManicureFeedLoader(adapter, 1).execute();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
+
+        new ManicureFeedLoader(adapter, 1, progressDialog).execute();
     }
 
     public static void addFeed(int position) {

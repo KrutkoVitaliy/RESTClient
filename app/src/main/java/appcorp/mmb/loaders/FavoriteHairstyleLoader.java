@@ -1,7 +1,6 @@
 package appcorp.mmb.loaders;
 
 import android.os.AsyncTask;
-import android.support.v4.widget.ContentLoadingProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;

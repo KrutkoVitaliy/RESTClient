@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.user;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -67,6 +68,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
     private LinearLayout servicesMakeup;
     private LinearLayout servicesManicure;
     private LinearLayout servicesHairstyle;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,15 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         initViews();
         new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
         changeServiceStatus(1);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     private void initViews() {
@@ -684,9 +695,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             servicesHairstyle.addView(stroke);
                         }
                     }
-
                     String ss = item.getString("photo");
                     Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + ss).into(photo);
+                    progressDialog.hide();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

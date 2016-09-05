@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.search_feeds;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.LipsFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
@@ -59,12 +61,16 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         initNavigationView();
         initViewPager();
 
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
+
         this.request = getIntent().getStringExtra("Request");
         this.hairstyleLength = getIntent().getStringExtra("HairstyleLength");
         this.hairstyleType = getIntent().getStringExtra("HairstyleType");
         this.hairstyleFor = getIntent().getStringExtra("HairstyleFor");
 
-        new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
+        new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, 1, progressDialog).execute();
     }
 
     public static void addFeed(int position) {

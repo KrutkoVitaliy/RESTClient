@@ -1,6 +1,8 @@
 package appcorp.mmb.loaders;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,13 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
     int position;
     private List<String> requestList = new ArrayList<>();
     private String request;
+    ProgressDialog progressDialog;
+
+    public MakeupFeedLoader(MakeupFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
+        this.adapter = adapter;
+        this.position = position;
+        this.progressDialog = progressDialog;
+    }
 
     public MakeupFeedLoader(MakeupFeedFragmentAdapter adapter, int position) {
         this.adapter = adapter;
@@ -108,6 +117,7 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                 }
             }
             adapter.setData(data);
+            progressDialog.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }
