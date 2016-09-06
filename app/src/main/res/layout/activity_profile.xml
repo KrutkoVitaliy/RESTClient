@@ -20,14 +20,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
-                android:title="Профиль" />
+                android:title="Профиль"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"  />
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,60 +40,92 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp">
 
-                    <ImageView
-                        android:id="@+id/avatar"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileAvatar"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:background="@color/horizontal_line" />
+                        app:border_width="0dp"/>
 
-                    <ImageView
-                        android:id="@+id/layer"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:background="@mipmap/layer" />
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="right">
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="Name Lastname"
+                        android:text="@string/nameLastname"
                         android:textColor="@color/author_title"
-                        android:textSize="8pt" />
+                        android:textSize="7pt" />
 
                     <TextView
                         android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="City, Address"
+                        android:text="@string/cityAddress"
                         android:textColor="@color/author_title"
-                        android:textSize="6pt" />
+                        android:textSize="5pt" />
 
                     <TextView
                         android:id="@+id/phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
-                        android:text="Phone number"
-                        android:textColor="@color/author_title"
-                        android:textSize="6pt" />
+                        android:text="@string/phoneNumber"
+                        android:textColor="#336699"
+                        android:textSize="7pt"
+                        android:layout_marginTop="8dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp">
+                        <ImageView
+                            android:id="@+id/gplusButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_gplus"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:id="@+id/fbButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_fb"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:id="@+id/vkButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_vk"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:id="@+id/instagramButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_instagram"
+                            android:layout_marginLeft="4dp"/>
+                        <ImageView
+                            android:id="@+id/okButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@mipmap/icon_ok"
+                            android:layout_marginLeft="4dp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D0D0D0" />
+                android:background="#D0D0D0"/>
 
-            <FrameLayout
+            <!--<FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -120,7 +153,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="1724"
+                            android:text="0"
                             android:textSize="6pt"
                             android:textStyle="bold" />
 
@@ -128,7 +161,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="Оценки"
+                            android:text="@string/likes"
                             android:textSize="5pt" />
                     </LinearLayout>
                 </LinearLayout>
@@ -157,7 +190,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="886"
+                            android:text="0"
                             android:textSize="6pt"
                             android:textStyle="bold" />
 
@@ -165,200 +198,164 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
-                            android:text="Подписки"
+                            android:text="@string/followers"
                             android:textSize="5pt" />
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D0D0D0" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:text="Skill 1"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 4"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
-                        android:text="Skill 2"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 5"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/skill3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
-                        android:text="Skill 3"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/skill6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="Skill 6"
-                        android:textColor="@color/author_title" />
-                </LinearLayout>
-            </FrameLayout>
+                android:background="#D0D0D0"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/serviceMakeup"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/selectStylistGallery"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="8dp"
-                        android:text="Best works"
-                        android:textColor="@color/description_title" />
-
+                        android:src="@mipmap/makeup"/>
                     <TextView
-                        android:id="@+id/selectPrice"
+                        android:id="@+id/serviceMakeupText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="8dp"
-                        android:text="Price list"
-                        android:textColor="@color/author_title" />
-
-                    <TextView
-                        android:id="@+id/selectCalendar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="8dp"
-                        android:text="Calendar"
-                        android:textColor="@color/description_title" />
+                        android:textColor="#000000"
+                        android:text="Makeup"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
-
+                <LinearLayout
+                    android:id="@+id/serviceManicure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/manicure"
+                        android:paddingRight="6dp"/>
+                    <TextView
+                        android:id="@+id/serviceManicureText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:text="Manicure"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/serviceHairstyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/hairstyle"
+                        android:paddingRight="4dp"/>
+                    <TextView
+                        android:id="@+id/serviceHairstyleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hairstyle"
+                        android:textColor="#000000"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
             </LinearLayout>
 
-            <ScrollView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/priceList"
+                android:layout_height="match_parent">
+                <ScrollView
+                    android:id="@+id/makeupUserGallery"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <FrameLayout
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesMakeup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginLeft="32dp"
-                            android:padding="8dp"
-                            android:text="Service"
-                            android:textColor="@color/author_title" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginRight="32dp"
-                            android:padding="8dp"
-                            android:text="Cost"
-                            android:textColor="@color/author_title" />
-                    </FrameLayout>
-                </LinearLayout>
-            </ScrollView>
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:textSize="7pt"
-                android:textColor="@color/author_title"
-                android:text="Календарь занятости на Август 2016"/>
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="7"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-            </GridLayout>-->
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/stylistFeed"
+                <ScrollView
+                    android:id="@+id/manicureUserGallery"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
-            </ScrollView>
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesManicure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView
+                    android:id="@+id/hairstyleUserGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
+                            <LinearLayout
+                                android:id="@+id/servicesHairstyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:orientation="vertical"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </FrameLayout>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 

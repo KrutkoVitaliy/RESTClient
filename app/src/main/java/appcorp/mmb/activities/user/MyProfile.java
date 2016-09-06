@@ -612,7 +612,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             stroke.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
@@ -644,6 +644,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             FrameLayout stroke = new FrameLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setGravity(Gravity.LEFT);
@@ -674,6 +675,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             FrameLayout stroke = new FrameLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setGravity(Gravity.LEFT);

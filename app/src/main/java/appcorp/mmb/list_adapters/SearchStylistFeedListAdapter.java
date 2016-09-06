@@ -97,7 +97,7 @@ public class SearchStylistFeedListAdapter extends RecyclerView.Adapter<SearchSty
             @Override
             public void onClick(View view) {
                 context.startActivity(new Intent(context, Profile.class)
-                        .putExtra("ID", item.getId())
+                        .putExtra("ID", ""+item.getId())
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
