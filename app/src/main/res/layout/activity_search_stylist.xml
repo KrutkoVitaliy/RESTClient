@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/manicureDrawerLayout"
+    android:id="@+id/searchStylistDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/manicureToolbar"
+                android:id="@+id/searchStylistToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
@@ -24,15 +24,42 @@
                 android:title="@string/app_name" />
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/manicureViewPager"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/searchStylistCity"
+                android:textColor="@color/description_title"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/searchStylistCityField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/searchStylistSkill"
+                android:textColor="@color/description_title"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/searchStylistSkillField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/manicureNavigation"
+        android:id="@+id/searchStylistNavigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

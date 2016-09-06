@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/stylistPost"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/icon"
+                ads:border_width="0dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name, Lastname"
+                    android:textColor="@color/author_title"
+                    android:textSize="7pt" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City, Address"
+                android:textColor="@color/description_title"
+                android:textSize="6pt"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/phoneNumber"
+                android:textColor="#336699"
+                android:textSize="8pt" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/gplusButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/icon_gplus" />
+
+                <ImageView
+                    android:id="@+id/fbButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="4dp"
+                    android:src="@mipmap/icon_fb" />
+
+                <ImageView
+                    android:id="@+id/vkButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="4dp"
+                    android:src="@mipmap/icon_vk" />
+
+                <ImageView
+                    android:id="@+id/instagramButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="4dp"
+                    android:src="@mipmap/icon_instagram" />
+
+                <ImageView
+                    android:id="@+id/okButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="4dp"
+                    android:src="@mipmap/icon_ok" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:id="@+id/imageViewerHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/imageViewer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/countImages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </FrameLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/moreContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#dddddd" />
+
+</LinearLayout>

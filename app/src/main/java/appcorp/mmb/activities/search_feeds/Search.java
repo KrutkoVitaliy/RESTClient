@@ -305,6 +305,9 @@ public class Search extends AppCompatActivity {
                         break;*/
                     case R.id.navMenuSearch:
                         break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
+                        break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;

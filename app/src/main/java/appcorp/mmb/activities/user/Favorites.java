@@ -23,6 +23,7 @@ import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
@@ -109,6 +110,9 @@ public class Favorites extends AppCompatActivity {
                         break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class).putExtra("hashTag", "empty"));
+                        break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
                         break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));

@@ -1,12 +1,12 @@
 package appcorp.mmb.activities.user;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +24,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import appcorp.mmb.R;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
-import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.Intermediates;
-import appcorp.mmb.R;
 import appcorp.mmb.classes.Storage;
 
-public class Profile extends Activity {
+public class Profile extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -134,11 +133,6 @@ public class Profile extends Activity {
                 return true;
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
     }
 
     class Get extends AsyncTask<Void, Void, String> {

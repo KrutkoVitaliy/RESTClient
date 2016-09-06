@@ -100,6 +100,9 @@ public class SearchManicureFeed extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
                         break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
+                        break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
                         break;

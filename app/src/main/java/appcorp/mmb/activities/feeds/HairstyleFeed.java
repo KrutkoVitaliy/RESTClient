@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.search_feeds.Search;
+import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
@@ -114,6 +115,9 @@ public class HairstyleFeed extends AppCompatActivity {
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
+                        break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
                         break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));

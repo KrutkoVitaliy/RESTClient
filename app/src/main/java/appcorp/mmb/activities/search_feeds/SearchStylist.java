@@ -1,6 +1,5 @@
-package appcorp.mmb.activities.feeds;
+package appcorp.mmb.activities.search_feeds;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,76 +19,45 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.activities.feeds.HairstyleFeed;
+import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
-import appcorp.mmb.activities.search_feeds.Search;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
-import appcorp.mmb.loaders.ManicureFeedLoader;
+import appcorp.mmb.dto.MakeupDTO;
 
-public class ManicureFeed extends AppCompatActivity {
+public class SearchStylist extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
-    private static ManicureFeedFragmentAdapter adapter;
-    private int toExit = 2;
+    private EditText cityField, skillField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manicure_feed);
+        setContentView(R.layout.activity_search_stylist);
 
         initToolbar();
         initNavigationView();
-        initViewPager();
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
-        progressDialog.show();
-
-        new ManicureFeedLoader(adapter, 1, progressDialog).execute();
+        initViews();
     }
 
-    public static void addFeed(int position) {
-        new ManicureFeedLoader(adapter, position).execute();
+    private void initViews() {
+        cityField = (EditText) findViewById(R.id.searchStylistCityField);
+        skillField = (EditText) findViewById(R.id.searchStylistSkillField);
     }
-
-
-    /*@Override
-    public void onBackPressed() {
-        new CountDownTimer(3000, 1000) {
-            @Override
-            public void onTick(long l) {
-                if(toExit != 0) {
-                    toExit--;
-                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                toExit = 2;
-            }
-        }.start();
-    }*/
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
-        toolbar.setTitle(R.string.menu_item_manicure);
+        toolbar = (Toolbar) findViewById(R.id.searchStylistToolbar);
+        toolbar.setTitle(R.string.menu_item_search_stylist);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                intent.putExtra("from", "manicureFeed");
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
+                        .putExtra("City", cityField.getText().toString().trim().toLowerCase())
+                        .putExtra("Skill", skillField.getText().toString().trim().toLowerCase())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 return true;
             }
         });
@@ -96,12 +65,12 @@ public class ManicureFeed extends AppCompatActivity {
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.manicureDrawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.searchStylistDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.manicureNavigation);
+        NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.searchStylistNavigation);
         initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -119,11 +88,11 @@ public class ManicureFeed extends AppCompatActivity {
                     case R.id.navMenuSearchStylist:
                         startActivity(new Intent(getApplicationContext(), SearchStylist.class));
                         break;
-                    case R.id.navMenuMakeup:
-                        startActivity(new Intent(getApplicationContext(), MakeupFeed.class));
-                        break;
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
+                        break;
+                    case R.id.navMenuManicure:
+                        startActivity(new Intent(getApplicationContext(), ManicureFeed.class));
                         break;
                     case R.id.navMenuProfile:
                         if (!Storage.getString("E-mail", "").equals(""))
@@ -148,7 +117,7 @@ public class ManicureFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("E-mail", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/"+Storage.getString("PhotoURL", "")).into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -171,11 +140,5 @@ public class ManicureFeed extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void initViewPager() {
-        viewPager = (ViewPager) findViewById(R.id.manicureViewPager);
-        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
-        viewPager.setAdapter(adapter);
     }
 }

@@ -47,6 +47,7 @@ import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
@@ -391,7 +392,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         builder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //showMessage("Нажали Нет");
+
                     }
                 });
         builder.setPositiveButton(R.string.open,
@@ -402,8 +403,6 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                                 .putExtra("URL", content));
                     }
                 });
-        // устанавливаем кнопку, которая отвечает за выбранный нами ответ
-        // в данном случаем мы просто хотим всплывающее окно с отменой
         builder.setNeutralButton(R.string.copy,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -484,6 +483,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
+                        break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
                         break;
                     case R.id.navMenuMakeup:
                         startActivity(new Intent(getApplicationContext(), MakeupFeed.class));

@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
@@ -113,6 +114,9 @@ public class MakeupFeed extends AppCompatActivity {
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
+                        break;
+                    case R.id.navMenuSearchStylist:
+                        startActivity(new Intent(getApplicationContext(), SearchStylist.class));
                         break;
                     case R.id.navMenuHairstyle:
                         startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));

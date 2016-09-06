@@ -68,7 +68,7 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);
                     resultJsonFeed += buffer.toString();
-                    resultJsonFeed = resultJsonFeed.replace("][",",");
+                    resultJsonFeed = resultJsonFeed.replace("][", ",");
                 }
             }
         } catch (Exception e) {
@@ -124,7 +124,8 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
                 }
             }
             adapter.setData(data);
-            progressDialog.hide();
+            if (progressDialog != null)
+                progressDialog.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }

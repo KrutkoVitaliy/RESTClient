@@ -117,7 +117,8 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                 }
             }
             adapter.setData(data);
-            progressDialog.hide();
+            if (progressDialog != null)
+                progressDialog.hide();
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -15,34 +15,34 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
+import appcorp.mmb.dto.StylistDTO;
+import appcorp.mmb.fragment_adapters.SearchStylistFeedFragmentAdapter;
 
-public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
+public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
 
     HttpURLConnection urlFeedConnection = null;
     BufferedReader reader = null;
     String resultJsonFeed = "";
-    HairstyleFeedFragmentAdapter adapter;
-    int position;
+    SearchStylistFeedFragmentAdapter adapter;
     ProgressDialog progressDialog;
+    int position;
 
-    public HairstyleFeedLoader(HairstyleFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
+    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
         this.adapter = adapter;
         this.position = position;
         this.progressDialog = progressDialog;
     }
 
-    public HairstyleFeedLoader(HairstyleFeedFragmentAdapter adapter, int position) {
+    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, int position) {
         this.adapter = adapter;
         this.position = position;
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected String doInBackground(Void... voids) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
+                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -55,7 +55,7 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + i + ".html");
+                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -66,7 +66,7 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);
                     resultJsonFeed += buffer.toString();
-                    resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    resultJsonFeed = resultJsonFeed.replace("][", "");
                 }
             }
         } catch (Exception e) {
@@ -76,53 +76,34 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String resultJsonFeed) {
-        super.onPostExecute(resultJsonFeed);
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
 
-        List<HairstyleDTO> data = new ArrayList<>();
+        List<StylistDTO> data = new ArrayList<>();
         try {
             JSONArray items = new JSONArray(resultJsonFeed);
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
-                List<String> images = new ArrayList<>();
-                List<String> hashTags = new ArrayList<>();
 
-                for (int j = 0; j < 10; j++)
-                    if (!item.getString("screen" + j).equals("empty.jpg"))
-                        images.add(item.getString("screen" + j));
-
-                String[] tempTags = item.getString("tags").split(",");
-                for (int j = 0; j < tempTags.length; j++) {
-                    hashTags.add(tempTags[j]);
-                }
-
-                if (item.getString("published").equals("t")) {
-                    HairstyleDTO hairstyleDTO = new HairstyleDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            item.getString("hairstyleType"),
-                            images,
-                            hashTags,
-                            item.getLong("likes"),
-                            item.getString("length"),
-                            item.getString("type"),
-                            item.getString("for"));
-                    data.add(hairstyleDTO);
-                }
-            }
-            adapter.setData(data);
-
-            if (progressDialog != null)
+                StylistDTO stylistDTO = new StylistDTO(
+                        item.getLong("id"),
+                        item.getString("firstName"),
+                        item.getString("lastName"),
+                        item.getString("photo"),
+                        item.getString("phoneNumber"),
+                        item.getString("city"),
+                        item.getString("address"),
+                        item.getString("gplus"),
+                        item.getString("facebook"),
+                        item.getString("vkontakte"),
+                        item.getString("instagram"),
+                        item.getString("odnoklassniki"));
+                data.add(stylistDTO);
+                adapter.setData(data);
                 progressDialog.hide();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private String upperCaseFirst(String word) {
-        if (word == null || word.isEmpty()) return "";
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

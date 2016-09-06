@@ -82,6 +82,8 @@
         <activity
             android:name=".activities.user.ProfileMediaViewer"
             android:screenOrientation="portrait" />
+        <activity android:name=".activities.search_feeds.SearchStylist" />
+        <activity android:name=".activities.search_feeds.SearchStylistFeed"></activity>
     </application>
 
 </manifest>

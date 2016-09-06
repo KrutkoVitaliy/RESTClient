@@ -215,4 +215,7 @@
     <string name="editOK">OK</string>
 
     <string name="loading">Загрузка...</string>
+    <string name="menu_item_search_stylist">Поиск мастера</string>
+    <string name="searchStylistCity">Город</string>
+    <string name="searchStylistSkill">Сервис</string>
 </resources>
