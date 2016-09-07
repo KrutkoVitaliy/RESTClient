@@ -6,11 +6,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -452,7 +456,6 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), EditMyProfile.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                         .putExtra("ID", id)
                         .putExtra("Name", name.getText())
                         .putExtra("Location", location.getText())
@@ -533,8 +536,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } else {
                     startActivity(new Intent(getApplicationContext(), Authorization.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -612,7 +614,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                             stroke.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
@@ -644,7 +646,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             FrameLayout stroke = new FrameLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setGravity(Gravity.LEFT);
@@ -675,7 +677,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             FrameLayout stroke = new FrameLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             strService.setGravity(Gravity.LEFT);

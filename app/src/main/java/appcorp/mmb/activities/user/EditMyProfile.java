@@ -1,8 +1,13 @@
 package appcorp.mmb.activities.user;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,6 +41,7 @@ import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
+import appcorp.mmb.network.UploadImage;
 
 public class EditMyProfile extends AppCompatActivity {
 
@@ -60,8 +66,42 @@ public class EditMyProfile extends AppCompatActivity {
         editAvatar = (ImageView) findViewById(R.id.editAvatar);
         Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(editAvatar);
         new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
+        editAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                final int ACTIVITY_SELECT_IMAGE = 1234;
+                startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
+            }
+        });
         //webView = (WebView) findViewById(R.id.uploadPhoto);
         //webView.loadUrl("http://195.88.209.17/app/actions/editform.php?id="+id);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1234:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String filePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png"))
+                        new UploadImage(filePath).execute();
+
+                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+                    // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
+                }
+        }
+
     }
 
     private void initFields() {
@@ -177,8 +217,7 @@ public class EditMyProfile extends AppCompatActivity {
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } else {
                     startActivity(new Intent(getApplicationContext(), Authorization.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

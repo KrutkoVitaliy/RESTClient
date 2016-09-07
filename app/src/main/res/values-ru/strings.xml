@@ -1,4 +1,5 @@
 <resources>
+    <string name="translation">Russian</string>
     <!-- ОСНОВНЫЕ ЗНАЧЕНИЯ -->
     <string name="drawer_toggle_open">Открыть</string>
     <string name="drawer_toggle_close">Закрыть</string>

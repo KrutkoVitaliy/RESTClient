@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class StartApplication extends AppCompatActivity {
@@ -21,10 +22,21 @@ public class StartApplication extends AppCompatActivity {
         setContentView(R.layout.start_application);
 
         initStorage();
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
         initAdMob();
         timer();
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     private void initStorage() {

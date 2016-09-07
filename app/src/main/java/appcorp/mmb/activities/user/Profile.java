@@ -195,8 +195,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } else {
                     startActivity(new Intent(getApplicationContext(), Authorization.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -398,10 +397,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     String[] makeupServicesArray = profileItem.getString("makeupServices").substring(1, profileItem.getString("makeupServices").length()).split(",");
                     String[] makeupCostsArray = profileItem.getString("makeupCosts").substring(1, profileItem.getString("makeupCosts").length()).split(",");
                     for (int j = 0; j < makeupServicesArray.length; j++) {
-                        FrameLayout stroke = new FrameLayout(getApplicationContext());
+                        LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - strCost.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         strService.setGravity(Gravity.LEFT);
@@ -429,10 +428,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     String[] manicureServicesArray = profileItem.getString("manicureServices").substring(1, profileItem.getString("manicureServices").length()).split(",");
                     String[] manicureCostsArray = profileItem.getString("manicureCosts").substring(1, profileItem.getString("manicureCosts").length()).split(",");
                     for (int j = 0; j < manicureServicesArray.length; j++) {
-                        FrameLayout stroke = new FrameLayout(getApplicationContext());
+                        LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - strCost.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         strService.setGravity(Gravity.LEFT);
@@ -460,10 +459,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     String[] hairstyleServicesArray = profileItem.getString("hairstyleServices").substring(1, profileItem.getString("hairstyleServices").length()).split(",");
                     String[] hairstyleCostsArray = profileItem.getString("hairstyleCosts").substring(1, profileItem.getString("hairstyleCosts").length()).split(",");
                     for (int j = 0; j < hairstyleServicesArray.length; j++) {
-                        FrameLayout stroke = new FrameLayout(getApplicationContext());
+                        LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - strCost.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         strService.setGravity(Gravity.LEFT);

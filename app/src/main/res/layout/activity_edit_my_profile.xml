@@ -32,14 +32,12 @@
                     <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-                        <ImageView
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/editAvatar"
                             android:layout_width="200dp"
-                            android:layout_height="200dp"/>
-                        <ImageView
-                            android:layout_width="200dp"
                             android:layout_height="200dp"
-                            android:src="@mipmap/layer"/>
+                            app:border_width="0dp"
+                            app:border_color="#FFFFFF"/>
                     </FrameLayout>
                     <EditText
                         android:id="@+id/editName"
