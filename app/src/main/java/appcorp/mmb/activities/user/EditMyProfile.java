@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.user;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -52,11 +54,17 @@ public class EditMyProfile extends AppCompatActivity {
     private int id;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
+    private ProgressDialog progressDialog;
+    private ProgressDialog loadProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_profile);
+
+        loadProgressDialog = new ProgressDialog(this);
+        loadProgressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        loadProgressDialog.show();
 
         initToolbar();
         initNavigationView();
@@ -94,8 +102,15 @@ public class EditMyProfile extends AppCompatActivity {
                     String filePath = cursor.getString(columnIndex);
                     cursor.close();
 
-                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png"))
-                        new UploadImage(filePath).execute();
+                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png")) {
+                        progressDialog = new ProgressDialog(this);
+                        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+                        progressDialog.show();
+                        new UploadImage(filePath, progressDialog).execute();
+                    }
+                    if (!progressDialog.isShowing()) {
+                        new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
+                    }
 
                     Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
                     // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
@@ -276,6 +291,9 @@ public class EditMyProfile extends AppCompatActivity {
                     editVK.setText(item.getString("vkontakte"));
                     editInst.setText(item.getString("instagram"));
                     editOK.setText(item.getString("odnoklassniki"));
+                    Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + item.getString("photo")).into(editAvatar);
+                    Storage.addString("PhotoURL", item.getString("photo"));
+                    loadProgressDialog.hide();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

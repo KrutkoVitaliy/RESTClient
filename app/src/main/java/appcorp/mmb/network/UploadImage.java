@@ -1,8 +1,10 @@
 package appcorp.mmb.network;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,10 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import appcorp.mmb.classes.Storage;
 
 public class UploadImage extends AsyncTask<Void, Void, String> {
 
@@ -22,12 +27,14 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
     // Два тире
     private String twoHyphens = "--";
     // Разделитель
-    private String boundary =  "----WebKitFormBoundary9xFB2hiUhzqbBQ4M";
+    private String boundary = "----WebKitFormBoundary9xFB2hiUhzqbBQ4M";
 
     // Переменные для считывания файла в оперативную память
     private int bytesRead, bytesAvailable, bufferSize;
     private byte[] buffer;
-    private int maxBufferSize = 1*1024*1024;
+    private int maxBufferSize = 1 * 1024 * 1024;
+
+    ProgressDialog progressDialog;
 
     // Путь к файлу в памяти устройства
     private String filePath;
@@ -38,8 +45,9 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
     // Ключ, под которым файл передается на сервер
     public static final String FORM_FILE_NAME = "file1";
 
-    public UploadImage(String filePath) {
+    public UploadImage(String filePath, ProgressDialog progressDialog) {
         this.filePath = filePath;
+        this.progressDialog = progressDialog;
     }
 
     @Override
@@ -66,11 +74,13 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
 
             // Задание необходимых свойств запросу
             connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
             // Создание потока для записи в соединение
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
 
+            BufferedWriter outputStream2 = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            addFormField(outputStream2, "email", Storage.getString("E-mail", "Click to sign in"));
             // Формирование multipart контента
 
             // Начало контента
@@ -113,7 +123,7 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
             outputStream.close();
 
             // Считка ответа от сервера в зависимости от успеха
-            if(serverResponseCode == 200) {
+            if (serverResponseCode == 200) {
                 result = readStream(connection.getInputStream());
             } else {
                 result = readStream(connection.getErrorStream());
@@ -127,8 +137,27 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return result;
+    }
+
+    public void addFormField(BufferedWriter dos, String parameter, String value) {
+        try {
+            dos.write(twoHyphens + boundary + lineEnd);
+            dos.write("Content-Disposition: form-data; name=\"" + parameter + "\"" + lineEnd);
+            dos.write("Content-Type: text/plain; charset=UTF-8" + lineEnd);
+            dos.write(lineEnd);
+            dos.write(value + lineEnd);
+            dos.flush();
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        if (progressDialog != null)
+            progressDialog.hide();
     }
 
     // Считка потока в строку
