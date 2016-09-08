@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -37,7 +36,6 @@ public class HairstyleFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private static HairstyleFeedFragmentAdapter adapter;
-    private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,28 +51,8 @@ public class HairstyleFeed extends AppCompatActivity {
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
-        new HairstyleFeedLoader(adapter, 1,progressDialog).execute();
+        new HairstyleFeedLoader(adapter, 1, progressDialog).execute();
     }
-
-    /*@Override
-    public void onBackPressed() {
-        new CountDownTimer(3000, 1000) {
-            @Override
-            public void onTick(long l) {
-                if(toExit != 0) {
-                    toExit--;
-                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                toExit = 2;
-            }
-        }.start();
-    }*/
 
     public static void addFeed(int position) {
         new HairstyleFeedLoader(adapter, position).execute();
@@ -147,7 +125,7 @@ public class HairstyleFeed extends AppCompatActivity {
         View menuHeader = navigationView.getHeaderView(0);
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
-        if (!Storage.getString("E-mail", "").equals("")){
+        if (!Storage.getString("E-mail", "").equals("")) {
             Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {

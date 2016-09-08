@@ -19,11 +19,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
-import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -36,7 +36,6 @@ public class MakeupFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private static MakeupFeedFragmentAdapter adapter;
-    private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,27 +56,6 @@ public class MakeupFeed extends AppCompatActivity {
     public static void addFeed(int position) {
         new MakeupFeedLoader(adapter, position).execute();
     }
-
-
-    /*@Override
-    public void onBackPressed() {
-        new CountDownTimer(3000, 1000) {
-            @Override
-            public void onTick(long l) {
-                if(toExit != 0) {
-                    toExit--;
-                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                toExit = 2;
-            }
-        }.start();
-    }*/
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.makeupToolbar);
@@ -146,8 +124,8 @@ public class MakeupFeed extends AppCompatActivity {
         View menuHeader = navigationView.getHeaderView(0);
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
-        if (!Storage.getString("E-mail", "").equals("")){
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/"+Storage.getString("PhotoURL", "")).into(avatar);
+        if (!Storage.getString("E-mail", "").equals("")) {
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);

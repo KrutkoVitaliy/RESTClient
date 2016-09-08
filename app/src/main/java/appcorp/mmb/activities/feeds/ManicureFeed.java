@@ -19,11 +19,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
-import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
@@ -36,7 +36,6 @@ public class ManicureFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private static ManicureFeedFragmentAdapter adapter;
-    private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,27 +57,6 @@ public class ManicureFeed extends AppCompatActivity {
     public static void addFeed(int position) {
         new ManicureFeedLoader(adapter, position).execute();
     }
-
-
-    /*@Override
-    public void onBackPressed() {
-        new CountDownTimer(3000, 1000) {
-            @Override
-            public void onTick(long l) {
-                if(toExit != 0) {
-                    toExit--;
-                    Toast.makeText(getApplicationContext(), R.string.doubleClickToExit, Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                toExit = 2;
-            }
-        }.start();
-    }*/
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
