@@ -55,8 +55,8 @@ public class SearchStylist extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
-                        .putExtra("City", cityField.getText().toString().trim().toLowerCase())
-                        .putExtra("Skill", skillField.getText().toString().trim().toLowerCase())
+                        .putExtra("City", cityField.getText().toString())
+                        .putExtra("Skill", skillField.getText().toString())
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 return true;
             }

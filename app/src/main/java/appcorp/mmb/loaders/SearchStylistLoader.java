@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.StylistDTO;
 import appcorp.mmb.fragment_adapters.SearchStylistFeedFragmentAdapter;
 
@@ -23,26 +24,32 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
     HttpURLConnection urlFeedConnection = null;
     BufferedReader reader = null;
     String resultJsonFeed = "";
+    String city;
+    String skill;
     SearchStylistFeedFragmentAdapter adapter;
     ProgressDialog progressDialog;
     int position;
 
-    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, int position, ProgressDialog progressDialog) {
+    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, String city, String skill, int position, ProgressDialog progressDialog) {
         this.adapter = adapter;
         this.position = position;
         this.progressDialog = progressDialog;
+        this.city = city;
+        this.skill = skill;
     }
 
-    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, int position) {
+    public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, String city, String skill, int position) {
         this.adapter = adapter;
         this.position = position;
+        this.city = city;
+        this.skill = skill;
     }
 
     @Override
     protected String doInBackground(Void... voids) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position);
+                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + city.replace(" ", "%20") + "&skill=" + skill.replace(" ", "%20"));
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -55,7 +62,7 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();

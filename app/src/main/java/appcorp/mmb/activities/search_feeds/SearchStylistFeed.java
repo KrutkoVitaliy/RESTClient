@@ -57,11 +57,11 @@ public class SearchStylistFeed extends AppCompatActivity {
         city = getIntent().getStringExtra("City");
         skill = getIntent().getStringExtra("Skill");
 
-        new SearchStylistLoader(adapter, 1, progressDialog).execute();
+        new SearchStylistLoader(adapter, city, skill, 1, progressDialog).execute();
     }
 
     public static void addStylistFeed(final int position) {
-        new SearchStylistLoader(adapter, position).execute();
+        new SearchStylistLoader(adapter, city, skill, position).execute();
     }
 
     private void initToolbar() {
