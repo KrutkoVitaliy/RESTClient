@@ -6,15 +6,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,12 +18,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -47,10 +43,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.other.FullscreenPreview;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
@@ -65,14 +62,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
     private LinearLayout serviceMakeup, serviceManicure, serviceHairstyle;
     private ImageView gplusButton, fbButton, vkButton, instagramButton, okButton;
     private ImageView photo;
-    private String id;
+    private String id, photoUrl;
     private String gplusLink, fbLink, vkLink, instagramLink, okLink;
     private ScrollView makeupUserGallery, manicureUserGallery, hairstyleUserGallery;
     private FloatingActionButton addMakeup, addManicure, addHairstyle;
     private LinearLayout servicesMakeup;
     private LinearLayout servicesManicure;
     private LinearLayout servicesHairstyle;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+    private Display display;
+    private int width, height;
+    private String[] makeupServicesArray;
+    private String[] makeupCostsArray;
+    private String[] manicureServicesArray;
+    private String[] manicureCostsArray;
+    private String[] hairstyleServicesArray;
+    private String[] hairstyleCostsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         initViews();
         new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
         changeServiceStatus(1);
+
+        display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+        width = display.getWidth();
+        height = width;
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
@@ -100,8 +109,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         location = (TextView) findViewById(R.id.location);
         phone = (TextView) findViewById(R.id.phone);
         photo = (ImageView) findViewById(R.id.myProfileAvatar);
-        likes = (TextView) findViewById(R.id.likes);
-        followers = (TextView) findViewById(R.id.followers);
+        //likes = (TextView) findViewById(R.id.likes);
+        //followers = (TextView) findViewById(R.id.followers);
         serviceMakeupText = (TextView) findViewById(R.id.serviceMakeupText);
         serviceManicureText = (TextView) findViewById(R.id.serviceManicureText);
         serviceHairstyleText = (TextView) findViewById(R.id.serviceHairstyleText);
@@ -138,6 +147,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         addManicure.setOnClickListener(this);
         addHairstyle.setOnClickListener(this);
         phone.setOnClickListener(this);
+        photo.setOnClickListener(this);
     }
 
     @Override
@@ -182,6 +192,10 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         }
         if (view == phone) {
             call();
+        }
+        if (view == photo) {
+            startActivity(new Intent(getApplicationContext(), FullscreenPreview.class)
+                    .putExtra("screenshot", photoUrl));
         }
     }
 
@@ -239,15 +253,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    FrameLayout stroke = new FrameLayout(getApplicationContext());
+                    LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
-                    strService.setGravity(Gravity.LEFT);
-                    strCost.setGravity(Gravity.RIGHT);
-                    stroke.addView(strService);
                     stroke.addView(strCost);
+                    stroke.addView(strService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -295,15 +308,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    FrameLayout stroke = new FrameLayout(getApplicationContext());
+                    LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
-                    strService.setGravity(Gravity.LEFT);
-                    strCost.setGravity(Gravity.RIGHT);
-                    stroke.addView(strService);
                     stroke.addView(strCost);
+                    stroke.addView(strService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -351,15 +363,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    FrameLayout stroke = new FrameLayout(getApplicationContext());
+                    LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
-                    strService.setGravity(Gravity.LEFT);
-                    strCost.setGravity(Gravity.RIGHT);
-                    stroke.addView(strService);
                     stroke.addView(strCost);
+                    stroke.addView(strService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -589,8 +600,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     Storage.addString("Name", item.getString("firstName") + " " + item.getString("lastName"));
                     location.setText(item.getString("city") + "  " + item.getString("address"));
                     phone.setText(item.getString("phoneNumber"));
-                    likes.setText(item.getString("likes"));
-                    followers.setText(item.getString("followers"));
+                    //likes.setText(item.getString("likes"));
+                    //followers.setText(item.getString("followers"));
                     id = item.getString("id");
                     gplusLink = item.getString("gplus");
                     fbLink = item.getString("facebook");
@@ -608,20 +619,18 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     if (item.getString("odnoklassniki").equals(""))
                         okButton.setAlpha(0.4F);
                     if (!item.getString("makeupServices").equals("")) {
-                        String[] makeupServicesArray = item.getString("makeupServices").substring(1, item.getString("makeupServices").length()).split(",");
-                        String[] makeupCostsArray = item.getString("makeupCosts").substring(1, item.getString("makeupCosts").length()).split(",");
+                        makeupServicesArray = item.getString("makeupServices").substring(1, item.getString("makeupServices").length()).split(",");
+                        makeupCostsArray = item.getString("makeupCosts").substring(1, item.getString("makeupCosts").length()).split(",");
+
                         for (int j = 0; j < makeupServicesArray.length; j++) {
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
-                            stroke.setOrientation(LinearLayout.HORIZONTAL);
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
-                            strService.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                            strCost.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                            stroke.addView(strService);
                             stroke.addView(strCost);
+                            stroke.addView(strService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -636,23 +645,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             costsTextView.setPadding(0, 8, 0, 8);
                             costsTextView.setText(makeupCostsArray[j].toString());
                             strCost.addView(costsTextView);
+
                             servicesMakeup.addView(stroke);
                         }
                     }
                     if (!item.getString("manicureServices").equals("")) {
-                        String[] manicureServicesArray = item.getString("manicureServices").substring(1, item.getString("manicureServices").length()).split(",");
-                        String[] manicureCostsArray = item.getString("manicureCosts").substring(1, item.getString("manicureCosts").length()).split(",");
+                        manicureServicesArray = item.getString("manicureServices").substring(1, item.getString("manicureServices").length()).split(",");
+                        manicureCostsArray = item.getString("manicureCosts").substring(1, item.getString("manicureCosts").length()).split(",");
                         for (int j = 0; j < manicureServicesArray.length; j++) {
-                            FrameLayout stroke = new FrameLayout(getApplicationContext());
+                            LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
-                            strService.setGravity(Gravity.LEFT);
-                            strCost.setGravity(Gravity.RIGHT);
-                            stroke.addView(strService);
                             stroke.addView(strCost);
+                            stroke.addView(strService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -671,19 +679,17 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         }
                     }
                     if (!item.getString("hairstyleServices").equals("")) {
-                        String[] hairstyleServicesArray = item.getString("hairstyleServices").substring(1, item.getString("hairstyleServices").length()).split(",");
-                        String[] hairstyleCostsArray = item.getString("hairstyleCosts").substring(1, item.getString("hairstyleCosts").length()).split(",");
+                        hairstyleServicesArray = item.getString("hairstyleServices").substring(1, item.getString("hairstyleServices").length()).split(",");
+                        hairstyleCostsArray = item.getString("hairstyleCosts").substring(1, item.getString("hairstyleCosts").length()).split(",");
                         for (int j = 0; j < hairstyleServicesArray.length; j++) {
-                            FrameLayout stroke = new FrameLayout(getApplicationContext());
+                            LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
-                            strService.setGravity(Gravity.LEFT);
-                            strCost.setGravity(Gravity.RIGHT);
-                            stroke.addView(strService);
                             stroke.addView(strCost);
+                            stroke.addView(strService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -701,7 +707,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             servicesHairstyle.addView(stroke);
                         }
                     }
-                    Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + item.getString("photo")).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
+                    photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
+                    Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
                     progressDialog.hide();
                 }
             } catch (JSONException e) {

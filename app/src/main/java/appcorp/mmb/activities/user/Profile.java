@@ -17,10 +17,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,6 +65,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     private LinearLayout servicesHairstyle;
     private ProgressDialog progressDialog;
     private int id;
+    Display display;
+    int width, height;
 
     public Profile() {
 
@@ -77,6 +81,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         initNavigationView();
         initViews();
 
+        display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+        width = display.getWidth();
+        height = width;
+
         id = new Integer(getIntent().getStringExtra("ID"));
         changeServiceStatus(1);
         new Get().execute();
@@ -87,8 +95,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         location = (TextView) findViewById(R.id.location);
         phone = (TextView) findViewById(R.id.phone);
         photo = (ImageView) findViewById(R.id.profileAvatar);
-        likes = (TextView) findViewById(R.id.likes);
-        followers = (TextView) findViewById(R.id.followers);
+        //likes = (TextView) findViewById(R.id.likes);
+        //followers = (TextView) findViewById(R.id.followers);
         serviceMakeupText = (TextView) findViewById(R.id.serviceMakeupText);
         serviceManicureText = (TextView) findViewById(R.id.serviceManicureText);
         serviceHairstyleText = (TextView) findViewById(R.id.serviceHairstyleText);
@@ -372,7 +380,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             try {
                 JSONObject profileItem = new JSONObject(s);
                 toolbar.setTitle(profileItem.getString("firstName") + " " + profileItem.getString("lastName"));
-                Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + profileItem.getString("photo")).into(photo);
+                Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + profileItem.getString("photo")).into(photo);
                 name.setText(profileItem.getString("firstName") + " " + profileItem.getString("lastName"));
                 location.setText(profileItem.getString("city") + ", " + profileItem.getString("address"));
                 phone.setText(profileItem.getString("phoneNumber"));
@@ -400,13 +408,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        strService.setGravity(Gravity.LEFT);
-                        strCost.setGravity(Gravity.RIGHT);
-                        stroke.addView(strService);
                         stroke.addView(strCost);
+                        stroke.addView(strService);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -431,13 +437,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        strService.setGravity(Gravity.LEFT);
-                        strCost.setGravity(Gravity.RIGHT);
-                        stroke.addView(strService);
                         stroke.addView(strCost);
+                        stroke.addView(strService);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -462,13 +466,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) - (int)(Storage.getInt("Width", 480) / 3.5F), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        strService.setGravity(Gravity.LEFT);
-                        strCost.setGravity(Gravity.RIGHT);
-                        stroke.addView(strService);
                         stroke.addView(strCost);
+                        stroke.addView(strService);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));

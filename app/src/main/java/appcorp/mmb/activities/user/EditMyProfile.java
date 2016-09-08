@@ -107,9 +107,7 @@ public class EditMyProfile extends AppCompatActivity {
                         progressDialog.show();
                         new UploadProfileImage(filePath, progressDialog).execute();
                     }
-                    if (!progressDialog.isShowing()) {
-                        new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
-                    }
+                    new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
 
                     Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
                     // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
