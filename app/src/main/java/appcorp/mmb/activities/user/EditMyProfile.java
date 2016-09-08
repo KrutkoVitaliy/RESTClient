@@ -19,7 +19,6 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -43,7 +42,7 @@ import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
-import appcorp.mmb.network.UploadImage;
+import appcorp.mmb.network.UploadProfileImage;
 
 public class EditMyProfile extends AppCompatActivity {
 
@@ -106,7 +105,7 @@ public class EditMyProfile extends AppCompatActivity {
                         progressDialog = new ProgressDialog(this);
                         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
                         progressDialog.show();
-                        new UploadImage(filePath, progressDialog).execute();
+                        new UploadProfileImage(filePath, progressDialog).execute();
                     }
                     if (!progressDialog.isShowing()) {
                         new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();

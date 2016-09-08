@@ -77,7 +77,7 @@ public class SearchStylistFeedListAdapter extends RecyclerView.Adapter<SearchSty
                 ManicureFeed.addFeed(data.size() / 100 + 1);
         }
 
-        Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getAuthorPhoto()).into(holder.photo);
+        Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.photo);
         holder.name.setText(item.getAuthorName() + " " + item.getAuthorLastname());
         holder.location.setText(item.getAuthorCity() + ", " + item.getAuthorAddress());
         holder.phone.setText(item.getAuthorPhoneNumber());

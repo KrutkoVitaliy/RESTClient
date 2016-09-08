@@ -20,7 +20,7 @@ import java.net.URL;
 
 import appcorp.mmb.classes.Storage;
 
-public class UploadImage extends AsyncTask<Void, Void, String> {
+public class UploadProfileImage extends AsyncTask<Void, Void, String> {
 
     // Конец строки
     private String lineEnd = "\r\n";
@@ -45,7 +45,7 @@ public class UploadImage extends AsyncTask<Void, Void, String> {
     // Ключ, под которым файл передается на сервер
     public static final String FORM_FILE_NAME = "file1";
 
-    public UploadImage(String filePath, ProgressDialog progressDialog) {
+    public UploadProfileImage(String filePath, ProgressDialog progressDialog) {
         this.filePath = filePath;
         this.progressDialog = progressDialog;
     }
