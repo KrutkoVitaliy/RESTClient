@@ -38,7 +38,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
     private static DrawerLayout drawerLayout;
     private static ViewPager viewPager;
     private static SearchMakeupFeedFragmentAdapter adapter;
-    private static String request, eyeColor, difficult, occasion;
+    private static String request, eyeColor, difficult, occasion, toolbarTitle;
     private static ArrayList<String> colors = new ArrayList<>();
 
     @Override
@@ -46,6 +46,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
 
+        this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");
         this.colors = getIntent().getStringArrayListExtra("Colors");
         this.eyeColor = getIntent().getStringExtra("EyeColor");
@@ -69,7 +70,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.makeupToolbar);
-        toolbar.setTitle(R.string.menu_item_makeup);
+        toolbar.setTitle(toolbarTitle);
         if (this.colors.size() > 0)
             if (!this.colors.get(0).equals("FFFFFF"))
                 toolbar.setBackgroundColor(Color.parseColor("#" + this.colors.get(0)));

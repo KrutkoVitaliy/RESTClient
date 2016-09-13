@@ -218,9 +218,11 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             @Override
             public void onClick(View view) {
                 if (type == "Occasion") {
+                    String[] occasion = context.getResources().getStringArray(R.array.occasions);
                     ArrayList<String> makeupColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchMakeupFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", ""+ occasion[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                     intent.putExtra("EyeColor", "");
@@ -270,7 +272,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         return tw;
     }
 
-    private LinearLayout difficult(String difficult) {
+    private LinearLayout difficult(final String difficult) {
         ImageView imageView = new ImageView(context);
         LinearLayout layout = new LinearLayout(context);
         layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -291,6 +293,36 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             imageView.setImageResource(R.mipmap.hard);
             text.setText(R.string.difficult_hard);
         }
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Toolbar", ""+difficult);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", difficult);
+                intent.putExtra("Occasion", "0");
+                context.startActivity(intent);
+            }
+        });
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Toolbar", ""+difficult);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", difficult);
+                intent.putExtra("Occasion", "0");
+                context.startActivity(intent);
+            }
+        });
         layout.addView(imageView);
         layout.addView(text);
         return layout;

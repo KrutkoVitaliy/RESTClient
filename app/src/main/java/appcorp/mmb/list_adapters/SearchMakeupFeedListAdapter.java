@@ -240,9 +240,11 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
             @Override
             public void onClick(View view) {
                 if (type == "Occasion") {
+                    String[] occasion = context.getResources().getStringArray(R.array.occasions);
                     ArrayList<String> makeupColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchMakeupFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", ""+ occasion[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                     intent.putExtra("EyeColor", "");
@@ -309,6 +311,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Toolbar", ""+difficult);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", "");
@@ -323,6 +326,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Toolbar", ""+difficult);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", "");

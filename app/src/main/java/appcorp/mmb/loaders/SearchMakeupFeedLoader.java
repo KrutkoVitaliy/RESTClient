@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.R;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchMakeupFeedFragmentAdapter;
@@ -145,9 +146,13 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                 }
 
                 if (item.getString("published").equals("t") && !images.isEmpty()) {
-                    if (!this.request.isEmpty())
+                    if (!this.request.equals(""))
                         toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                     else {
+                        if (toolbar.getTitle().toString() == "")
+                            toolbar.setTitle(R.string.menu_item_makeup);
+                        else
+                            toolbar.setTitle(R.string.menu_item_makeup);
                         if (!toolbar.getTitle().toString().contains(" - "))
                             toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
                     }
