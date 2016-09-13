@@ -253,14 +253,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    LinearLayout stroke = new LinearLayout(getApplicationContext());
+                    final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    LinearLayout removeService = new LinearLayout(getApplicationContext());
+                    ImageView remove = new ImageView(getApplicationContext());
+                    remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                    removeService.addView(remove);
                     strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
+                    removeService.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -274,6 +282,21 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 8, 0, 8);
                     c.setText(cost.getText().toString());
                     strCost.addView(c);
+
+                    final String tempService = service.getText().toString();
+                    final String tempCosts = cost.getText().toString();
+
+                    removeService.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
+                                    "?service=" + Intermediates.encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "&id=" + id).execute();
+                            stroke.removeAllViews();
+                        }
+                    });
+
                     servicesMakeup.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addmakeupservice.php" +
                             "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
@@ -308,14 +331,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    LinearLayout stroke = new LinearLayout(getApplicationContext());
+                    final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    LinearLayout removeService = new LinearLayout(getApplicationContext());
+                    ImageView remove = new ImageView(getApplicationContext());
+                    remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                    removeService.addView(remove);
                     strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
+                    removeService.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -329,6 +360,21 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 8, 0, 8);
                     c.setText(cost.getText().toString());
                     strCost.addView(c);
+
+                    final String tempService = service.getText().toString();
+                    final String tempCosts = cost.getText().toString();
+
+                    removeService.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
+                                    "?service=" + Intermediates.encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "&id=" + id).execute();
+                            stroke.removeAllViews();
+                        }
+                    });
+
                     servicesManicure.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addmanicureservice.php" +
                             "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
@@ -363,14 +409,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
-                    LinearLayout stroke = new LinearLayout(getApplicationContext());
+                    final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
+                    LinearLayout removeService = new LinearLayout(getApplicationContext());
+                    ImageView remove = new ImageView(getApplicationContext());
+                    remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                    removeService.addView(remove);
                     strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
+                    removeService.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
                     s.setTextColor(Color.parseColor("#808080"));
@@ -384,7 +438,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     c.setPadding(0, 8, 0, 8);
                     c.setText(cost.getText().toString());
                     strCost.addView(c);
-                    servicesHairstyle.addView(s);
+
+                    final String tempService = service.getText().toString();
+                    final String tempCosts = cost.getText().toString();
+
+                    removeService.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
+                                    "?service=" + Intermediates.encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "&id=" + id).execute();
+                            stroke.removeAllViews();
+                        }
+                    });
+
+                    servicesHairstyle.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addhairstyleservice.php" +
                             "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
                             "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
@@ -557,12 +626,6 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         });
     }
 
-    private void refreshAvatar(NavigationView navigationView) {
-        View menuHeader = navigationView.getHeaderView(0);
-        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
-        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).into(avatar);
-    }
-
     public class MyProfileLoader extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection profilePageConnection = null;
@@ -629,14 +692,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         makeupCostsArray = item.getString("makeupCosts").substring(1, item.getString("makeupCosts").length()).split(",");
 
                         for (int j = 0; j < makeupServicesArray.length; j++) {
-                            LinearLayout stroke = new LinearLayout(getApplicationContext());
+                            final LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
+                            LinearLayout removeService = new LinearLayout(getApplicationContext());
+                            ImageView remove = new ImageView(getApplicationContext());
+                            remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                            removeService.addView(remove);
                             strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
+                            removeService.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -652,6 +723,20 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             costsTextView.setText(makeupCostsArray[j].toString());
                             strCost.addView(costsTextView);
 
+                            final String tempService = serviceTextView.getText().toString();
+                            final String tempCosts = costsTextView.getText().toString();
+
+                            removeService.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
+                                            "?service=" + Intermediates.encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "&id=" + id).execute();
+                                    stroke.removeAllViews();
+                                }
+                            });
+
                             servicesMakeup.addView(stroke);
                         }
                     }
@@ -659,14 +744,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         manicureServicesArray = item.getString("manicureServices").substring(1, item.getString("manicureServices").length()).split(",");
                         manicureCostsArray = item.getString("manicureCosts").substring(1, item.getString("manicureCosts").length()).split(",");
                         for (int j = 0; j < manicureServicesArray.length; j++) {
-                            LinearLayout stroke = new LinearLayout(getApplicationContext());
+                            final LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
+                            LinearLayout removeService = new LinearLayout(getApplicationContext());
+                            ImageView remove = new ImageView(getApplicationContext());
+                            remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                            removeService.addView(remove);
                             strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
+                            removeService.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -681,6 +774,21 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             costsTextView.setPadding(0, 8, 0, 8);
                             costsTextView.setText(manicureCostsArray[j].toString());
                             strCost.addView(costsTextView);
+
+                            final String tempService = serviceTextView.getText().toString();
+                            final String tempCosts = costsTextView.getText().toString();
+
+                            removeService.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
+                                            "?service=" + Intermediates.encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "&id=" + id).execute();
+                                    stroke.removeAllViews();
+                                }
+                            });
+
                             servicesManicure.addView(stroke);
                         }
                     }
@@ -688,14 +796,22 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         hairstyleServicesArray = item.getString("hairstyleServices").substring(1, item.getString("hairstyleServices").length()).split(",");
                         hairstyleCostsArray = item.getString("hairstyleCosts").substring(1, item.getString("hairstyleCosts").length()).split(",");
                         for (int j = 0; j < hairstyleServicesArray.length; j++) {
-                            LinearLayout stroke = new LinearLayout(getApplicationContext());
+                            final LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
+                            LinearLayout removeService = new LinearLayout(getApplicationContext());
+                            ImageView remove = new ImageView(getApplicationContext());
+                            remove.setImageResource(R.mipmap.ic_close_circle_outline);
+                            removeService.addView(remove);
                             strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
+                            removeService.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -710,13 +826,26 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             costsTextView.setPadding(0, 8, 0, 8);
                             costsTextView.setText(hairstyleCostsArray[j].toString());
                             strCost.addView(costsTextView);
+
+                            final String tempService = serviceTextView.getText().toString();
+                            final String tempCosts = costsTextView.getText().toString();
+
+                            removeService.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
+                                            "?service=" + Intermediates.encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "&id=" + id).execute();
+                                    stroke.removeAllViews();
+                                }
+                            });
+
                             servicesHairstyle.addView(stroke);
                         }
                     }
                     photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
-                    Storage.addString("PhotoURL", item.getString("photo"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
-                    refreshAvatar((NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation));
                     progressDialog.hide();
                 }
             } catch (JSONException e) {
