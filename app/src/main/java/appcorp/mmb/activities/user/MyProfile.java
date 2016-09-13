@@ -256,7 +256,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
@@ -311,7 +311,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
@@ -366,7 +366,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     stroke.addView(strCost);
@@ -557,6 +557,12 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         });
     }
 
+    private void refreshAvatar(NavigationView navigationView) {
+        View menuHeader = navigationView.getHeaderView(0);
+        ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
+        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).into(avatar);
+    }
+
     public class MyProfileLoader extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection profilePageConnection = null;
@@ -626,7 +632,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
@@ -656,7 +662,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
@@ -685,7 +691,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             LinearLayout stroke = new LinearLayout(getApplicationContext());
                             LinearLayout strService = new LinearLayout(getApplicationContext());
                             LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             stroke.addView(strCost);
@@ -708,7 +714,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         }
                     }
                     photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
+                    Storage.addString("PhotoURL", item.getString("photo"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
+                    refreshAvatar((NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation));
                     progressDialog.hide();
                 }
             } catch (JSONException e) {

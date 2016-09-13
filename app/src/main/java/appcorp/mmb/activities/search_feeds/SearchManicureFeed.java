@@ -38,7 +38,7 @@ public class SearchManicureFeed extends AppCompatActivity {
     private static DrawerLayout drawerLayout;
     private static ViewPager viewPager;
     private static SearchManicureFeedFragmentAdapter adapter;
-    private static String request, shape, design;
+    private static String request, shape, design, toolbarTitle;
     private static ArrayList<String> colors = new ArrayList<>();
 
     @Override
@@ -46,6 +46,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manicure_feed);
 
+        this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");
         this.colors = getIntent().getStringArrayListExtra("ManicureColors");
         this.shape = getIntent().getStringExtra("Shape");
@@ -68,7 +69,7 @@ public class SearchManicureFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
-        toolbar.setTitle(R.string.menu_item_manicure);
+        toolbar.setTitle(toolbarTitle);
         if (this.colors.size() > 0)
             if (!this.colors.get(0).equals("FFFFFF"))
                 toolbar.setBackgroundColor(Color.parseColor("#" + this.colors.get(0)));

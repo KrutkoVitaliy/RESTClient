@@ -339,9 +339,15 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
+                ArrayList<String> makeupColors = new ArrayList<>();
+                makeupColors.add(searchParameter);
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", searchParameter);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", "");
+                intent.putExtra("Difficult", "");
+                intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
             }
         });
@@ -351,7 +357,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
 
     String colorName;
 
-    private LinearLayout createImage(String color) {
+    private LinearLayout createImage(final String color) {
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -394,9 +400,15 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
+                ArrayList<String> makeupColors = new ArrayList<>();
+                Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", colorName);
+                intent.putExtra("Toolbar", ""+colorName);
+                intent.putExtra("Request", "");
+                intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
+                intent.putExtra("EyeColor", color);
+                intent.putExtra("Difficult", "");
+                intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
             }
         });

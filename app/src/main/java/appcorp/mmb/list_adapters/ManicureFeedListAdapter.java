@@ -263,20 +263,24 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             @Override
             public void onClick(View view) {
                 if (type == "Shape") {
+                    String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", ""+index);
                     intent.putExtra("Design", "0");
                     context.startActivity(intent);
                 }
                 if (type == "Design") {
+                    String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "0");
                     intent.putExtra("Design", ""+index);
@@ -352,62 +356,6 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             }
         }
         return sortedColors;
-    }
-
-    String colorName;
-
-    private LinearLayout createImage(String color) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
-
-        ImageView imageView = new ImageView(context);
-        TextView title = new TextView(context);
-        title.setTextSize(14);
-        title.setTextColor(Color.argb(255, 100, 100, 100));
-        title.setPadding(16, 0, 0, 0);
-        if (color.equals("black")) {
-            colorName = "black";
-            imageView.setImageResource(R.mipmap.eye_black);
-            title.setText(R.string.black_eyes);
-        }
-        if (color.equals("blue")) {
-            colorName = "blue";
-            imageView.setImageResource(R.mipmap.eye_blue);
-            title.setText(R.string.blue_eyes);
-        }
-        if (color.equals("brown")) {
-            colorName = "brown";
-            imageView.setImageResource(R.mipmap.eye_brown);
-            title.setText(R.string.brown_eyes);
-        }
-        if (color.equals("gray")) {
-            colorName = "gray";
-            imageView.setImageResource(R.mipmap.eye_gray);
-            title.setText(R.string.gray_eyes);
-        }
-        if (color.equals("green")) {
-            colorName = "green";
-            imageView.setImageResource(R.mipmap.eye_green);
-            title.setText(R.string.green_eyes);
-        }
-        if (color.equals("hazel")) {
-            colorName = "hazel";
-            imageView.setImageResource(R.mipmap.eye_hazel);
-            title.setText(R.string.hazel_eyes);
-        }
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", colorName);
-                context.startActivity(intent);
-            }
-        });
-        layout.addView(imageView);
-        layout.addView(title);
-        return layout;
     }
 
     @Override

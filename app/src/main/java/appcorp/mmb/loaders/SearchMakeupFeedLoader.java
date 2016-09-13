@@ -149,10 +149,27 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     if (!this.request.equals(""))
                         toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                     else {
-                        if (toolbar.getTitle().toString() == "")
+                        if (toolbar.getTitle() == null)
                             toolbar.setTitle(R.string.menu_item_makeup);
-                        else
-                            toolbar.setTitle(R.string.menu_item_makeup);
+                        if(toolbar.getTitle().equals("easy"))
+                            toolbar.setTitle(R.string.difficult_easy);
+                        if(toolbar.getTitle().equals("medium"))
+                            toolbar.setTitle(R.string.difficult_medium);
+                        if(toolbar.getTitle().equals("hard"))
+                            toolbar.setTitle(R.string.difficult_hard);
+
+                        if(toolbar.getTitle().equals("black"))
+                            toolbar.setTitle(R.string.black_eyes);
+                        if(toolbar.getTitle().equals("blue"))
+                            toolbar.setTitle(R.string.blue_eyes);
+                        if(toolbar.getTitle().equals("brown"))
+                            toolbar.setTitle(R.string.brown_eyes);
+                        if(toolbar.getTitle().equals("gray"))
+                            toolbar.setTitle(R.string.gray_eyes);
+                        if(toolbar.getTitle().equals("green"))
+                            toolbar.setTitle(R.string.green_eyes);
+                        if(toolbar.getTitle().equals("hazel"))
+                            toolbar.setTitle(R.string.hazel_eyes);
                         if (!toolbar.getTitle().toString().contains(" - "))
                             toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
                     }

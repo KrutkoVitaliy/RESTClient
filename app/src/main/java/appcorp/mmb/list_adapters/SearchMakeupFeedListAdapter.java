@@ -416,6 +416,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Toolbar", ""+colorName);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", color);

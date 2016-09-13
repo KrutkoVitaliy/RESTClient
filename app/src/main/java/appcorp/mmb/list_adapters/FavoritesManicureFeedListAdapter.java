@@ -242,23 +242,27 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
             @Override
             public void onClick(View view) {
                 if (type == "Shape") {
+                    String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
                     intent.putExtra("Request", "");
-                    intent.putExtra("Shape", ""+index);
+                    intent.putExtra("Shape", "" + index);
                     intent.putExtra("Design", "0");
                     context.startActivity(intent);
                 }
                 if (type == "Design") {
+                    String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
+                    intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "0");
-                    intent.putExtra("Design", ""+index);
+                    intent.putExtra("Design", "" + index);
                     context.startActivity(intent);
                 }
             }

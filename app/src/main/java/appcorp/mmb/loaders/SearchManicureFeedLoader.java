@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.R;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchHairstyleFeedFragmentAdapter;
@@ -206,6 +207,8 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                 if (!this.request.isEmpty())
                     toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
                 else {
+                    if (toolbar.getTitle() == null)
+                        toolbar.setTitle(R.string.menu_item_manicure);
                     if (!toolbar.getTitle().toString().contains(" - "))
                         toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
                 }
