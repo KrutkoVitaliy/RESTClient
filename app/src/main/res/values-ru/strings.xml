@@ -15,7 +15,7 @@
 
     <!-- ЗНАЧЕНИЯ ДЛЯ ПОЛЯ ВВОДА "ТИП МЕРОПРИЯТИЯ" -->
     <string-array name="occasions">
-        <item>Не выбрано</item>
+        <item>Любое</item>
         <item>На каждый день</item>
         <item>Селебрити</item>
         <item>Драматический</item>
@@ -24,7 +24,7 @@
 
     <!-- VALUES FROM MANICURE SHAPES -->
     <string-array name="manicureShapes">
-        <item>Не выбрано</item>
+        <item>Любая</item>
         <item>Квадратная</item>
         <item>Овальная</item>
         <item>Стилеты</item>
@@ -32,7 +32,7 @@
 
     <!-- VALUES FROM MANICURE DESIGN -->
     <string-array name="manicureDesign">
-        <item>Не выбрано</item>
+        <item>Любой</item>
         <item>Классический</item>
         <item>Шеврон</item>
         <item>Миллениум</item>
@@ -156,14 +156,14 @@
     <string name="call">Позвонить</string>
 
     <string-array name="hairstyleLength">
-        <item>Не выбрано</item>
+        <item>Любые</item>
         <item>Короткие</item>
         <item>Средние</item>
         <item>Длинные</item>
     </string-array>
 
     <string-array name="hairstyleType">
-        <item>Не выбрано</item>
+        <item>Любые</item>
         <item>Прямые</item>
         <item>Коса</item>
         <item>Хвост</item>
@@ -174,7 +174,7 @@
     </string-array>
 
     <string-array name="hairstyleFor">
-        <item>Не выбрано</item>
+        <item>Любые</item>
         <item>Для детей</item>
         <item>На каждый день</item>
         <item>Свадебные</item>
@@ -202,7 +202,7 @@
     <string name="phoneNumber">Номер телефона</string>
     <string name="likes">Оценили</string>
     <string name="followers">Подписались</string>
-
+    <string name="search">Искать</string>
     <string name="editProfile">Редактирование профиля</string>
     <string name="editName">Имя</string>
     <string name="editLastname">Фамилия</string>

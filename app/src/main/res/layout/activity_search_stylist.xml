@@ -41,7 +41,8 @@
             <EditText
                 android:id="@+id/searchStylistCityField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textAutoComplete" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +54,14 @@
             <EditText
                 android:id="@+id/searchStylistSkillField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textAutoComplete" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>

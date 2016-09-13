@@ -199,7 +199,10 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
                     for (int i = 0; i < mColors.length; i++) {
-                        colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        if (!mColors[i].equals("FFFFFF"))
+                            colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        else
+                            colors.addView(createCircle("#EEEEEE", mColors[i]));
                     }
                     moreContainer.addView(colors);
                     if (item.getShape().equals("square"))

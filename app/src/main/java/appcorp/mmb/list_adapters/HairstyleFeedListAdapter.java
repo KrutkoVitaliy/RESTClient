@@ -216,15 +216,15 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                         moreContainer.addView(createText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
 
                     if (item.getHfor().equals("kids"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", "1"));
                     else if (item.getHfor().equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", "2"));
                     else if (item.getHfor().equals("wedding"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", "3"));
                     else if (item.getHfor().equals("evening"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", "4"));
                     else if (item.getHfor().equals("exclusive"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", "5"));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -245,8 +245,10 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             @Override
             public void onClick(View view) {
                 if (type == "Length") {
+                    String[] length = context.getResources().getStringArray(R.array.hairstyleLength);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + length[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "" + index);
                     intent.putExtra("HairstyleType", "0");
@@ -254,8 +256,10 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                     context.startActivity(intent);
                 }
                 if (type == "Type") {
+                    String[] type = context.getResources().getStringArray(R.array.hairstyleType);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + type[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "" + index);
@@ -263,8 +267,10 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                     context.startActivity(intent);
                 }
                 if (type == "For") {
+                    String[] hfor = context.getResources().getStringArray(R.array.hairstyleFor);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + hfor[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "0");
@@ -275,119 +281,6 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         });
         //tw.setTypeface(tf);
         return tw;
-    }
-
-    private TextView createText(int title, Typeface tf, int padding) {
-        TextView tw = new TextView(context);
-        tw.setText("" + title);
-        tw.setPadding(0, padding, 0, padding);
-        tw.setTextSize(14);
-        tw.setTextColor(Color.argb(255, 50, 50, 50));
-        //tw.setTypeface(tf);
-        return tw;
-    }
-
-    private LinearLayout difficult(String difficult) {
-        ImageView imageView = new ImageView(context);
-        LinearLayout layout = new LinearLayout(context);
-        layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        TextView text = new TextView(context);
-        text.setTextSize(14);
-        text.setTextColor(Color.argb(255, 100, 100, 100));
-        text.setPadding(16, 0, 0, 0);
-        if (difficult.equals("easy")) {
-            imageView.setImageResource(R.mipmap.easy);
-            text.setText(R.string.difficult_easy);
-        }
-        if (difficult.equals("medium")) {
-            imageView.setImageResource(R.mipmap.medium);
-            text.setText(R.string.difficult_medium);
-        }
-        if (difficult.equals("hard")) {
-            imageView.setImageResource(R.mipmap.hard);
-            text.setText(R.string.difficult_hard);
-        }
-        layout.addView(imageView);
-        layout.addView(text);
-        return layout;
-    }
-
-    private ImageView createCircle(String color, final String searchParameter) {
-        ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
-        imageView.setScaleX(0.9F);
-        imageView.setScaleY(0.9F);
-        imageView.setBackgroundColor(Color.parseColor(color));
-        imageView.setImageResource(R.mipmap.photo_layer);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", searchParameter);
-                context.startActivity(intent);
-            }
-        });
-        return imageView;
-    }
-
-
-    String colorName;
-
-    private LinearLayout createImage(String color) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
-
-        ImageView imageView = new ImageView(context);
-        TextView title = new TextView(context);
-        title.setTextSize(14);
-        title.setTextColor(Color.argb(255, 100, 100, 100));
-        title.setPadding(16, 0, 0, 0);
-        if (color.equals("black")) {
-            colorName = "black";
-            imageView.setImageResource(R.mipmap.eye_black);
-            title.setText(R.string.black_eyes);
-        }
-        if (color.equals("blue")) {
-            colorName = "blue";
-            imageView.setImageResource(R.mipmap.eye_blue);
-            title.setText(R.string.blue_eyes);
-        }
-        if (color.equals("brown")) {
-            colorName = "brown";
-            imageView.setImageResource(R.mipmap.eye_brown);
-            title.setText(R.string.brown_eyes);
-        }
-        if (color.equals("gray")) {
-            colorName = "gray";
-            imageView.setImageResource(R.mipmap.eye_gray);
-            title.setText(R.string.gray_eyes);
-        }
-        if (color.equals("green")) {
-            colorName = "green";
-            imageView.setImageResource(R.mipmap.eye_green);
-            title.setText(R.string.green_eyes);
-        }
-        if (color.equals("hazel")) {
-            colorName = "hazel";
-            imageView.setImageResource(R.mipmap.eye_hazel);
-            title.setText(R.string.hazel_eyes);
-        }
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("hashTag", colorName);
-                context.startActivity(intent);
-            }
-        });
-        layout.addView(imageView);
-        layout.addView(title);
-        return layout;
     }
 
     @Override

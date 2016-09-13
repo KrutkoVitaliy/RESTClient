@@ -18,7 +18,7 @@
 
     <!-- VALUES FROM OCCASION FIELD -->
     <string-array name="occasions">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>Everyday</item>
         <item>Celebrity</item>
         <item>Dramatic</item>
@@ -27,7 +27,7 @@
 
     <!-- VALUES FROM MANICURE SHAPES -->
     <string-array name="manicureShapes">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>Square</item>
         <item>Oval</item>
         <item>Stiletto</item>
@@ -35,7 +35,7 @@
 
     <!-- VALUES FROM MANICURE DESIGN -->
     <string-array name="manicureDesign">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>French classic</item>
         <item>French chevron</item>
         <item>French millennium</item>
@@ -162,14 +162,14 @@
     <string name="records">Records</string>
 
     <string-array name="hairstyleLength">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>Short</item>
         <item>Medium</item>
         <item>Long</item>
     </string-array>
 
     <string-array name="hairstyleType">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>Straight</item>
         <item>Braid</item>
         <item>Tail</item>
@@ -180,7 +180,7 @@
     </string-array>
 
     <string-array name="hairstyleFor">
-        <item>Not selected</item>
+        <item>Any</item>
         <item>For kids</item>
         <item>Everyday</item>
         <item>Wedding</item>
@@ -206,6 +206,7 @@
     <string name="phoneNumber">Phone number</string>
     <string name="likes">Likes</string>
     <string name="followers">Followers</string>
+    <string name="search">Search</string>
 
     <string name="editProfile">Edit profile</string>
     <string name="editName">Name</string>

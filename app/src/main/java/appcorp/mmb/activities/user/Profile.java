@@ -45,6 +45,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Storage;
@@ -59,6 +60,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     private ImageView gplusButton, fbButton, vkButton, instagramButton, okButton;
     private ImageView photo;
     private String gplusLink = "", fbLink = "", vkLink = "", instagramLink = "", okLink = "";
+    private String photoUrl;
     private ScrollView makeupUserGallery, manicureUserGallery, hairstyleUserGallery;
     private LinearLayout servicesMakeup;
     private LinearLayout servicesManicure;
@@ -127,6 +129,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         instagramButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
         phone.setOnClickListener(this);
+        photo.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -246,6 +249,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         }
         if (view == phone) {
             call();
+        }
+        if (view == photo) {
+            startActivity(new Intent(getApplicationContext(), FullscreenPreview.class)
+                    .putExtra("screenshot", photoUrl));
         }
     }
 
@@ -488,7 +495,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         servicesHairstyle.addView(stroke);
                     }
                 }
-
+                photoUrl = "http://195.88.209.17/storage/photos/" + profileItem.getString("photo");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

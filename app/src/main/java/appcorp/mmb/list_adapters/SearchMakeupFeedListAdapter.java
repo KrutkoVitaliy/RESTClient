@@ -202,7 +202,10 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
                     for (int i = 0; i < mColors.length; i++) {
-                        colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        if (!mColors[i].equals("FFFFFF"))
+                            colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        else
+                            colors.addView(createCircle("#EEEEEE", mColors[i]));
                     }
                     moreContainer.addView(colors);
 

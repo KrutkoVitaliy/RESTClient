@@ -147,6 +147,10 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                 if (item.getString("published").equals("t") && !images.isEmpty()) {
                     if (!this.request.isEmpty())
                         toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                    else {
+                        if (!toolbar.getTitle().toString().contains(" - "))
+                            toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    }
                     MakeupDTO makeupDTO = new MakeupDTO(
                             item.getLong("id"),
                             item.getString("uploadDate"),

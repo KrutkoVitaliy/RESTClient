@@ -167,7 +167,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 }
             });
             holder.imageViewer.addView(screenShot);
-            holder.imageViewerHorizontal.scrollTo(0,0);
+            holder.imageViewerHorizontal.scrollTo(0, 0);
 
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
@@ -196,18 +196,21 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16, "", ""));
                     moreContainer.addView(createImage(item.getEye_color()));
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
                     for (int i = 0; i < mColors.length; i++) {
-                        colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        if (!mColors[i].equals("FFFFFF"))
+                            colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                        else
+                            colors.addView(createCircle("#EEEEEE", mColors[i]));
                     }
                     moreContainer.addView(colors);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
+                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16, "", ""));
                     moreContainer.addView(difficult(item.getDifficult()));
                     if (item.getOccasion().equals("everyday"))
                         moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));

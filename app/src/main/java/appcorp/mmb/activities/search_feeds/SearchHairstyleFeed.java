@@ -37,12 +37,18 @@ public class SearchHairstyleFeed extends AppCompatActivity {
     private static DrawerLayout drawerLayout;
     private static ViewPager viewPager;
     private static SearchHairstyleFeedFragmentAdapter adapter;
-    private static String request, hairstyleLength, hairstyleType, hairstyleFor;
+    private static String request, hairstyleLength, hairstyleType, hairstyleFor, toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hairstyle_feed);
+
+        this.toolbarTitle = getIntent().getStringExtra("Toolbar");
+        this.request = getIntent().getStringExtra("Request");
+        this.hairstyleLength = getIntent().getStringExtra("HairstyleLength");
+        this.hairstyleType = getIntent().getStringExtra("HairstyleType");
+        this.hairstyleFor = getIntent().getStringExtra("HairstyleFor");
 
         initToolbar();
         initNavigationView();
@@ -51,11 +57,6 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
-
-        this.request = getIntent().getStringExtra("Request");
-        this.hairstyleLength = getIntent().getStringExtra("HairstyleLength");
-        this.hairstyleType = getIntent().getStringExtra("HairstyleType");
-        this.hairstyleFor = getIntent().getStringExtra("HairstyleFor");
 
         new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, 1, progressDialog).execute();
     }
@@ -66,7 +67,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.hairstyleToolbar);
-        toolbar.setTitle(R.string.menu_item_hairstyle);
+        toolbar.setTitle(toolbarTitle);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

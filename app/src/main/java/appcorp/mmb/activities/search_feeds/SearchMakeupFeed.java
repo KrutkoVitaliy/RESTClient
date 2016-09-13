@@ -2,6 +2,7 @@ package appcorp.mmb.activities.search_feeds;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
@@ -45,6 +46,12 @@ public class SearchMakeupFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
 
+        this.request = getIntent().getStringExtra("Request");
+        this.colors = getIntent().getStringArrayListExtra("Colors");
+        this.eyeColor = getIntent().getStringExtra("EyeColor");
+        this.difficult = getIntent().getStringExtra("Difficult");
+        this.occasion = getIntent().getStringExtra("Occasion");
+
         initToolbar();
         initNavigationView();
         initViewPager();
@@ -52,12 +59,6 @@ public class SearchMakeupFeed extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
-
-        this.request = getIntent().getStringExtra("Request");
-        this.colors = getIntent().getStringArrayListExtra("Colors");
-        this.eyeColor = getIntent().getStringExtra("EyeColor");
-        this.difficult = getIntent().getStringExtra("Difficult");
-        this.occasion = getIntent().getStringExtra("Occasion");
 
         new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1, progressDialog).execute();
     }
@@ -69,6 +70,12 @@ public class SearchMakeupFeed extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.makeupToolbar);
         toolbar.setTitle(R.string.menu_item_makeup);
+        if (this.colors.size() > 0)
+            if (!this.colors.get(0).equals("FFFFFF"))
+                toolbar.setBackgroundColor(Color.parseColor("#" + this.colors.get(0)));
+            else {
+                toolbar.setBackgroundColor(Color.parseColor("#DDDDDD"));
+            }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

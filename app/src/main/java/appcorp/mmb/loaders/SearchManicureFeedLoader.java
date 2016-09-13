@@ -205,6 +205,10 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
 
                 if (!this.request.isEmpty())
                     toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                else {
+                    if (!toolbar.getTitle().toString().contains(" - "))
+                        toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                }
                 id = item.getLong("id");
                 authorPhoto = item.getString("authorPhoto");
                 authorName = item.getString("authorName");

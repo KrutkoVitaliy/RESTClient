@@ -2,6 +2,7 @@ package appcorp.mmb.activities.search_feeds;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
@@ -45,6 +46,11 @@ public class SearchManicureFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manicure_feed);
 
+        this.request = getIntent().getStringExtra("Request");
+        this.colors = getIntent().getStringArrayListExtra("ManicureColors");
+        this.shape = getIntent().getStringExtra("Shape");
+        this.design = getIntent().getStringExtra("Design");
+
         initToolbar();
         initNavigationView();
         initViewPager();
@@ -52,11 +58,6 @@ public class SearchManicureFeed extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
-
-        this.request = getIntent().getStringExtra("Request");
-        this.colors = getIntent().getStringArrayListExtra("ManicureColors");
-        this.shape = getIntent().getStringExtra("Shape");
-        this.design = getIntent().getStringExtra("Design");
 
         new SearchManicureFeedLoader(toolbar, adapter, request, colors, shape, design, 1, progressDialog).execute();
     }
@@ -68,6 +69,12 @@ public class SearchManicureFeed extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
         toolbar.setTitle(R.string.menu_item_manicure);
+        if (this.colors.size() > 0)
+            if (!this.colors.get(0).equals("FFFFFF"))
+                toolbar.setBackgroundColor(Color.parseColor("#" + this.colors.get(0)));
+            else {
+                toolbar.setBackgroundColor(Color.parseColor("#DDDDDD"));
+            }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

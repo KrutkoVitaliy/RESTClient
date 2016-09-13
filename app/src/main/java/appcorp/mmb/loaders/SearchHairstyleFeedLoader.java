@@ -189,6 +189,10 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                 if (item.getString("published").equals("t")) {
                     if (!this.request.isEmpty())
                         toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                    else {
+                        if (!toolbar.getTitle().toString().contains(" - "))
+                            toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    }
                     HairstyleDTO hairstyleDTO = new HairstyleDTO(
                             item.getLong("id"),
                             item.getString("uploadDate"),

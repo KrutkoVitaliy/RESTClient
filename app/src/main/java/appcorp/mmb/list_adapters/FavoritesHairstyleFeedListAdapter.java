@@ -195,16 +195,15 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
                             moreContainer.addView(createText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
 
                         if (item.getHfor().equals("kids"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", "1"));
                         else if (item.getHfor().equals("everyday"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", "2"));
                         else if (item.getHfor().equals("wedding"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", "3"));
                         else if (item.getHfor().equals("evening"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", ""));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", "4"));
                         else if (item.getHfor().equals("exclusive"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", ""));
-
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", "5"));
 
                         holder.moreContainer.addView(moreContainer);
                     } else if (holder.showMore.getText().equals(HIDE)) {
@@ -226,8 +225,10 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
             @Override
             public void onClick(View view) {
                 if (type == "Length") {
+                    String[] length = context.getResources().getStringArray(R.array.hairstyleLength);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + length[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "" + index);
                     intent.putExtra("HairstyleType", "0");
@@ -235,8 +236,10 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
                     context.startActivity(intent);
                 }
                 if (type == "Type") {
+                    String[] type = context.getResources().getStringArray(R.array.hairstyleType);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + type[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "" + index);
@@ -244,8 +247,10 @@ public class FavoritesHairstyleFeedListAdapter extends RecyclerView.Adapter<Favo
                     context.startActivity(intent);
                 }
                 if (type == "For") {
+                    String[] hfor = context.getResources().getStringArray(R.array.hairstyleFor);
                     Intent intent = new Intent(context, SearchHairstyleFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("Toolbar", "" + hfor[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "0");
