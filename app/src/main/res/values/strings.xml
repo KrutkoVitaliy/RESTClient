@@ -224,4 +224,5 @@
     <string name="menu_item_search_stylist">Search stylist</string>
     <string name="searchStylistCity">City</string>
     <string name="searchStylistSkill">Service</string>
+    <string name="searchStylistSkillHint">Nail extensions</string>
 </resources>

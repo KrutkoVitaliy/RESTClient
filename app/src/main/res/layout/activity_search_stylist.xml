@@ -55,7 +55,8 @@
                 android:id="@+id/searchStylistSkillField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textAutoComplete" />
+                android:inputType="textAutoComplete"
+                android:hint="@string/searchStylistSkillHint"/>
 
             <Button
                 android:layout_width="wrap_content"

@@ -219,4 +219,5 @@
     <string name="menu_item_search_stylist">Поиск мастера</string>
     <string name="searchStylistCity">Город</string>
     <string name="searchStylistSkill">Сервис</string>
+    <string name="searchStylistSkillHint">Наращивание ногтей</string>
 </resources>

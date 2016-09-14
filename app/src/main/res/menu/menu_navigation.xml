@@ -16,6 +16,20 @@
 
         </menu>
     </item>-->
+    <item android:title="@string/menu_item_search">
+        <menu>
+            <item
+                android:id="@+id/navMenuSearch"
+                android:icon="@mipmap/ic_magnify_dark"
+                android:orderInCategory="20"
+                android:title="@string/menu_item_search" />
+            <item
+                android:id="@+id/navMenuSearchStylist"
+                android:icon="@mipmap/ic_magnify_dark"
+                android:orderInCategory="30"
+                android:title="@string/menu_item_search_stylist" />
+        </menu>
+    </item>
     <item android:title="@string/menu_item_style_types">
         <menu>
             <item
@@ -33,20 +47,6 @@
                 android:icon="@mipmap/manicure"
                 android:orderInCategory="60"
                 android:title="@string/menu_item_manicure" />
-        </menu>
-    </item>
-    <item android:title="@string/menu_item_search">
-        <menu>
-            <item
-                android:id="@+id/navMenuSearch"
-                android:icon="@mipmap/ic_magnify_dark"
-                android:orderInCategory="20"
-                android:title="@string/menu_item_search" />
-            <item
-                android:id="@+id/navMenuSearchStylist"
-                android:icon="@mipmap/ic_magnify_dark"
-                android:orderInCategory="30"
-                android:title="@string/menu_item_search_stylist" />
         </menu>
     </item>
     <item android:title="@string/menu_item_user">

@@ -149,6 +149,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:visibility="invisible"
                         android:id="@+id/makeupFrame"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -447,6 +448,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="invisible"
                         android:id="@+id/hairstyleFrame"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -510,38 +512,6 @@
                         android:orientation="vertical"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/manicureShape"
-                            android:textColor="@color/description_title"
-                            android:textSize="8pt"
-                            android:textStyle="bold" />
-
-                        <Spinner
-                            android:id="@+id/shape"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:entries="@array/manicureShapes"
-                            android:spinnerMode="dialog" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/manicureDesign"
-                            android:textColor="@color/description_title"
-                            android:textSize="8pt"
-                            android:textStyle="bold" />
-
-                        <Spinner
-                            android:id="@+id/design"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:entries="@array/manicureDesign"
-                            android:spinnerMode="dialog" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -803,27 +773,69 @@
                                 android:background="#D6C880"
                                 android:src="@mipmap/photo_layer" />
                         </LinearLayout>
-                        <LinearLayout
+
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:text="@string/manicureShape"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tags"
-                                android:textColor="@color/description_title"
-                                android:textSize="8pt"
-                                android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/shape"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:entries="@array/manicureShapes"
+                            android:spinnerMode="dialog" />
 
-                            <EditText
-                                android:id="@+id/requestField"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textAutoComplete"/>
-                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/manicureDesign"
+                            android:textColor="@color/description_title"
+                            android:textSize="8pt"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/design"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/manicureDesign"
+                            android:spinnerMode="dialog" />
+
+
                     </LinearLayout>
                 </FrameLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tags"
+                        android:textColor="@color/description_title"
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/requestField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textAutoComplete"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

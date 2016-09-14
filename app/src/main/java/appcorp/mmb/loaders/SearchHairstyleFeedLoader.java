@@ -167,6 +167,26 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
 
+        if(resultJsonFeed.equals("[]")) {
+            List<HairstyleDTO> data = new ArrayList<>();
+            HairstyleDTO hairstyleDTO = new HairstyleDTO(
+                    -1,
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    new ArrayList<String>(),
+                    new ArrayList<String>(),
+                    -1,
+                    "nothing",
+                    "nothing",
+                    "nothing");
+            data.add(hairstyleDTO);
+            adapter.setData(data);
+            if (progressDialog != null)
+                progressDialog.hide();
+        }
+
         List<HairstyleDTO> data = new ArrayList<>();
 
         try {

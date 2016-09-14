@@ -46,6 +46,9 @@ public class SearchStylist extends AppCompatActivity {
     private void initViews() {
         cityField = (EditText) findViewById(R.id.searchStylistCityField);
         skillField = (EditText) findViewById(R.id.searchStylistSkillField);
+        if(!Storage.getString("MyCity", "").equals("")) {
+            cityField.setText(Storage.getString("MyCity", ""));
+        }
     }
 
     private void initToolbar() {
@@ -130,11 +133,9 @@ public class SearchStylist extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
                     startActivity(new Intent(getApplicationContext(), Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }

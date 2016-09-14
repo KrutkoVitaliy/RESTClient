@@ -5,6 +5,6 @@
         android:title="Search"
         android:id="@+id/toSearch"
         android:orderInCategory="1"
-        android:icon="@mipmap/ic_check"
+        android:icon="@mipmap/ic_magnify"
         app:showAsAction="ifRoom"/>
 </menu>

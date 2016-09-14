@@ -653,11 +653,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
-                    startActivity(new Intent(getApplicationContext(), MyProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
                     startActivity(new Intent(getApplicationContext(), Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
@@ -884,6 +882,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     }
                     photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
                     Storage.addString("PhotoURL", item.getString("photo"));
+                    Storage.addString("MyCity", item.getString("city"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
                     progressDialog.hide();
                 }
