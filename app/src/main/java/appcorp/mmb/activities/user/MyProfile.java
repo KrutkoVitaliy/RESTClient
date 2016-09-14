@@ -6,11 +6,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -52,6 +56,7 @@ import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
+import appcorp.mmb.network.UploadProfileImage;
 
 public class MyProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -163,23 +168,23 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         }
         if (view == gplusButton) {
             if (!gplusLink.equals(""))
-                createThreeButtonsAlertDialog("Google Plus", gplusLink);
+                createThreeButtonsAlertDialog("Google Plus", "gplus", gplusLink);
         }
         if (view == fbButton) {
             if (!fbLink.equals(""))
-                createThreeButtonsAlertDialog("Facebook", fbLink);
+                createThreeButtonsAlertDialog("Facebook", "fb", fbLink);
         }
         if (view == vkButton) {
             if (!vkLink.equals(""))
-                createThreeButtonsAlertDialog("Vkontakte", vkLink);
+                createThreeButtonsAlertDialog("Vkontakte", "vk", vkLink);
         }
         if (view == instagramButton) {
             if (!instagramLink.equals(""))
-                createThreeButtonsAlertDialog("Instagram", instagramLink);
+                createThreeButtonsAlertDialog("Instagram", "instagram", instagramLink);
         }
         if (view == okButton) {
             if (!okLink.equals(""))
-                createThreeButtonsAlertDialog("Odnoklassniki", okLink);
+                createThreeButtonsAlertDialog("Odnoklassniki", "ok", okLink);
         }
         if (view == addMakeup) {
             newMakeup();
@@ -194,9 +199,41 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             call();
         }
         if (view == photo) {
-            startActivity(new Intent(getApplicationContext(), FullscreenPreview.class)
-                    .putExtra("screenshot", photoUrl));
+            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            final int ACTIVITY_SELECT_IMAGE = 1234;
+            startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
         }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1234:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String filePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png")) {
+                        progressDialog = new ProgressDialog(this);
+                        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+                        progressDialog.show();
+                        new UploadProfileImage(filePath, progressDialog).execute();
+                    }
+                    new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
+
+                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+                    // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
+                }
+        }
+
     }
 
     private void call() {
@@ -260,14 +297,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     ImageView remove = new ImageView(getApplicationContext());
                     remove.setImageResource(R.mipmap.ic_close_circle_outline);
                     removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     removeService.setOrientation(LinearLayout.HORIZONTAL);
-                    stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(strCost);
                     stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
@@ -338,14 +375,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     ImageView remove = new ImageView(getApplicationContext());
                     remove.setImageResource(R.mipmap.ic_close_circle_outline);
                     removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     removeService.setOrientation(LinearLayout.HORIZONTAL);
-                    stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(strCost);
                     stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
@@ -416,14 +453,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     ImageView remove = new ImageView(getApplicationContext());
                     remove.setImageResource(R.mipmap.ic_close_circle_outline);
                     removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     removeService.setOrientation(LinearLayout.HORIZONTAL);
-                    stroke.addView(strCost);
                     stroke.addView(strService);
+                    stroke.addView(strCost);
                     stroke.addView(removeService);
 
                     TextView s = new TextView(getApplicationContext());
@@ -469,7 +506,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.show();
     }
 
-    private void createThreeButtonsAlertDialog(String title, final String content) {
+    private void createThreeButtonsAlertDialog(String title, final String type, final String content) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MyProfile.this);
         builder.setTitle(title);
         builder.setMessage(content);
@@ -484,6 +521,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(getApplicationContext(), ProfileMediaViewer.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("Type", type)
                                 .putExtra("URL", content));
                     }
                 });
@@ -699,14 +737,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             ImageView remove = new ImageView(getApplicationContext());
                             remove.setImageResource(R.mipmap.ic_close_circle_outline);
                             removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             removeService.setOrientation(LinearLayout.HORIZONTAL);
-                            stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(strCost);
                             stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
@@ -751,14 +789,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             ImageView remove = new ImageView(getApplicationContext());
                             remove.setImageResource(R.mipmap.ic_close_circle_outline);
                             removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             removeService.setOrientation(LinearLayout.HORIZONTAL);
-                            stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(strCost);
                             stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
@@ -803,14 +841,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             ImageView remove = new ImageView(getApplicationContext());
                             remove.setImageResource(R.mipmap.ic_close_circle_outline);
                             removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             removeService.setOrientation(LinearLayout.HORIZONTAL);
-                            stroke.addView(strCost);
                             stroke.addView(strService);
+                            stroke.addView(strCost);
                             stroke.addView(removeService);
 
                             TextView serviceTextView = new TextView(getApplicationContext());
@@ -845,6 +883,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         }
                     }
                     photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
+                    Storage.addString("PhotoURL", item.getString("photo"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
                     progressDialog.hide();
                 }

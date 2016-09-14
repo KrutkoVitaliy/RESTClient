@@ -48,6 +48,7 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class Profile extends AppCompatActivity implements View.OnClickListener {
@@ -86,6 +87,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
         height = width;
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.show();
 
         id = new Integer(getIntent().getStringExtra("ID"));
         changeServiceStatus(1);
@@ -229,23 +234,23 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         }
         if (view == gplusButton) {
             if (!gplusLink.equals(""))
-                createThreeButtonsAlertDialog("Google Plus", gplusLink);
+                createThreeButtonsAlertDialog("Google Plus", "gplus", gplusLink);
         }
         if (view == fbButton) {
             if (!fbLink.equals(""))
-                createThreeButtonsAlertDialog("Facebook", fbLink);
+                createThreeButtonsAlertDialog("Facebook", "fb", fbLink);
         }
         if (view == vkButton) {
             if (!vkLink.equals(""))
-                createThreeButtonsAlertDialog("Vkontakte", vkLink);
+                createThreeButtonsAlertDialog("Vkontakte", "vk", vkLink);
         }
         if (view == instagramButton) {
             if (!instagramLink.equals(""))
-                createThreeButtonsAlertDialog("Instagram", instagramLink);
+                createThreeButtonsAlertDialog("Instagram", "instagram", instagramLink);
         }
         if (view == okButton) {
             if (!okLink.equals(""))
-                createThreeButtonsAlertDialog("Odnoklassniki", okLink);
+                createThreeButtonsAlertDialog("Odnoklassniki", "ok", okLink);
         }
         if (view == phone) {
             call();
@@ -292,7 +297,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         alert.show();
     }
 
-    private void createThreeButtonsAlertDialog(String title, final String content) {
+    private void createThreeButtonsAlertDialog(String title, final String type, final String content) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Profile.this);
         builder.setTitle(title);
         builder.setMessage(content);
@@ -307,6 +312,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(getApplicationContext(), ProfileMediaViewer.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("Type", type)
                                 .putExtra("URL", content));
                     }
                 });
@@ -415,11 +421,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        stroke.addView(strCost);
                         stroke.addView(strService);
+                        stroke.addView(strCost);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -444,11 +451,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        stroke.addView(strCost);
                         stroke.addView(strService);
+                        stroke.addView(strCost);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -473,11 +481,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/4, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        stroke.addView(strCost);
                         stroke.addView(strService);
+                        stroke.addView(strCost);
 
                         TextView serviceTextView = new TextView(getApplicationContext());
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
@@ -496,6 +505,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
                 photoUrl = "http://195.88.209.17/storage/photos/" + profileItem.getString("photo");
+                progressDialog.hide();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

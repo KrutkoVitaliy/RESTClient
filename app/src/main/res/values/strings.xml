@@ -214,11 +214,11 @@
     <string name="editCity">City</string>
     <string name="editAddress">Address</string>
     <string name="editPhoneNumber">Phone number</string>
-    <string name="editgplus">Google Plus</string>
-    <string name="editFacebook">Facebook</string>
-    <string name="editVK">VK</string>
-    <string name="editInstagram">Instagram</string>
-    <string name="editOK">OK</string>
+    <string name="editgplus">https://plus.google.com/</string>
+    <string name="editFacebook">https://facebook.com/</string>
+    <string name="editVK">https://vk.com/</string>
+    <string name="editInstagram">https://instagram.com/</string>
+    <string name="editOK">https://ok.ru/</string>
 
     <string name="loading">Loading...</string>
     <string name="menu_item_search_stylist">Search stylist</string>
