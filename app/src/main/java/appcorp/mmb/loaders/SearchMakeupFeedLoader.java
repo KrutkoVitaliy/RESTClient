@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchMakeupFeedFragmentAdapter;
@@ -126,73 +127,93 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
-        List<MakeupDTO> data = new ArrayList<>();
 
-        try {
-            JSONArray items = new JSONArray(resultJsonFeed);
+        if(resultJsonFeed.equals("[]")) {
+            List<MakeupDTO> data = new ArrayList<>();
+            MakeupDTO makeupDTO = new MakeupDTO(
+                    -1,
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    new ArrayList<String>(),
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    new ArrayList<String>(),
+                    -1);
+            data.add(makeupDTO);
+            adapter.setData(data);
+            if (progressDialog != null)
+                progressDialog.hide();
+        } else {
+            List<MakeupDTO> data = new ArrayList<>();
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
 
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                List<String> images = new ArrayList<>();
-                List<String> hashTags = new ArrayList<>();
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    List<String> images = new ArrayList<>();
+                    List<String> hashTags = new ArrayList<>();
 
-                for (int j = 0; j < 10; j++)
-                    if (!item.getString("screen" + j).equals("empty.jpg"))
-                        images.add(item.getString("screen" + j));
+                    for (int j = 0; j < 10; j++)
+                        if (!item.getString("screen" + j).equals("empty.jpg"))
+                            images.add(item.getString("screen" + j));
 
-                String[] tempTags = item.getString("tags").replace(" ", "").split(",");
-                for (int j = 0; j < tempTags.length; j++) {
-                    hashTags.add(tempTags[j]);
-                }
-
-                if (item.getString("published").equals("t") && !images.isEmpty()) {
-                    if (!this.request.equals(""))
-                        toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
-                    else {
-                        if (toolbar.getTitle() == null)
-                            toolbar.setTitle(R.string.menu_item_makeup);
-                        if(toolbar.getTitle().equals("easy"))
-                            toolbar.setTitle(R.string.difficult_easy);
-                        if(toolbar.getTitle().equals("medium"))
-                            toolbar.setTitle(R.string.difficult_medium);
-                        if(toolbar.getTitle().equals("hard"))
-                            toolbar.setTitle(R.string.difficult_hard);
-
-                        if(toolbar.getTitle().equals("black"))
-                            toolbar.setTitle(R.string.black_eyes);
-                        if(toolbar.getTitle().equals("blue"))
-                            toolbar.setTitle(R.string.blue_eyes);
-                        if(toolbar.getTitle().equals("brown"))
-                            toolbar.setTitle(R.string.brown_eyes);
-                        if(toolbar.getTitle().equals("gray"))
-                            toolbar.setTitle(R.string.gray_eyes);
-                        if(toolbar.getTitle().equals("green"))
-                            toolbar.setTitle(R.string.green_eyes);
-                        if(toolbar.getTitle().equals("hazel"))
-                            toolbar.setTitle(R.string.hazel_eyes);
-                        if (!toolbar.getTitle().toString().contains(" - "))
-                            toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    String[] tempTags = item.getString("tags").replace(" ", "").split(",");
+                    for (int j = 0; j < tempTags.length; j++) {
+                        hashTags.add(tempTags[j]);
                     }
-                    MakeupDTO makeupDTO = new MakeupDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            images,
-                            item.getString("colors"),
-                            item.getString("eyeColor"),
-                            item.getString("occasion"),
-                            item.getString("difficult"),
-                            hashTags,
-                            item.getLong("likes"));
-                    data.add(makeupDTO);
+
+                    if (item.getString("published").equals("t") && !images.isEmpty()) {
+                        if (!this.request.equals(""))
+                            toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                        else {
+                            if (toolbar.getTitle() == null)
+                                toolbar.setTitle(R.string.menu_item_makeup);
+                            if(toolbar.getTitle().equals("easy"))
+                                toolbar.setTitle(R.string.difficult_easy);
+                            if(toolbar.getTitle().equals("medium"))
+                                toolbar.setTitle(R.string.difficult_medium);
+                            if(toolbar.getTitle().equals("hard"))
+                                toolbar.setTitle(R.string.difficult_hard);
+
+                            if(toolbar.getTitle().equals("black"))
+                                toolbar.setTitle(R.string.black_eyes);
+                            if(toolbar.getTitle().equals("blue"))
+                                toolbar.setTitle(R.string.blue_eyes);
+                            if(toolbar.getTitle().equals("brown"))
+                                toolbar.setTitle(R.string.brown_eyes);
+                            if(toolbar.getTitle().equals("gray"))
+                                toolbar.setTitle(R.string.gray_eyes);
+                            if(toolbar.getTitle().equals("green"))
+                                toolbar.setTitle(R.string.green_eyes);
+                            if(toolbar.getTitle().equals("hazel"))
+                                toolbar.setTitle(R.string.hazel_eyes);
+                            if (!toolbar.getTitle().toString().contains(" - "))
+                                toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                        }
+                        MakeupDTO makeupDTO = new MakeupDTO(
+                                item.getLong("id"),
+                                item.getString("uploadDate"),
+                                item.getString("authorName"),
+                                item.getString("authorPhoto"),
+                                images,
+                                item.getString("colors"),
+                                item.getString("eyeColor"),
+                                item.getString("occasion"),
+                                item.getString("difficult"),
+                                hashTags,
+                                item.getLong("likes"));
+                        data.add(makeupDTO);
+                    }
+                    adapter.setData(data);
+                    if (progressDialog != null)
+                        progressDialog.hide();
                 }
-                adapter.setData(data);
-                if (progressDialog != null)
-                    progressDialog.hide();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

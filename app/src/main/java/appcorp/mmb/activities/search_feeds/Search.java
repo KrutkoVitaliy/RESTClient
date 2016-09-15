@@ -26,7 +26,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.classes.Storage;
@@ -177,10 +177,6 @@ public class Search extends AppCompatActivity {
         makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
         hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(requestField.getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void initToolbar() {
@@ -192,6 +188,7 @@ public class Search extends AppCompatActivity {
                 switch (category) {
                     case "makeup":
                         startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
+                                .putExtra("Toolbar", "makeup")
                                 .putExtra("Category", "makeup")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putStringArrayListExtra("Colors", sortMakeupColors(colors))
@@ -201,7 +198,9 @@ public class Search extends AppCompatActivity {
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case "hairstyle":
+                        String[] hairstylesForArray = getResources().getStringArray(R.array.hairstyleFor);
                         startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
+                                .putExtra("Toolbar", ""+hairstylesForArray[hairstyleFor.getSelectedItemPosition()])
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putExtra("HairstyleLength", ""+hairstyleLength.getSelectedItemPosition())
@@ -211,6 +210,7 @@ public class Search extends AppCompatActivity {
                         break;
                     case "manicure":
                         startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
+                                .putExtra("Toolbar", "manicure")
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())
                                 .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
@@ -329,13 +329,13 @@ public class Search extends AppCompatActivity {
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                 }
                 return true;
@@ -363,7 +363,7 @@ public class Search extends AppCompatActivity {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                    startActivity(new Intent(getApplicationContext(), SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }

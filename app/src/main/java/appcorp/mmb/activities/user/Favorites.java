@@ -127,13 +127,13 @@ public class Favorites extends AppCompatActivity {
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                 }
                 return true;
@@ -161,7 +161,7 @@ public class Favorites extends AppCompatActivity {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                    startActivity(new Intent(getApplicationContext(), SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }

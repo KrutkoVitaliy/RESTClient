@@ -24,6 +24,7 @@ import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
@@ -107,13 +108,13 @@ public class ManicureFeed extends AppCompatActivity {
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                 }
                 return true;
@@ -141,7 +142,7 @@ public class ManicureFeed extends AppCompatActivity {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                    startActivity(new Intent(getApplicationContext(), SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }

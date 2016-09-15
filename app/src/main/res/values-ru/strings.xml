@@ -39,7 +39,7 @@
         <item>Фан</item>
         <item>Хрустальный</item>
         <item>Цветной</item>
-        <item>Дизайнерский</item>
+        <item>Дизайнерский френч</item>
         <item>Спа</item>
         <item>Лунный</item>
         <item>Художественная роспись</item>
@@ -185,7 +185,8 @@
 
 
     <string name="whatFind">Что ищем?</string>
-    <string name="tags">Теги</string>
+    <string name="tags">Хештеги</string>
+    <string name="tagsHint">color, spring, ...</string>
     <string name="chooseEyeColor">Выберите цвет глаз</string>
     <string name="checkUsedColors">Отметьте используемые цвета</string>
     <string name="occasion">Мероприятие</string>
@@ -220,4 +221,5 @@
     <string name="searchStylistCity">Город</string>
     <string name="searchStylistSkill">Сервис</string>
     <string name="searchStylistSkillHint">Наращивание ногтей</string>
+    <string name="notFindResult">Ничего не найдено</string>
 </resources>

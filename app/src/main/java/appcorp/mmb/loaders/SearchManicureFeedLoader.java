@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchHairstyleFeedFragmentAdapter;
@@ -188,56 +189,75 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
 
-        long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
-        List<ManicureDTO> data = new ArrayList<>();
-        String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
+        if (resultJsonFeed.equals("[]")) {
+            List<ManicureDTO> data = new ArrayList<>();
+            ManicureDTO manicureDTO = new ManicureDTO(
+                    -1,
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    "nothing",
+                    new ArrayList<String>(),
+                    "nothing",
+                    new ArrayList<String>(),
+                    -1);
+            data.add(manicureDTO);
+            adapter.setData(data);
+            if (progressDialog != null)
+                progressDialog.hide();
+        } else {
+            long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
+            List<ManicureDTO> data = new ArrayList<>();
+            String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
 
-        try {
-            JSONArray items = new JSONArray(resultJsonFeed);
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
 
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                List<String> images = new ArrayList<>();
-                List<String> hashTags = new ArrayList<>();
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    List<String> images = new ArrayList<>();
+                    List<String> hashTags = new ArrayList<>();
 
-                for (int j = 0; j < 10; j++)
-                    if (!item.getString("screen" + j).equals("empty.jpg"))
-                        images.add(item.getString("screen" + j));
+                    for (int j = 0; j < 10; j++)
+                        if (!item.getString("screen" + j).equals("empty.jpg"))
+                            images.add(item.getString("screen" + j));
 
-                if (!this.request.isEmpty())
-                    toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
-                else {
-                    if (toolbar.getTitle() == null)
-                        toolbar.setTitle(R.string.menu_item_manicure);
-                    if (!toolbar.getTitle().toString().contains(" - "))
-                        toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    if (!this.request.isEmpty())
+                        toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                    else {
+                        if (toolbar.getTitle() == null)
+                            toolbar.setTitle(R.string.menu_item_manicure);
+                        if (!toolbar.getTitle().toString().contains(" - "))
+                            toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    }
+                    id = item.getLong("id");
+                    authorPhoto = item.getString("authorPhoto");
+                    authorName = item.getString("authorName");
+                    availableDate = item.getString("uploadDate");
+                    tags = item.getString("tags");
+                    shape = item.getString("shape");
+                    design = item.getString("design");
+                    colors = item.getString("colors");
+                    likes = item.getLong("likes");
+                    published = item.getString("published");
+
+                    String[] tempTags = tags.split(",");
+                    for (int j = 0; j < tempTags.length; j++) {
+                        hashTags.add(tempTags[j]);
+                    }
+
+                    if (published.equals("t")) {
+                        ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
+                        data.add(manicureDTO);
+                    }
+                    adapter.setData(data);
+                    if (progressDialog != null)
+                        progressDialog.hide();
                 }
-                id = item.getLong("id");
-                authorPhoto = item.getString("authorPhoto");
-                authorName = item.getString("authorName");
-                availableDate = item.getString("uploadDate");
-                tags = item.getString("tags");
-                shape = item.getString("shape");
-                design = item.getString("design");
-                colors = item.getString("colors");
-                likes = item.getLong("likes");
-                published = item.getString("published");
-
-                String[] tempTags = tags.split(",");
-                for (int j = 0; j < tempTags.length; j++) {
-                    hashTags.add(tempTags[j]);
-                }
-
-                if (published.equals("t")) {
-                    ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
-                    data.add(manicureDTO);
-                }
-                adapter.setData(data);
-                if (progressDialog != null)
-                    progressDialog.hide();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

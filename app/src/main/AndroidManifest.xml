@@ -21,7 +21,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:largeHeap="false"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.feeds.SelectCategory"
@@ -32,13 +32,15 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
             android:name=".activities.search_feeds.Search"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.user.Profile"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.user.Authorization"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.user.Favorites"
             android:screenOrientation="portrait" />
@@ -68,7 +70,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.user.EditMyProfile"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.search_feeds.SearchMakeupFeed"
             android:screenOrientation="portrait" />
@@ -80,7 +83,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.user.SignIn"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.user.ProfileMediaViewer"
             android:screenOrientation="portrait" />

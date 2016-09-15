@@ -185,54 +185,54 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
             adapter.setData(data);
             if (progressDialog != null)
                 progressDialog.hide();
-        }
+        } else {
+            List<HairstyleDTO> data = new ArrayList<>();
 
-        List<HairstyleDTO> data = new ArrayList<>();
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
 
-        try {
-            JSONArray items = new JSONArray(resultJsonFeed);
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    List<String> images = new ArrayList<>();
+                    List<String> hashTags = new ArrayList<>();
 
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                List<String> images = new ArrayList<>();
-                List<String> hashTags = new ArrayList<>();
+                    for (int j = 0; j < 10; j++)
+                        if (!item.getString("screen" + j).equals("empty.jpg"))
+                            images.add(item.getString("screen" + j));
 
-                for (int j = 0; j < 10; j++)
-                    if (!item.getString("screen" + j).equals("empty.jpg"))
-                        images.add(item.getString("screen" + j));
-
-                String[] tempTags = item.getString("tags").split(",");
-                for (int j = 0; j < tempTags.length; j++) {
-                    hashTags.add(tempTags[j]);
-                }
-
-                if (item.getString("published").equals("t")) {
-                    if (!this.request.isEmpty())
-                        toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
-                    else {
-                        if (!toolbar.getTitle().toString().contains(" - "))
-                            toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                    String[] tempTags = item.getString("tags").split(",");
+                    for (int j = 0; j < tempTags.length; j++) {
+                        hashTags.add(tempTags[j]);
                     }
-                    HairstyleDTO hairstyleDTO = new HairstyleDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            item.getString("hairstyleType"),
-                            images,
-                            hashTags,
-                            item.getLong("likes"),
-                            item.getString("length"),
-                            item.getString("type"),
-                            item.getString("for"));
-                    data.add(hairstyleDTO);
+
+                    if (item.getString("published").equals("t")) {
+                        if (!this.request.isEmpty())
+                            toolbar.setTitle("#" + this.request + " - " + item.getString("count"));
+                        else {
+                            if (!toolbar.getTitle().toString().contains(" - "))
+                                toolbar.setTitle(toolbar.getTitle() + " - " + item.getString("count"));
+                        }
+                        HairstyleDTO hairstyleDTO = new HairstyleDTO(
+                                item.getLong("id"),
+                                item.getString("uploadDate"),
+                                item.getString("authorName"),
+                                item.getString("authorPhoto"),
+                                item.getString("hairstyleType"),
+                                images,
+                                hashTags,
+                                item.getLong("likes"),
+                                item.getString("length"),
+                                item.getString("type"),
+                                item.getString("for"));
+                        data.add(hairstyleDTO);
+                    }
+                    adapter.setData(data);
+                    if (progressDialog != null)
+                        progressDialog.hide();
                 }
-                adapter.setData(data);
-                if (progressDialog != null)
-                    progressDialog.hide();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

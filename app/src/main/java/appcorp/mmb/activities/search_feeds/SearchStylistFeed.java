@@ -22,7 +22,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.classes.Intermediates;
@@ -114,13 +114,13 @@ public class SearchStylistFeed extends AppCompatActivity {
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), MyProfile.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
                         else
-                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
                 }
                 return true;
@@ -148,7 +148,7 @@ public class SearchStylistFeed extends AppCompatActivity {
                 if (!Storage.getString("E-mail", "").equals("")) {
                     startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 } else {
-                    startActivity(new Intent(getApplicationContext(), Authorization.class)
+                    startActivity(new Intent(getApplicationContext(), SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }

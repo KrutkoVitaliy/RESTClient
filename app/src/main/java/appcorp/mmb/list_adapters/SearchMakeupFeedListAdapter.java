@@ -16,6 +16,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +31,7 @@ import java.util.List;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.other.FullscreenPreview;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.classes.Intermediates;
@@ -65,48 +67,55 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
         final MakeupDTO item = data.get(position);
 
-        if (position == data.size() - 1) {
-            SearchMakeupFeed.addFeed(data.size() / 100 + 1);
-        }
-
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
-
-        String[] date = item.getAvailableDate().split("");
-
-        holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-        holder.likesCount.setText("" + item.getLikes());
-        if (!likes.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+        if (item.getId() == -1) {
+            context.startActivity(new Intent(context, Search.class)
+                    .putExtra("from", "makeupFeed")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            Toast.makeText(context, R.string.notFindResult, Toast.LENGTH_LONG).show();
         } else {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-            holder.likesCount.setText("" + (item.getLikes() + 1));
-        }
-
-        holder.addLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
-                    if (!likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                        likes.add(item.getId());
-                        holder.likesCount.setText("" + (item.getLikes() + 1));
-                        new GetRequest("http://195.88.209.17/app/in/makeupLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    } else if (likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                        likes.remove(item.getId());
-                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
-                        new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    }
-                } else {
-                    context.startActivity(new Intent(context, Authorization.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
+            if (position == data.size() - 1) {
+                SearchMakeupFeed.addFeed(data.size() / 100 + 1);
             }
-        });
 
-        Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
+            final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
+            final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+
+            String[] date = item.getAvailableDate().split("");
+
+            holder.title.setText(item.getAuthorName());
+            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+            holder.likesCount.setText("" + item.getLikes());
+            if (!likes.contains(item.getId())) {
+                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+            } else {
+                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                holder.likesCount.setText("" + (item.getLikes() + 1));
+            }
+
+            holder.addLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                        if (!likes.contains(item.getId())) {
+                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                            likes.add(item.getId());
+                            holder.likesCount.setText("" + (item.getLikes() + 1));
+                            new GetRequest("http://195.88.209.17/app/in/makeupLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                        } else if (likes.contains(item.getId())) {
+                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                            likes.remove(item.getId());
+                            holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
+                            new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                        }
+                    } else {
+                        context.startActivity(new Intent(context, Authorization.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                }
+            });
+
+            Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,117 +127,117 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
             }
         });*/
 
-        holder.hashTags.removeAllViews();
-        for (int i = 0; i < item.getHashTags().size(); i++) {
-            TextView hashTag = new TextView(context);
-            hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-            hashTag.setTextSize(14);
-            final int finalI = i;
-            if (!item.getHashTags().get(i).equals(""))
-                hashTag.setText("#" + item.getHashTags().get(i) + " ");
-            hashTag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchMakeupFeed.class)
-                            .putExtra("Category", "makeup")
-                            .putExtra("Request", item.getHashTags().get(finalI).toString())
-                            .putStringArrayListExtra("Colors", new ArrayList<String>())
-                            .putExtra("EyeColor", "")
-                            .putExtra("Difficult", "")
-                            .putExtra("Occasion", "0")
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });
-            holder.hashTags.addView(hashTag);
-        }
-
-        holder.imageViewer.removeAllViews();
-        holder.countImages.removeAllViews();
-        for (int i = 0; i < item.getImages().size(); i++) {
-            ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(width);
-            screenShot.setMinimumHeight(height);
-            screenShot.setPadding(0, 0, 1, 0);
-            screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
-
-            screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            final int finalI = i;
-            screenShot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (holder.showMore.getText().equals(SHOW)) {
-                        Intent intent = new Intent(context, FullscreenPreview.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                        context.startActivity(intent);
+            holder.hashTags.removeAllViews();
+            for (int i = 0; i < item.getHashTags().size(); i++) {
+                TextView hashTag = new TextView(context);
+                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                hashTag.setTextSize(14);
+                final int finalI = i;
+                if (!item.getHashTags().get(i).equals(""))
+                    hashTag.setText("#" + item.getHashTags().get(i) + " ");
+                hashTag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        context.startActivity(new Intent(context, SearchMakeupFeed.class)
+                                .putExtra("Category", "makeup")
+                                .putExtra("Request", item.getHashTags().get(finalI).toString())
+                                .putStringArrayListExtra("Colors", new ArrayList<String>())
+                                .putExtra("EyeColor", "")
+                                .putExtra("Difficult", "")
+                                .putExtra("Occasion", "0")
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
-                }
-            });
-            holder.imageViewer.addView(screenShot);
-            holder.imageViewerHorizontal.scrollTo(0,0);
-
-            LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-            TextView count = new TextView(context);
-            count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
-            count.setTextSize(20);
-            count.setTextColor(Color.WHITE);
-            count.setPadding(32, 32, 32, 32);
-            count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-            countLayout.addView(count);
-            holder.countImages.addView(countLayout);
-        }
-
-        holder.moreContainer.removeAllViews();
-        holder.showMore.setText(SHOW);
-        holder.showMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (holder.showMore.getText().equals(SHOW)) {
-                    holder.showMore.setText(HIDE);
-                    LinearLayout moreContainer = new LinearLayout(context);
-                    moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    moreContainer.setOrientation(LinearLayout.VERTICAL);
-                    moreContainer.setPadding(32, 32, 32, 0);
-
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16, "", ""));
-                    moreContainer.addView(createImage(item.getEye_color()));
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
-                    LinearLayout colors = new LinearLayout(context);
-                    colors.setOrientation(LinearLayout.HORIZONTAL);
-                    String[] mColors = (item.getColors().split(","));
-                    for (int i = 0; i < mColors.length; i++) {
-                        if (!mColors[i].equals("FFFFFF"))
-                            colors.addView(createCircle("#" + mColors[i], mColors[i]));
-                        else
-                            colors.addView(createCircle("#EEEEEE", mColors[i]));
-                    }
-                    moreContainer.addView(colors);
-
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16, "", ""));
-                    moreContainer.addView(difficult(item.getDifficult()));
-                    if (item.getOccasion().equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
-                    else if (item.getOccasion().equals("celebrity"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
-                    else if (item.getOccasion().equals("dramatic"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
-                    else if (item.getOccasion().equals("holiday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
-
-                    holder.moreContainer.addView(moreContainer);
-                } else if (holder.showMore.getText().equals(HIDE)) {
-                    holder.showMore.setText(SHOW);
-                    holder.moreContainer.removeAllViews();
-                }
+                });
+                holder.hashTags.addView(hashTag);
             }
-        });
-    }
 
+            holder.imageViewer.removeAllViews();
+            holder.countImages.removeAllViews();
+            for (int i = 0; i < item.getImages().size(); i++) {
+                ImageView screenShot = new ImageView(context);
+                screenShot.setMinimumWidth(width);
+                screenShot.setMinimumHeight(height);
+                screenShot.setPadding(0, 0, 1, 0);
+                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+
+                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                final int finalI = i;
+                screenShot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.showMore.getText().equals(SHOW)) {
+                            Intent intent = new Intent(context, FullscreenPreview.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                            context.startActivity(intent);
+                        }
+                    }
+                });
+                holder.imageViewer.addView(screenShot);
+                holder.imageViewerHorizontal.scrollTo(0, 0);
+
+                LinearLayout countLayout = new LinearLayout(context);
+                countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                TextView count = new TextView(context);
+                count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
+                count.setTextSize(20);
+                count.setTextColor(Color.WHITE);
+                count.setPadding(32, 32, 32, 32);
+                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+                countLayout.addView(count);
+                holder.countImages.addView(countLayout);
+            }
+
+            holder.moreContainer.removeAllViews();
+            holder.showMore.setText(SHOW);
+            holder.showMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (holder.showMore.getText().equals(SHOW)) {
+                        holder.showMore.setText(HIDE);
+                        LinearLayout moreContainer = new LinearLayout(context);
+                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        moreContainer.setOrientation(LinearLayout.VERTICAL);
+                        moreContainer.setPadding(32, 32, 32, 0);
+
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16, "", ""));
+                        moreContainer.addView(createImage(item.getEye_color()));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
+                        LinearLayout colors = new LinearLayout(context);
+                        colors.setOrientation(LinearLayout.HORIZONTAL);
+                        String[] mColors = (item.getColors().split(","));
+                        for (int i = 0; i < mColors.length; i++) {
+                            if (!mColors[i].equals("FFFFFF"))
+                                colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                            else
+                                colors.addView(createCircle("#EEEEEE", mColors[i]));
+                        }
+                        moreContainer.addView(colors);
+
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16, "", ""));
+                        moreContainer.addView(difficult(item.getDifficult()));
+                        if (item.getOccasion().equals("everyday"))
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
+                        else if (item.getOccasion().equals("celebrity"))
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
+                        else if (item.getOccasion().equals("dramatic"))
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
+                        else if (item.getOccasion().equals("holiday"))
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
+
+                        holder.moreContainer.addView(moreContainer);
+                    } else if (holder.showMore.getText().equals(HIDE)) {
+                        holder.showMore.setText(SHOW);
+                        holder.moreContainer.removeAllViews();
+                    }
+                }
+            });
+        }
+    }
 
     private TextView createText(String title, Typeface tf, int padding, final String type, final String index) {
         TextView tw = new TextView(context);
@@ -244,7 +253,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                     ArrayList<String> makeupColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchMakeupFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Toolbar", ""+ occasion[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + occasion[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                     intent.putExtra("EyeColor", "");
@@ -311,7 +320,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Toolbar", ""+difficult);
+                intent.putExtra("Toolbar", "" + difficult);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", "");
@@ -326,7 +335,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Toolbar", ""+difficult);
+                intent.putExtra("Toolbar", "" + difficult);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", "");
@@ -416,7 +425,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                 ArrayList<String> makeupColors = new ArrayList<>();
                 Intent intent = new Intent(context, SearchMakeupFeed.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Toolbar", ""+colorName);
+                intent.putExtra("Toolbar", "" + colorName);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                 intent.putExtra("EyeColor", color);
