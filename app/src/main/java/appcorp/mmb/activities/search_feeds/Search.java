@@ -39,7 +39,7 @@ public class Search extends AppCompatActivity {
     private String arrayColors = "", category = "";
     private EditText requestField;
     private Spinner hairstyleLength, hairstyleType, hairstyleFor;
-    private Button search;
+    private Button searchButton;
     private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
             eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
@@ -177,6 +177,46 @@ public class Search extends AppCompatActivity {
         makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
         hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
+        searchButton = (Button) findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (category) {
+                    case "makeup":
+                        startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
+                                .putExtra("Toolbar", "makeup")
+                                .putExtra("Category", "makeup")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putStringArrayListExtra("Colors", sortMakeupColors(colors))
+                                .putExtra("EyeColor", eyeColor)
+                                .putExtra("Difficult", difficult)
+                                .putExtra("Occasion", "" + occasion.getSelectedItemPosition())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        break;
+                    case "hairstyle":
+                        String[] hairstylesForArray = getResources().getStringArray(R.array.hairstyleFor);
+                        startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
+                                .putExtra("Toolbar", ""+hairstylesForArray[hairstyleFor.getSelectedItemPosition()])
+                                .putExtra("Category", "hairstyle")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putExtra("HairstyleLength", ""+hairstyleLength.getSelectedItemPosition())
+                                .putExtra("HairstyleType", ""+hairstyleType.getSelectedItemPosition())
+                                .putExtra("HairstyleFor", ""+hairstyleFor.getSelectedItemPosition())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        break;
+                    case "manicure":
+                        startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
+                                .putExtra("Toolbar", "manicure")
+                                .putExtra("Category", "manicure")
+                                .putExtra("Request", requestField.getText().toString())
+                                .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
+                                .putExtra("Shape", "" + shape.getSelectedItemPosition())
+                                .putExtra("Design", "" + design.getSelectedItemPosition())
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        break;
+                }
+            }
+        });
     }
 
     private void initToolbar() {
