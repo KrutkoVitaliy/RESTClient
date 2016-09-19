@@ -34,6 +34,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
@@ -70,8 +71,8 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
         if (item.getId() == -1) {
             context.startActivity(new Intent(context, Search.class)
                     .putExtra("from", "manicureFeed")
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             Toast.makeText(context, R.string.notFindResult, Toast.LENGTH_LONG).show();
         } else {
             if (position == data.size() - 1) {
@@ -109,7 +110,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                             new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                         }
                     } else {
-                        context.startActivity(new Intent(context, Authorization.class)
+                        context.startActivity(new Intent(context, SignIn.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 }
@@ -274,24 +275,24 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                     String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "" + index);
                     intent.putExtra("Design", "0");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
                 if (type == "Design") {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "0");
                     intent.putExtra("Design", "" + index);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             }
@@ -314,11 +315,11 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                 ArrayList<String> manicureColors = new ArrayList<>();
                 manicureColors.add(searchParameter);
                 Intent intent = new Intent(context, SearchManicureFeed.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors));
                 intent.putExtra("Request", "");
                 intent.putExtra("Shape", "0");
                 intent.putExtra("Design", "0");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
@@ -412,7 +413,6 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, Search.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("hashTag", colorName);
                 context.startActivity(intent);
             }

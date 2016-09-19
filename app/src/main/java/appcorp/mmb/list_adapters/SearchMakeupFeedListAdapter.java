@@ -34,6 +34,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.activities.user.Authorization;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -70,8 +71,8 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
         if (item.getId() == -1) {
             context.startActivity(new Intent(context, Search.class)
                     .putExtra("from", "makeupFeed")
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             Toast.makeText(context, R.string.notFindResult, Toast.LENGTH_LONG).show();
         } else {
             if (position == data.size() - 1) {
@@ -109,7 +110,7 @@ public class SearchMakeupFeedListAdapter extends RecyclerView.Adapter<SearchMake
                             new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                         }
                     } else {
-                        context.startActivity(new Intent(context, Authorization.class)
+                        context.startActivity(new Intent(context, SignIn.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 }

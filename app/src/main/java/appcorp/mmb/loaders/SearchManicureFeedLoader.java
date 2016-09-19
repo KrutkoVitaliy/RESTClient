@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -209,7 +210,7 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
         } else {
             long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
             List<ManicureDTO> data = new ArrayList<>();
-            String availableDate, colors, shape, design, tags, authorPhoto, authorName, published;
+            String availableDate, colors, shape, design, tags = "", authorPhoto, authorName, published;
 
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
@@ -235,7 +236,11 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                     authorPhoto = item.getString("authorPhoto");
                     authorName = item.getString("authorName");
                     availableDate = item.getString("uploadDate");
-                    tags = item.getString("tags");
+
+                    if (Storage.getString("Localization", "").equals("English"))
+                        tags = item.getString("tags");
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        tags = item.getString("tagsRu");
                     shape = item.getString("shape");
                     design = item.getString("design");
                     colors = item.getString("colors");

@@ -31,6 +31,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
@@ -99,7 +100,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                         new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     }
                 } else {
-                    context.startActivity(new Intent(context, Authorization.class)
+                    context.startActivity(new Intent(context, SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }

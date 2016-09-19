@@ -33,6 +33,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
@@ -102,7 +103,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                         new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     }
                 } else {
-                    context.startActivity(new Intent(context, Authorization.class)
+                    context.startActivity(new Intent(context, SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }
@@ -135,7 +136,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                             .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
                             .putExtra("Shape", "" + "0")
                             .putExtra("Design", "" + "0")
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             });
             holder.hashTags.addView(hashTag);
@@ -165,7 +167,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 }
             });
             holder.imageViewer.addView(screenShot);
-            holder.imageViewerHorizontal.scrollTo(0,0);
+            holder.imageViewerHorizontal.scrollTo(0, 0);
 
             LinearLayout countLayout = new LinearLayout(context);
             countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
@@ -267,10 +269,11 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
                     intent.putExtra("Request", "");
-                    intent.putExtra("Shape", ""+index);
+                    intent.putExtra("Shape", "" + index);
                     intent.putExtra("Design", "0");
                     context.startActivity(intent);
                 }
@@ -279,11 +282,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureFeed.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "0");
-                    intent.putExtra("Design", ""+index);
+                    intent.putExtra("Design", "" + index);
                     context.startActivity(intent);
                 }
             }

@@ -66,8 +66,6 @@ public class Search extends AppCompatActivity {
         initManicureColors();
         initEyeColors();
         initDifficult();
-
-
     }
 
     public void initCategorySelector() {

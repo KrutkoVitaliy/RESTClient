@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
@@ -160,9 +161,17 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    String[] tempTags = item.getString("tags").replace(" ", "").split(",");
-                    for (int j = 0; j < tempTags.length; j++) {
-                        hashTags.add(tempTags[j]);
+                    String[] tempTags;
+                    if (Storage.getString("Localization", "").equals("English")) {
+                        tempTags = item.getString("tags").split(",");
+                        for (int j = 0; j < tempTags.length; j++) {
+                            hashTags.add(tempTags[j]);
+                        }
+                    } else if (Storage.getString("Localization", "").equals("Russian")) {
+                        tempTags = item.getString("tagsRu").split(",");
+                        for (int j = 0; j < tempTags.length; j++) {
+                            hashTags.add(tempTags[j]);
+                        }
                     }
 
                     if (item.getString("published").equals("t") && !images.isEmpty()) {

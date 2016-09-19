@@ -32,6 +32,7 @@ import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -101,7 +102,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                         new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     }
                 } else {
-                    context.startActivity(new Intent(context, Authorization.class)
+                    context.startActivity(new Intent(context, SignIn.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }

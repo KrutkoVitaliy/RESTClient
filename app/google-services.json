@@ -1,33 +1,35 @@
 {
   "project_info": {
-    "project_number": "552985499572",
-    "project_id": "firebase-make-me-beauty"
+    "project_number": "1062807424314",
+    "firebase_url": "https://mmb-start-9646d.firebaseio.com",
+    "project_id": "mmb-start-9646d",
+    "storage_bucket": "mmb-start-9646d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:552985499572:android:484e7979502e7f48",
+        "mobilesdk_app_id": "1:1062807424314:android:484e7979502e7f48",
         "android_client_info": {
           "package_name": "appcorp.mmb"
         }
       },
       "oauth_client": [
         {
-          "client_id": "552985499572-67mqsc8bbf3fpci1iu58335t7dgch3m8.apps.googleusercontent.com",
+          "client_id": "1062807424314-5ifdabpcskk5q977cnil8lp5pdgo17h7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "appcorp.mmb",
-            "certificate_hash": "1A4FD0B76D0CC9D35EFF45D973F6020E0F7713E7"
+            "certificate_hash": "AE194D2CB1B33C43B96A5E20CB5C0CE482486A9A"
           }
         },
         {
-          "client_id": "552985499572-ivrotqi4logbclp6mgekmi1dut14hsug.apps.googleusercontent.com",
+          "client_id": "1062807424314-78jp1r62sjis96pm6lq4smpfqup2o7a3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFk-1UqwwYNNuK5FsJSfvLlAcCNr9IxZ0"
+          "current_key": "AIzaSyB8PntH64sMfI2IenEHSt3xxWJA58VvTkE"
         }
       ],
       "services": {
@@ -35,11 +37,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062807424314-78jp1r62sjis96pm6lq4smpfqup2o7a3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
