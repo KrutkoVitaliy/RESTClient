@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class SearchStylist extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private EditText cityField, skillField;
+    private Button searchStylistButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,16 @@ public class SearchStylist extends AppCompatActivity {
         if(!Storage.getString("MyCity", "").equals("")) {
             cityField.setText(Storage.getString("MyCity", ""));
         }
+        searchStylistButton = (Button) findViewById(R.id.searchStylistButton);
+        searchStylistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
+                        .putExtra("City", cityField.getText().toString())
+                        .putExtra("Skill", skillField.getText().toString())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
     }
 
     private void initToolbar() {

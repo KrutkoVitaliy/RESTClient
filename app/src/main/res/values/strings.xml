@@ -120,7 +120,7 @@
     <string name="authorization_sign_up">Sign up</string>
     <string name="authorization_sign_ip">Sign in</string>
     <string name="authorization_to_sign_up">Already registered?\nSign in here!</string>
-    <string name="authorization_to_sign_in">No account?\nCreate it here!</string>
+    <string name="authorization_to_sign_in">Sign up</string>
 
     <string name="internet_notification">Failed to connect to the Internet\nCheck your Internet connection</string>
     <string name="try_again">Try again</string>
