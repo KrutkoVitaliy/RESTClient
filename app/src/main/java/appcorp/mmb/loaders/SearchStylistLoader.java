@@ -49,7 +49,7 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... voids) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + city.replace(" ", "%20") + "&skill=" + skill.replace(" ", "%20"));
+                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.getInstance().encodeToURL(city) + "&skill=" + Intermediates.getInstance().encodeToURL(skill));
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -62,7 +62,7 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
+                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.getInstance().encodeToURL(city) + "&skill=" + Intermediates.getInstance().encodeToURL(skill));
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();

@@ -131,7 +131,8 @@ public class FavoriteManicureLoader extends AsyncTask<Void, Void, String> {
 
                 ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
                 data.add(manicureDTO);
-                adapter.setManicureData(data);
+                if (adapter != null)
+                    adapter.setManicureData(data);
             }
         } catch (JSONException e) {
             e.printStackTrace();

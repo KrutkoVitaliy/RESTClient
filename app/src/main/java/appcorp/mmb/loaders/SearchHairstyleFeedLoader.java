@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchHairstyleFeedFragmentAdapter;
@@ -130,7 +131,7 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
+                URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + Intermediates.getInstance().encodeToURL(request) + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -143,7 +144,7 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + request + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/hairstyle.php?request=" + Intermediates.getInstance().encodeToURL(request) + "&hairstyle_length=" + hairstyleLength + "&hairstyle_type=" + hairstyleType + "&hairstyle_for=" + hairstyleFor + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -167,7 +168,7 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String resultJsonFeed) {
         super.onPostExecute(resultJsonFeed);
 
-        if(resultJsonFeed.equals("[]")) {
+        if (resultJsonFeed.equals("[]")) {
             List<HairstyleDTO> data = new ArrayList<>();
             HairstyleDTO hairstyleDTO = new HairstyleDTO(
                     -1,
@@ -226,7 +227,8 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                                 item.getString("for"));
                         data.add(hairstyleDTO);
                     }
-                    adapter.setData(data);
+                    if (adapter != null)
+                        adapter.setData(data);
                     if (progressDialog != null)
                         progressDialog.hide();
                 }

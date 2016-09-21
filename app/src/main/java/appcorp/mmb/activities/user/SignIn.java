@@ -49,6 +49,9 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
 
         signUp.setOnClickListener(this);
         submit.setOnClickListener(this);
+        if(getIntent().getStringExtra("tempemail") != null) {
+            email.setText(getIntent().getStringExtra("tempemail"));
+        }
     }
 
     @Override
@@ -98,7 +101,10 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                             Storage.addString("E-mail", email.getText().toString().trim().toLowerCase());
                             Storage.addString("PhotoURL", "mmbuserunauth.jpg");
                         } else {
-                            Toast.makeText(getApplicationContext(), "Cannot sign in! Please try again!", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), R.string.cantAuth, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), SignIn.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                                    .putExtra("tempemail", sEmail));
                         }
                     }
                 });

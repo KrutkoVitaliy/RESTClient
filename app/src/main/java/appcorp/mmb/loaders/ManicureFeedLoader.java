@@ -84,7 +84,7 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
 
         long id, sid, likes, uploadDate, currentDate = System.currentTimeMillis();
         List<ManicureDTO> data = new ArrayList<>();
-        String availableDate, colors, shape, design, tags= "", authorPhoto, authorName, published;
+        String availableDate, colors, shape, design, tags = "", authorPhoto, authorName, published;
 
         try {
             JSONArray items = new JSONArray(resultJsonFeed);
@@ -127,7 +127,8 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(manicureDTO);
                 }
             }
-            adapter.setData(data);
+            if (adapter != null)
+                adapter.setData(data);
             if (progressDialog != null)
                 progressDialog.hide();
         } catch (JSONException e) {

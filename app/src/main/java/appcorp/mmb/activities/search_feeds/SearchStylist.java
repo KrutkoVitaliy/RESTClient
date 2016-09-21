@@ -8,12 +8,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -48,17 +50,22 @@ public class SearchStylist extends AppCompatActivity {
     private void initViews() {
         cityField = (EditText) findViewById(R.id.searchStylistCityField);
         skillField = (EditText) findViewById(R.id.searchStylistSkillField);
-        if(!Storage.getString("MyCity", "").equals("")) {
+        if (!Storage.getString("MyCity", "").equals("")) {
             cityField.setText(Storage.getString("MyCity", ""));
         }
         searchStylistButton = (Button) findViewById(R.id.searchStylistButton);
         searchStylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
-                        .putExtra("City", cityField.getText().toString())
-                        .putExtra("Skill", skillField.getText().toString())
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                if (TextUtils.isEmpty(cityField.getText())) {
+                    Toast.makeText(getApplicationContext(), R.string.enterCity, Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
+                            .putExtra("City", cityField.getText().toString())
+                            .putExtra("Skill", skillField.getText().toString())
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
     }

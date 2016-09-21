@@ -132,6 +132,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 @Override
                 public void onClick(View view) {
                     context.startActivity(new Intent(context, SearchManicureFeed.class)
+                            .putExtra("Toolbar", item.getHashTags().get(finalI).trim())
                             .putExtra("Request", item.getHashTags().get(finalI).trim())
                             .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
                             .putExtra("Shape", "" + "0")

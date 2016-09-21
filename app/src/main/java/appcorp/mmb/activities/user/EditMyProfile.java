@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
@@ -55,6 +57,7 @@ public class EditMyProfile extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ProgressDialog progressDialog;
     private ProgressDialog loadProgressDialog;
+    private Button logOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +130,19 @@ public class EditMyProfile extends AppCompatActivity {
         editVK = (EditText) findViewById(R.id.editVK);
         editInst = (EditText) findViewById(R.id.editInst);
         editOK = (EditText) findViewById(R.id.editOK);
+        logOut = (Button) findViewById(R.id.logOut);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Storage.clearString("E-mail");
+                Storage.clearString("Name");
+                Storage.clearString("PhotoURL");
+                Storage.clearString("MyCity");
+                startActivity(new Intent(getApplicationContext(), SelectCategory.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            }
+        });
     }
 
     private void initToolbar() {

@@ -45,6 +45,8 @@ public class ProfileMediaViewer extends Activity {
             url = url.replace("vk.com", "");
         if (url.contains("instagram.com"))
             url = url.replace("instagram.com", "");
+        if (url.startsWith("@"))
+            url = url.substring(1, url.length());
         if (url.contains("ok.ru"))
             url = url.replace("ok.ru", "");
 

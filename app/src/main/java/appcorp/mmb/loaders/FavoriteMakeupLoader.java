@@ -133,7 +133,8 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
                         hashTags,
                         item.getLong("likes"));
                 makeupData.add(makeupDTO);
-                adapter.setMakeupData(makeupData);
+                if (adapter != null)
+                    adapter.setMakeupData(makeupData);
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -121,8 +121,8 @@ public class HairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(hairstyleDTO);
                 }
             }
+            if (adapter != null)
             adapter.setData(data);
-
             if (progressDialog != null)
                 progressDialog.hide();
         } catch (JSONException e) {

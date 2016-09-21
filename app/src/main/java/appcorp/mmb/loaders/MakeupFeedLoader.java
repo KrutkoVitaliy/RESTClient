@@ -125,6 +125,7 @@ public class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     data.add(makeupDTO);
                 }
             }
+            if (adapter != null)
             adapter.setData(data);
             if (progressDialog != null)
                 progressDialog.hide();

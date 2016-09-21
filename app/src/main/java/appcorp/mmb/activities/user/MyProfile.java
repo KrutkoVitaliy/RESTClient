@@ -50,7 +50,6 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.Intermediates;
@@ -90,8 +89,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_my_profile);
 
         initToolbar();
-        initNavigationView();
         initViews();
+        initNavigationView();
         new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
         changeServiceStatus(1);
 
@@ -884,7 +883,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     Storage.addString("PhotoURL", item.getString("photo"));
                     Storage.addString("MyCity", item.getString("city"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
-                    progressDialog.hide();
+                    initHeaderLayout((NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation));
+                    if (progressDialog != null)
+                        progressDialog.hide();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

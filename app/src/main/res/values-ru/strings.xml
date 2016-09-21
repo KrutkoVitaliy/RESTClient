@@ -216,10 +216,18 @@
     <string name="editInstagram">https://instagram.com/</string>
     <string name="editOK">https://ok.ru/</string>
 
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка..</string>
     <string name="menu_item_search_stylist">Поиск мастера</string>
     <string name="searchStylistCity">Город</string>
     <string name="searchStylistSkill">Сервис</string>
     <string name="searchStylistSkillHint">Наращивание ногтей</string>
     <string name="notFindResult">Ничего не найдено</string>
+    <string name="cantAuth">Неправильный логин или пароль!\nПовторите попытку!</string>
+    <string name="logOut">Выйти из учетной записи</string>
+    <string name="enterCity">Пожалуйста, введите город</string>
+    <string name="enterEmail">Пожалуйста, введите e-mail</string>
+    <string name="enterPassword">Пожалуйста, введите пароль</string>
+    <string name="enterName">Пожалуйста, введите имя</string>
+    <string name="enterLastname">Пожалуйста, введите фамилию</string>
+    <string name="registering">Регистрация..</string>
 </resources>

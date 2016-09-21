@@ -133,6 +133,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 public void onClick(View view) {
                     context.startActivity(new Intent(context, SearchMakeupFeed.class)
                             .putExtra("Category", "makeup")
+                            .putExtra("Toolbar", item.getHashTags().get(finalI).toString())
                             .putExtra("Request", item.getHashTags().get(finalI).toString())
                             .putStringArrayListExtra("Colors", new ArrayList<String>())
                             .putExtra("EyeColor", "")

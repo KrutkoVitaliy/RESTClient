@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.ManicureDTO;
@@ -153,7 +154,7 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         try {
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request.replace(" ", "%20") + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
+                URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + Intermediates.getInstance().encodeToURL(request) + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
@@ -166,7 +167,7 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + request + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
+                    URL feedURL = new URL("http://195.88.209.17/search/manicure.php?request=" + Intermediates.getInstance().encodeToURL(request) + "&colors=" + colorsStr + "&shape=" + shape + "&design=" + design + "&position=" + position);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -256,7 +257,8 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                         ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
                         data.add(manicureDTO);
                     }
-                    adapter.setData(data);
+                    if (adapter != null)
+                        adapter.setData(data);
                     if (progressDialog != null)
                         progressDialog.hide();
                 }

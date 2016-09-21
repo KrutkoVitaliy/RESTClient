@@ -79,23 +79,23 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         final String firebasePass = pass.getText().toString().trim();
 
         if (TextUtils.isEmpty(sEmail)) {
-            Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enterEmail, Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(sPass)) {
-            Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enterPassword, Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(sName)) {
-            Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enterName, Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(sLastname)) {
-            Toast.makeText(getApplicationContext(), "Please enter your lastname", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enterLastname, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        progressDialog.setMessage("Registering...");
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.registering));
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(firebaseEmail, firebasePass)

@@ -221,10 +221,18 @@
     <string name="editInstagram">https://instagram.com/</string>
     <string name="editOK">https://ok.ru/</string>
 
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading..</string>
     <string name="menu_item_search_stylist">Search stylist</string>
     <string name="searchStylistCity">City</string>
     <string name="searchStylistSkill">Service</string>
     <string name="searchStylistSkillHint">Nail extensions</string>
     <string name="notFindResult">Nothing found</string>
+    <string name="cantAuth">Login or password is incorrect!\nPlease try again!</string>
+    <string name="logOut">Log out</string>
+    <string name="enterCity">Please, enter city</string>
+    <string name="enterEmail">Please, enter e-mail</string>
+    <string name="enterPassword">Please, enter password</string>
+    <string name="enterName">Please, enter name</string>
+    <string name="enterLastname">Please, enter last name</string>
+    <string name="registering">Registering..</string>
 </resources>

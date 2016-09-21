@@ -131,6 +131,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                 @Override
                 public void onClick(View view) {
                     context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                            .putExtra("Toolbar", item.getHashTags().get(finalI))
                             .putExtra("Request", item.getHashTags().get(finalI))
                             .putExtra("HairstyleLength", "0")
                             .putExtra("HairstyleType", "0")
