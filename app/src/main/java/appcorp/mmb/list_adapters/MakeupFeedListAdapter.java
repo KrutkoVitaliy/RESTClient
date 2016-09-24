@@ -33,6 +33,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
 import appcorp.mmb.activities.user.SignIn;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -49,11 +50,43 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
     public MakeupFeedListAdapter(List<MakeupDTO> data, Context context) {
         this.data = data;
         this.context = context;
+
+        Storage.init(context);
+        initLocalization(Intermediates.convertToString(context, R.string.translation));
+        initScreen();
+        initFirebase();
+
         display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
         width = display.getWidth();
         height = width;
         if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) context
+                .getSystemService(context.WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(context);
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     @Override

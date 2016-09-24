@@ -45,6 +45,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
@@ -52,6 +54,7 @@ import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
@@ -82,11 +85,23 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
     private String[] manicureCostsArray;
     private String[] hairstyleServicesArray;
     private String[] hairstyleCostsArray;
+    List<Integer> numbers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "MyProfile");
+
+        for(int i = 0 ; i < 10;i++){
+            numbers.add(i);
+        }
 
         initToolbar();
         initViews();
@@ -101,6 +116,32 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     @Override
@@ -288,7 +329,16 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
+                service.setText(service.getText().toString().trim());
+                cost.setText(cost.getText().toString().trim());
+                int tempCost;
+                try{
+                    tempCost = new Integer(cost.getText().toString());
+                } catch (NumberFormatException e) {
+                    tempCost = -1;
+                    e.printStackTrace();
+                }
+                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("") && tempCost > 0) {
                     final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
@@ -366,7 +416,17 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
+                service.setText(service.getText().toString().trim());
+                cost.setText(cost.getText().toString().trim());
+
+                int tempCost;
+                try{
+                    tempCost = new Integer(cost.getText().toString());
+                } catch (NumberFormatException e) {
+                    tempCost = -1;
+                    e.printStackTrace();
+                }
+                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("") && tempCost > 0) {
                     final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());
@@ -444,7 +504,16 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("")) {
+                service.setText(service.getText().toString().trim());
+                cost.setText(cost.getText().toString().trim());
+                int tempCost;
+                try{
+                    tempCost = new Integer(cost.getText().toString());
+                } catch (NumberFormatException e) {
+                    tempCost = -1;
+                    e.printStackTrace();
+                }
+                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("") && tempCost > 0) {
                     final LinearLayout stroke = new LinearLayout(getApplicationContext());
                     LinearLayout strService = new LinearLayout(getApplicationContext());
                     LinearLayout strCost = new LinearLayout(getApplicationContext());

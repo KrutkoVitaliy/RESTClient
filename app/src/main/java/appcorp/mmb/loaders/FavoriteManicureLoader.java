@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
@@ -133,6 +134,8 @@ public class FavoriteManicureLoader extends AsyncTask<Void, Void, String> {
                 data.add(manicureDTO);
                 if (adapter != null)
                     adapter.setManicureData(data);
+
+                FireAnal.sendString("1", "Open", "FavoriteManicureLoaded");
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -3,10 +3,15 @@ package appcorp.mmb.activities.user;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.Display;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 
 public class ProfileMediaViewer extends Activity {
 
@@ -16,6 +21,13 @@ public class ProfileMediaViewer extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_media_viewer);
+
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "ProfileMediaViewer");
 
         webView = (WebView) findViewById(R.id.webViewProfile);
         webView.setWebViewClient(new WebViewClient());
@@ -63,5 +75,31 @@ public class ProfileMediaViewer extends Activity {
 
         webView.loadUrl(url);
 
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 }

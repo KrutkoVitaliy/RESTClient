@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.HairstyleFeedFragmentAdapter;
@@ -231,6 +232,8 @@ public class SearchHairstyleFeedLoader extends AsyncTask<Void, Void, String> {
                         adapter.setData(data);
                     if (progressDialog != null)
                         progressDialog.hide();
+
+                    FireAnal.sendString("1", "Open", "SearchHairstyleLoaded");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

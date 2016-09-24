@@ -10,8 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
@@ -46,6 +49,13 @@ public class SearchMakeupFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
 
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "SearchMakeupFeed");
+
         this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");
         this.colors = getIntent().getStringArrayListExtra("Colors");
@@ -62,6 +72,32 @@ public class SearchMakeupFeed extends AppCompatActivity {
         progressDialog.show();
 
         new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1, progressDialog).execute();
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     public static void addFeed(int position) {

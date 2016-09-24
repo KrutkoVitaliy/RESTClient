@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 
 public class UploadProfileImage extends AsyncTask<Void, Void, String> {
@@ -52,6 +53,8 @@ public class UploadProfileImage extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
+
+        FireAnal.sendString("1", "Open", "UploadProfileImage");
         // Результат выполнения запроса, полученный от сервера
         String result = null;
 

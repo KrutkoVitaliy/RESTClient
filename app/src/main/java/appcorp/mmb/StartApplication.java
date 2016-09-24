@@ -21,11 +21,11 @@ public class StartApplication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_application);
 
-        initStorage();
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
-        initFirebase();
-        initAdMob();
+        //initStorage();
+        //initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        //initScreen();
+        //initFirebase();
+        //initAdMob();
         timer();
     }
 

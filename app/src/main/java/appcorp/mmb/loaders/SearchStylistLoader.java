@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.dto.StylistDTO;
 import appcorp.mmb.fragment_adapters.SearchStylistFeedFragmentAdapter;
@@ -112,5 +113,7 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        FireAnal.sendString("1", "Open", "StylistLoaded");
     }
 }

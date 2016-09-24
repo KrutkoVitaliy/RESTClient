@@ -14,8 +14,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +43,7 @@ import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
@@ -64,6 +67,13 @@ public class EditMyProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_profile);
 
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "EditProfile");
+
         loadProgressDialog = new ProgressDialog(this);
         loadProgressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         loadProgressDialog.show();
@@ -86,6 +96,32 @@ public class EditMyProfile extends AppCompatActivity {
         });
         //webView = (WebView) findViewById(R.id.uploadPhoto);
         //webView.loadUrl("http://195.88.209.17/app/actions/editform.php?id="+id);
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

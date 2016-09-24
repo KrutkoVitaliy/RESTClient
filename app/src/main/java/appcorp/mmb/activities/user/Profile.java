@@ -48,6 +48,7 @@ import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
@@ -80,6 +81,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "Profile");
+
         initToolbar();
         initNavigationView();
         initViews();
@@ -95,6 +103,32 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         id = new Integer(getIntent().getStringExtra("ID"));
         changeServiceStatus(1);
         new Get().execute();
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     private void initViews() {

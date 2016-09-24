@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +34,7 @@ import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
 import appcorp.mmb.activities.user.SignIn;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
@@ -47,10 +50,42 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
     public HairstyleFeedListAdapter(List<HairstyleDTO> data, Context context) {
         this.data = data;
         this.context = context;
+
+        Storage.init(context);
+        initLocalization(Intermediates.convertToString(context, R.string.translation));
+        initScreen();
+        initFirebase();
+
         width = Storage.getInt("Width", 480);
         height = width;
         if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) context
+                .getSystemService(context.WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(context);
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     @Override

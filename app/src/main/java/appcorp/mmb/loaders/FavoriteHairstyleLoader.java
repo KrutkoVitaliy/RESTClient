@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
@@ -135,6 +136,8 @@ public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
                 hairstyleData.add(hairstyleDTO);
                 if (adapter != null)
                     adapter.setHairstyleData(hairstyleData);
+
+                FireAnal.sendString("1", "Open", "FavoriteHairstyleLoaded");
             }
         } catch (JSONException e) {
             e.printStackTrace();

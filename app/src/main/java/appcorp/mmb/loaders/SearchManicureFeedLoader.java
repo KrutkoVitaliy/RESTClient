@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.HairstyleDTO;
@@ -261,6 +262,8 @@ public class SearchManicureFeedLoader extends AsyncTask<Void, Void, String> {
                         adapter.setData(data);
                     if (progressDialog != null)
                         progressDialog.hide();
+
+                    FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

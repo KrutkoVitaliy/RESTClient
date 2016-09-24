@@ -5,7 +5,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.other.InternetNotification;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
+import appcorp.mmb.classes.Storage;
 
 public class SelectCategory extends AppCompatActivity {
 
@@ -23,6 +26,11 @@ public class SelectCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_feed);
+
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
 
         if (!Intermediates.isConnected(getApplicationContext()))
             startActivity(new Intent(getApplicationContext(), InternetNotification.class));
@@ -54,6 +62,32 @@ public class SelectCategory extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), HairstyleFeed.class));
             }
         });
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
+        }
     }
 
     @Override

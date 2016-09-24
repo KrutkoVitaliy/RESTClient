@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -131,6 +132,8 @@ public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
                 adapter.setData(data);
             if (progressDialog != null)
                 progressDialog.hide();
+
+            FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
         } catch (JSONException e) {
             e.printStackTrace();
         }

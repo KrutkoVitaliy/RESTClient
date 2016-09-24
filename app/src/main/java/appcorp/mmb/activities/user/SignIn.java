@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class SignIn extends AppCompatActivity implements View.OnClickListener {
@@ -36,6 +40,14 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        Storage.init(getApplicationContext());
+        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initScreen();
+        initFirebase();
+
+        FireAnal.sendString("1", "Open", "SignIn");
+
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
@@ -51,6 +63,32 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
         submit.setOnClickListener(this);
         if(getIntent().getStringExtra("tempemail") != null) {
             email.setText(getIntent().getStringExtra("tempemail"));
+        }
+    }
+
+    private void initScreen() {
+        Display display;
+        int width, height;
+        display = ((WindowManager) getApplicationContext()
+                .getSystemService(getApplicationContext().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        width = display.getWidth();
+        height = (int) (width * 0.75F);
+        Storage.addInt("Width", width);
+        Storage.addInt("Height", height);
+    }
+
+    private void initFirebase() {
+        FireAnal.setContext(getApplicationContext());
+    }
+
+    private void initLocalization(final String translation) {
+        if (translation.equals("English")) {
+            Storage.addString("Localization", "English");
+        }
+
+        if (translation.equals("Russian")) {
+            Storage.addString("Localization", "Russian");
         }
     }
 

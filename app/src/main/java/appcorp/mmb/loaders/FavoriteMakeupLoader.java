@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
@@ -135,6 +136,8 @@ public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
                 makeupData.add(makeupDTO);
                 if (adapter != null)
                     adapter.setMakeupData(makeupData);
+
+                FireAnal.sendString("1", "Open", "FavoriteMakeupLoaded");
             }
         } catch (JSONException e) {
             e.printStackTrace();
