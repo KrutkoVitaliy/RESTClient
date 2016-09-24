@@ -53,7 +53,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         this.context = context;
 
         Storage.init(context);
-        initLocalization(Intermediates.convertToString(context, R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(context, R.string.translation));
         initScreen();
         initFirebase();
 
@@ -105,8 +105,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 ManicureFeed.addFeed(data.size() / 100 + 1);
         }
 
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+        final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
+        final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
@@ -230,7 +230,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
+                    moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));

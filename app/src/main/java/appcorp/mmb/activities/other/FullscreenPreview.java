@@ -26,7 +26,7 @@ public class FullscreenPreview extends Activity {
         setContentView(R.layout.fullscreen_preview);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 

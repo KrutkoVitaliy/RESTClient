@@ -27,7 +27,7 @@ public class InternetNotification extends AppCompatActivity {
         setContentView(R.layout.activity_internet_notification);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 

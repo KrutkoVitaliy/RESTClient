@@ -52,7 +52,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         this.context = context;
 
         Storage.init(context);
-        initLocalization(Intermediates.convertToString(context, R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(context, R.string.translation));
         initScreen();
         initFirebase();
 
@@ -103,8 +103,8 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                 HairstyleFeed.addFeed(data.size() / 100 + 1);
         }
 
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+        final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
+        final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
@@ -231,37 +231,37 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                     moreContainer.setPadding(32, 32, 32, 0);
 
                     if (item.getHlenght().equals("short"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.shortHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "1"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.shortHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "1"));
                     else if (item.getHlenght().equals("medium"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.mediumHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "2"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.mediumHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "2"));
                     else if (item.getHlenght().equals("long"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.longHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "3"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.longHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "3"));
 
                     if (item.getHtype().equals("straight"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.straightHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "1"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.straightHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "1"));
                     else if (item.getHtype().equals("braid"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.braidHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "2"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.braidHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "2"));
                     else if (item.getHtype().equals("tail"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.tailHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "3"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.tailHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "3"));
                     else if (item.getHtype().equals("bunch"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.bunchHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "4"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.bunchHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "4"));
                     else if (item.getHtype().equals("netting"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.nettingHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "5"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.nettingHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "5"));
                     else if (item.getHtype().equals("curls"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.curlsHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "6"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.curlsHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "6"));
                     else if (item.getHtype().equals("unstandart"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
 
                     if (item.getHfor().equals("kids"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", "1"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", "1"));
                     else if (item.getHfor().equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", "2"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", "2"));
                     else if (item.getHfor().equals("wedding"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", "3"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", "3"));
                     else if (item.getHfor().equals("evening"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", "4"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", "4"));
                     else if (item.getHfor().equals("exclusive"))
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", "5"));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", "5"));
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {

@@ -62,7 +62,7 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -227,6 +227,10 @@ public class Search extends AppCompatActivity {
                                 .putExtra("Difficult", difficult)
                                 .putExtra("Occasion", "" + occasion.getSelectedItemPosition())
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "SearchMakeupRequest", requestField.getText().toString());
+                        FireAnal.sendString("2", "SearchMakeupEyeColor", eyeColor);
+                        FireAnal.sendString("2", "SearchMakeupDifficult", difficult);
+                        FireAnal.sendString("2", "SearchMakeupOccasion", ""+occasion.getSelectedItemPosition());
                         break;
                     case "hairstyle":
                         String[] hairstylesForArray = getResources().getStringArray(R.array.hairstyleFor);
@@ -238,6 +242,10 @@ public class Search extends AppCompatActivity {
                                 .putExtra("HairstyleType", ""+hairstyleType.getSelectedItemPosition())
                                 .putExtra("HairstyleFor", ""+hairstyleFor.getSelectedItemPosition())
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "SearchHairstyleRequest", requestField.getText().toString());
+                        FireAnal.sendString("2", "SearchHairstyleLength", ""+hairstyleLength.getSelectedItemPosition());
+                        FireAnal.sendString("2", "SearchHairstyleType", ""+hairstyleType.getSelectedItemPosition());
+                        FireAnal.sendString("2", "SearchHairstyleFor", ""+hairstyleFor.getSelectedItemPosition());
                         break;
                     case "manicure":
                         startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
@@ -248,6 +256,9 @@ public class Search extends AppCompatActivity {
                                 .putExtra("Shape", "" + shape.getSelectedItemPosition())
                                 .putExtra("Design", "" + design.getSelectedItemPosition())
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "SearchManicureRequest", requestField.getText().toString());
+                        FireAnal.sendString("2", "SearchManicureShape", ""+shape.getSelectedItemPosition());
+                        FireAnal.sendString("2", "SearchManicureDesign", ""+design.getSelectedItemPosition());
                         break;
                 }
             }

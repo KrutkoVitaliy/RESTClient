@@ -68,14 +68,14 @@ public class EditMyProfile extends AppCompatActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "EditProfile");
 
         loadProgressDialog = new ProgressDialog(this);
-        loadProgressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        loadProgressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         loadProgressDialog.show();
 
         initToolbar();
@@ -142,7 +142,7 @@ public class EditMyProfile extends AppCompatActivity {
 
                     if (filePath.endsWith(".jpg") || filePath.endsWith(".png")) {
                         progressDialog = new ProgressDialog(this);
-                        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+                        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
                         progressDialog.show();
                         new UploadProfileImage(filePath, progressDialog).execute();
                     }
@@ -183,21 +183,21 @@ public class EditMyProfile extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.editMyProfileToolbar);
-        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
+        toolbar.setTitle(Storage.getString("Name", Intermediates.getInstance().convertToString(getApplicationContext(), R.string.app_name)));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 new GetRequest("http://195.88.209.17/app/in/updateuser.php" +
-                        "?firstname=" + Intermediates.encodeToURL(editName.getText().toString()) +
-                        "&lastname=" + Intermediates.encodeToURL(editLastname.getText().toString()) +
-                        "&city=" + Intermediates.encodeToURL(editCity.getText().toString()) +
-                        "&address=" + Intermediates.encodeToURL(editAddress.getText().toString()) +
-                        "&phone=" + Intermediates.encodeToURL(editPhone.getText().toString()) +
-                        "&gplus=" + Intermediates.encodeToURL(editGplus.getText().toString()) +
-                        "&facebook=" + Intermediates.encodeToURL(editFB.getText().toString()) +
-                        "&vk=" + Intermediates.encodeToURL(editVK.getText().toString()) +
-                        "&instagram=" + Intermediates.encodeToURL(editInst.getText().toString()) +
-                        "&ok=" + Intermediates.encodeToURL(editOK.getText().toString()) +
+                        "?firstname=" + Intermediates.getInstance().encodeToURL(editName.getText().toString()) +
+                        "&lastname=" + Intermediates.getInstance().encodeToURL(editLastname.getText().toString()) +
+                        "&city=" + Intermediates.getInstance().encodeToURL(editCity.getText().toString()) +
+                        "&address=" + Intermediates.getInstance().encodeToURL(editAddress.getText().toString()) +
+                        "&phone=" + Intermediates.getInstance().encodeToURL(editPhone.getText().toString()) +
+                        "&gplus=" + Intermediates.getInstance().encodeToURL(editGplus.getText().toString()) +
+                        "&facebook=" + Intermediates.getInstance().encodeToURL(editFB.getText().toString()) +
+                        "&vk=" + Intermediates.getInstance().encodeToURL(editVK.getText().toString()) +
+                        "&instagram=" + Intermediates.getInstance().encodeToURL(editInst.getText().toString()) +
+                        "&ok=" + Intermediates.getInstance().encodeToURL(editOK.getText().toString()) +
                         "&id=" + id).execute();
                 startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 return true;
@@ -340,7 +340,7 @@ public class EditMyProfile extends AppCompatActivity {
                     editOK.setText(item.getString("odnoklassniki"));
                     Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + item.getString("photo")).into(editAvatar);
                     Storage.addString("PhotoURL", item.getString("photo"));
-                    loadProgressDialog.hide();
+                    loadProgressDialog.dismiss();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

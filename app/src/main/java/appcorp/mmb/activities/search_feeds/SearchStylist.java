@@ -47,7 +47,7 @@ public class SearchStylist extends AppCompatActivity {
         setContentView(R.layout.activity_search_stylist);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -102,6 +102,8 @@ public class SearchStylist extends AppCompatActivity {
                             .putExtra("City", cityField.getText().toString())
                             .putExtra("Skill", skillField.getText().toString())
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                FireAnal.sendString("2", "SearchStylistCity", cityField.getText().toString());
+                FireAnal.sendString("2", "SearchStylistSkill", skillField.getText().toString());
                 //}
             }
         });

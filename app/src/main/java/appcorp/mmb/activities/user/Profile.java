@@ -82,7 +82,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -97,7 +97,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         height = width;
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         id = new Integer(getIntent().getStringExtra("ID"));
@@ -454,7 +454,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
                         strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         stroke.addView(strService);
@@ -484,7 +484,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
                         strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         stroke.addView(strService);
@@ -514,7 +514,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
                         strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width/6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         stroke.addView(strService);
@@ -537,7 +537,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
                 photoUrl = "http://195.88.209.17/storage/photos/" + profileItem.getString("photo");
-                progressDialog.hide();
+                if (progressDialog != null)
+                    progressDialog.dismiss();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

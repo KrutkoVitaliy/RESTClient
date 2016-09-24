@@ -48,7 +48,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         setContentView(R.layout.activity_hairstyle_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -65,7 +65,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         initViewPager();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new SearchHairstyleFeedLoader(toolbar, adapter, request, hairstyleLength, hairstyleType, hairstyleFor, 1, progressDialog).execute();

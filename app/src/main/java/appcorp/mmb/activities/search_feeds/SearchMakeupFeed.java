@@ -50,7 +50,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         setContentView(R.layout.activity_makeup_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -68,7 +68,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         initViewPager();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new SearchMakeupFeedLoader(toolbar, adapter, request, colors, eyeColor, difficult, occasion, 1, progressDialog).execute();

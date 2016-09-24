@@ -28,11 +28,11 @@ public class SelectCategory extends AppCompatActivity {
         setContentView(R.layout.global_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
-        if (!Intermediates.isConnected(getApplicationContext()))
+        if (!Intermediates.getInstance().isConnected(getApplicationContext()))
             startActivity(new Intent(getApplicationContext(), InternetNotification.class));
 
         FireAnal.sendString("1", "Open", "SelectCategory");

@@ -221,7 +221,7 @@ public class SearchMakeupFeedLoader extends AsyncTask<Void, Void, String> {
                     if (adapter != null)
                         adapter.setData(data);
                     if (progressDialog != null)
-                        progressDialog.hide();
+                        progressDialog.dismiss();
 
                     FireAnal.sendString("1", "Open", "SearchMakeupLoaded");
                 }

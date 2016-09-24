@@ -50,7 +50,7 @@ public class SearchStylistFeed extends AppCompatActivity {
         setContentView(R.layout.activity_search_stylist_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -61,7 +61,7 @@ public class SearchStylistFeed extends AppCompatActivity {
         initViewPager();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         city = getIntent().getStringExtra("City");

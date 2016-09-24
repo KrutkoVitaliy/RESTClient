@@ -23,7 +23,7 @@ public class ProfileMediaViewer extends Activity {
         setContentView(R.layout.activity_profile_media_viewer);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 

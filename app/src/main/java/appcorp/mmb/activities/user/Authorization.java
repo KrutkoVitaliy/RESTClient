@@ -41,7 +41,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_introduction);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -108,10 +108,10 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
     }
 
     private void registerUser() {
-        final String sEmail = Intermediates.encodeToURL(email.getText().toString().trim());
-        final String sPass = Intermediates.encodeToURL(pass.getText().toString().trim());
-        final String sName = Intermediates.encodeToURL(name.getText().toString().trim());
-        final String sLastname = Intermediates.encodeToURL(lastname.getText().toString().trim());
+        final String sEmail = Intermediates.getInstance().encodeToURL(email.getText().toString().trim());
+        final String sPass = Intermediates.getInstance().encodeToURL(pass.getText().toString().trim());
+        final String sName = Intermediates.getInstance().encodeToURL(name.getText().toString().trim());
+        final String sLastname = Intermediates.getInstance().encodeToURL(lastname.getText().toString().trim());
         final String firebaseEmail = email.getText().toString().trim();
         final String firebasePass = pass.getText().toString().trim();
 
@@ -132,7 +132,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.registering));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.registering));
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(firebaseEmail, firebasePass)

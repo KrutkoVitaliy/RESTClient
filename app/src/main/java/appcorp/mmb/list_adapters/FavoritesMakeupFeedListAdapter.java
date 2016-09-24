@@ -46,7 +46,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         this.context = context;
 
         Storage.init(context);
-        initLocalization(Intermediates.convertToString(context, R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(context, R.string.translation));
         initScreen();
         initFirebase();
 
@@ -96,8 +96,8 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 if (makeupData.size() - 1 % 100 != 8)
                     Favorites.addMakeupFeed(makeupData.size() / 100 + 1);
             }
-            final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-            final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+            final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
+            final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);
 
             String[] date = item.getAvailableDate().split("");
 
@@ -203,9 +203,9 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                         moreContainer.setOrientation(LinearLayout.VERTICAL);
                         moreContainer.setPadding(32, 32, 32, 0);
 
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
                         moreContainer.addView(createImage(item.getEye_color()));
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
                         LinearLayout colors = new LinearLayout(context);
                         colors.setOrientation(LinearLayout.HORIZONTAL);
                         String[] mColors = (item.getColors().split(","));
@@ -217,16 +217,16 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                         }
                         moreContainer.addView(colors);
 
-                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
                         moreContainer.addView(difficult(item.getDifficult()));
                         if (item.getOccasion().equals("everyday"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
+                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
                         else if (item.getOccasion().equals("celebrity"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
+                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
                         else if (item.getOccasion().equals("dramatic"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
+                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
                         else if (item.getOccasion().equals("holiday"))
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
+                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
 
                         holder.moreContainer.addView(moreContainer);
                     } else if (holder.showMore.getText().equals(HIDE)) {

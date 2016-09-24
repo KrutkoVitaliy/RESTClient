@@ -50,7 +50,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         setContentView(R.layout.activity_manicure_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -67,7 +67,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         initViewPager();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new SearchManicureFeedLoader(toolbar, adapter, request, colors, shape, design, 1, progressDialog).execute();

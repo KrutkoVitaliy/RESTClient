@@ -93,7 +93,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_my_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 
@@ -114,7 +114,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         height = width;
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
     }
 
@@ -376,8 +376,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onClick(View v) {
                             new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
-                                    "?service=" + Intermediates.encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                     "&id=" + id).execute();
                             stroke.removeAllViews();
                         }
@@ -385,8 +385,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
                     servicesMakeup.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addmakeupservice.php" +
-                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
                             "&id=" + id).execute();
                 }
             }
@@ -464,8 +464,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onClick(View v) {
                             new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
-                                    "?service=" + Intermediates.encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                     "&id=" + id).execute();
                             stroke.removeAllViews();
                         }
@@ -473,8 +473,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
                     servicesManicure.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addmanicureservice.php" +
-                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
                             "&id=" + id).execute();
                 }
             }
@@ -551,8 +551,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onClick(View v) {
                             new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
-                                    "?service=" + Intermediates.encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                     "&id=" + id).execute();
                             stroke.removeAllViews();
                         }
@@ -560,8 +560,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
                     servicesHairstyle.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addhairstyleservice.php" +
-                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
+                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
                             "&id=" + id).execute();
                 }
             }
@@ -637,7 +637,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.myProfileToolbar);
-        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
+        toolbar.setTitle(Storage.getString("Name", Intermediates.getInstance().convertToString(getApplicationContext(), R.string.app_name)));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -834,8 +834,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void onClick(View v) {
                                     new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
-                                            "?service=" + Intermediates.encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                             "&id=" + id).execute();
                                     stroke.removeAllViews();
                                 }
@@ -886,8 +886,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void onClick(View v) {
                                     new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
-                                            "?service=" + Intermediates.encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                             "&id=" + id).execute();
                                     stroke.removeAllViews();
                                 }
@@ -938,8 +938,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void onClick(View v) {
                                     new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
-                                            "?service=" + Intermediates.encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
+                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
                                             "&id=" + id).execute();
                                     stroke.removeAllViews();
                                 }
@@ -954,7 +954,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);
                     initHeaderLayout((NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation));
                     if (progressDialog != null)
-                        progressDialog.hide();
+                        progressDialog.dismiss();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -42,7 +42,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_sign_in);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
+        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
         initScreen();
         initFirebase();
 

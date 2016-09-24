@@ -160,7 +160,7 @@ public class UploadProfileImage extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (progressDialog != null)
-            progressDialog.hide();
+            progressDialog.dismiss();
     }
 
     // Считка потока в строку

@@ -108,7 +108,7 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
                         item.getString("odnoklassniki"));
                 data.add(stylistDTO);
                 adapter.setData(data);
-                progressDialog.hide();
+                progressDialog.dismiss();
             }
         } catch (JSONException e) {
             e.printStackTrace();
