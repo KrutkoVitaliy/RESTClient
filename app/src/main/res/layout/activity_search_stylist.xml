@@ -64,6 +64,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/search"
                 android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/howToBecomeStylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#336699"
+                android:text="@string/howToBeStylist"
+                android:layout_gravity="center"
+                android:textSize="8pt"
+                android:layout_marginTop="16dp"/>
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>

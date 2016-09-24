@@ -1,31 +1,44 @@
 package appcorp.mmb.activities.search_feeds;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
@@ -33,6 +46,7 @@ import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.network.GetRequest;
 
 public class SearchStylist extends AppCompatActivity {
 
@@ -40,6 +54,7 @@ public class SearchStylist extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private EditText cityField, skillField;
     private Button searchStylistButton;
+    private TextView howToBecomeStylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +100,31 @@ public class SearchStylist extends AppCompatActivity {
     }
 
     private void initViews() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.howToBeStylist);
+        alert.setMessage(R.string.howToBeStylistHint);
+
+        howToBecomeStylist = (TextView) findViewById(R.id.howToBecomeStylist);
+        howToBecomeStylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.setPositiveButton(R.string.skip, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                });
+                alert.setNeutralButton(R.string.goToProfile, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        FireAnal.sendString("3", "HowToBecomeAStylistLink", "Clicked");
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), MyProfile.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), Authorization.class));
+                    }
+                });
+                alert.show();
+            }
+        });
         cityField = (EditText) findViewById(R.id.searchStylistCityField);
         skillField = (EditText) findViewById(R.id.searchStylistSkillField);
         if (!Storage.getString("MyCity", "").equals("")) {
@@ -94,17 +134,9 @@ public class SearchStylist extends AppCompatActivity {
         searchStylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (TextUtils.isEmpty(cityField.getText())) {
-                    Toast.makeText(getApplicationContext(), R.string.enterCity, Toast.LENGTH_SHORT).show();
-                    return;
-                } else {*/
-                    startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
-                            .putExtra("City", cityField.getText().toString())
-                            .putExtra("Skill", skillField.getText().toString())
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                new CheckSearchResult(cityField.getText().toString(), skillField.getText().toString()).execute();
                 FireAnal.sendString("2", "SearchStylistCity", cityField.getText().toString());
                 FireAnal.sendString("2", "SearchStylistSkill", skillField.getText().toString());
-                //}
             }
         });
     }
@@ -115,10 +147,7 @@ public class SearchStylist extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
-                        .putExtra("City", cityField.getText().toString())
-                        .putExtra("Skill", skillField.getText().toString())
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                new CheckSearchResult(cityField.getText().toString(), skillField.getText().toString()).execute();
                 return true;
             }
         });
@@ -198,5 +227,52 @@ public class SearchStylist extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public class CheckSearchResult extends AsyncTask<Void, Void, String> {
+
+        HttpURLConnection urlFeedConnection = null;
+        BufferedReader reader = null;
+        String resultJsonFeed = "";
+        String city, skill;
+
+        public CheckSearchResult(final String city, final String skill) {
+            this.city = city;
+            this.skill = skill;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=1&city=" + Intermediates.getInstance().encodeToURL(city) + "&skill=" + Intermediates.getInstance().encodeToURL(skill));
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer buffer = new StringBuffer();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                resultJsonFeed += buffer.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (!s.equals("[]")) {
+                startActivity(new Intent(getApplicationContext(), SearchStylistFeed.class)
+                        .putExtra("City", cityField.getText().toString())
+                        .putExtra("Skill", skillField.getText().toString())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            } else {
+                Toast.makeText(getApplicationContext(), "Мастеров в городе " + city + " еще нет", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

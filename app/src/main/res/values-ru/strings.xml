@@ -230,4 +230,14 @@
     <string name="enterName">Пожалуйста, введите имя</string>
     <string name="enterLastname">Пожалуйста, введите фамилию</string>
     <string name="registering">Регистрация..</string>
+    <string name="howToBeStylist">Как стать мастером?</string>
+    <string name="howToBeStylistHint">Предоставлять сови услуги очень легко\n\n
+    1. Зарегистрируйтесь, это бесплатно,\n
+    2. Перейдите в ваш профиль,\n
+    3. Заполните контактные данные,\n
+    4. Добавьте свои услуги в прайс лист,\n
+    5. Получайте клиентов!
+    </string>
+    <string name="skip">Пропустить</string>
+    <string name="goToProfile">Начать</string>
 </resources>

@@ -235,4 +235,14 @@
     <string name="enterName">Please, enter name</string>
     <string name="enterLastname">Please, enter last name</string>
     <string name="registering">Registering..</string>
+    <string name="howToBeStylist">How to become a stylist?</string>
+    <string name="howToBeStylistHint">To provide services very easy\n\n
+    1. Create an account,\n
+    2. Go to your profile,\n
+    3. Enter contacts,\n
+    4. Enter services in to price list,\n
+    5. Get clients!
+    </string>
+    <string name="skip">Skip</string>
+    <string name="goToProfile">Go to my profile</string>
 </resources>
