@@ -177,6 +177,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                                 .putExtra("Shape", "" + "0")
                                 .putExtra("Design", "" + "0")
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "SearchManicureFeedTag", item.getHashTags().get(finalI));
                     }
                 });
                 holder.hashTags.addView(hashTag);
@@ -315,6 +316,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                     intent.putExtra("Design", "0");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "SearchManicureFeedParamShape", index);
                 }
                 if (type == "Design") {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
@@ -327,6 +329,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                     intent.putExtra("Design", "" + index);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "SearchManicureFeedParamDesign", index);
                 }
             }
         });
@@ -334,7 +337,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
         return tw;
     }
 
-    private ImageView createCircle(String color, final String searchParameter) {
+    private ImageView createCircle(final String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
         imageView.setScaleX(0.9F);
@@ -354,6 +357,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                 intent.putExtra("Design", "0");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+                FireAnal.sendString("2", "SearchManicureFeedParamColor", color);
             }
         });
         return imageView;
@@ -398,61 +402,6 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
             }
         }
         return sortedColors;
-    }
-
-    String colorName;
-
-    private LinearLayout createImage(String color) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setVerticalGravity(Gravity.CENTER_VERTICAL);
-
-        ImageView imageView = new ImageView(context);
-        TextView title = new TextView(context);
-        title.setTextSize(14);
-        title.setTextColor(Color.argb(255, 100, 100, 100));
-        title.setPadding(16, 0, 0, 0);
-        if (color.equals("black")) {
-            colorName = "black";
-            imageView.setImageResource(R.mipmap.eye_black);
-            title.setText(R.string.black_eyes);
-        }
-        if (color.equals("blue")) {
-            colorName = "blue";
-            imageView.setImageResource(R.mipmap.eye_blue);
-            title.setText(R.string.blue_eyes);
-        }
-        if (color.equals("brown")) {
-            colorName = "brown";
-            imageView.setImageResource(R.mipmap.eye_brown);
-            title.setText(R.string.brown_eyes);
-        }
-        if (color.equals("gray")) {
-            colorName = "gray";
-            imageView.setImageResource(R.mipmap.eye_gray);
-            title.setText(R.string.gray_eyes);
-        }
-        if (color.equals("green")) {
-            colorName = "green";
-            imageView.setImageResource(R.mipmap.eye_green);
-            title.setText(R.string.green_eyes);
-        }
-        if (color.equals("hazel")) {
-            colorName = "hazel";
-            imageView.setImageResource(R.mipmap.eye_hazel);
-            title.setText(R.string.hazel_eyes);
-        }
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, Search.class);
-                intent.putExtra("hashTag", colorName);
-                context.startActivity(intent);
-            }
-        });
-        layout.addView(imageView);
-        layout.addView(title);
-        return layout;
     }
 
     @Override

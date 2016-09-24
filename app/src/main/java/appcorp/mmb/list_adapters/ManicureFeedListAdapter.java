@@ -170,8 +170,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                             .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
                             .putExtra("Shape", "" + "0")
                             .putExtra("Design", "" + "0")
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    FireAnal.sendString("2", "ManicureFeedTag", item.getHashTags().get(finalI));
                 }
             });
             holder.hashTags.addView(hashTag);
@@ -310,6 +310,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     intent.putExtra("Shape", "" + index);
                     intent.putExtra("Design", "0");
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "ManicureFeedParamShape", index);
                 }
                 if (type == "Design") {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
@@ -323,6 +324,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     intent.putExtra("Shape", "0");
                     intent.putExtra("Design", "" + index);
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "ManicureFeedParamDesign", index);
                 }
             }
         });
@@ -330,7 +332,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         return tw;
     }
 
-    private ImageView createCircle(String color, final String searchParameter) {
+    private ImageView createCircle(final String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
         imageView.setScaleX(0.9F);
@@ -350,6 +352,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 intent.putExtra("Shape", "0");
                 intent.putExtra("Design", "0");
                 context.startActivity(intent);
+                FireAnal.sendString("2", "ManicureFeedParamColor", color);
             }
         });
         return imageView;

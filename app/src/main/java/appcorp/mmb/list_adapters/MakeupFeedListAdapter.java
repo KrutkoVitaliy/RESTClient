@@ -173,6 +173,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                             .putExtra("Difficult", "")
                             .putExtra("Occasion", "0")
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    FireAnal.sendString("2", "MakeupFeedTag", item.getHashTags().get(finalI));
                 }
             });
             holder.hashTags.addView(hashTag);
@@ -287,6 +288,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                     intent.putExtra("Difficult", "");
                     intent.putExtra("Occasion", "" + index);
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "MakeupFeedParamOccasion", index);
                 }
             }
         });
@@ -359,6 +361,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 intent.putExtra("Difficult", difficult);
                 intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
+                FireAnal.sendString("2", "MakeupFeedParamDifficult", difficult);
             }
         });
         text.setOnClickListener(new View.OnClickListener() {
@@ -374,6 +377,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 intent.putExtra("Difficult", difficult);
                 intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
+                FireAnal.sendString("2", "MakeupFeedParamDifficult", difficult);
             }
         });
         layout.addView(imageView);
@@ -381,7 +385,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
         return layout;
     }
 
-    private ImageView createCircle(String color, final String searchParameter) {
+    private ImageView createCircle(final String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
         imageView.setScaleX(0.9F);
@@ -402,6 +406,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 intent.putExtra("Difficult", "");
                 intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
+                FireAnal.sendString("2", "MakeupFeedParamColor", color);
             }
         });
 
@@ -464,6 +469,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 intent.putExtra("Difficult", "");
                 intent.putExtra("Occasion", "0");
                 context.startActivity(intent);
+                FireAnal.sendString("2", "MakeupFeedParamEyeColor", color);
             }
         });
         layout.addView(imageView);

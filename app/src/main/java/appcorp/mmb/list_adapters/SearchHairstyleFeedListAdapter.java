@@ -179,6 +179,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
                                 .putExtra("HairstyleType", "0")
                                 .putExtra("HairstyleFor", "0")
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "SearchHairstyleFeedTag", item.getHashTags().get(finalI));
                     }
                 });
                 holder.hashTags.addView(hashTag);
@@ -299,6 +300,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
                     intent.putExtra("HairstyleType", "0");
                     intent.putExtra("HairstyleFor", "0");
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "SearchHairstyleFeedParamLength", index);
                 }
                 if (type == "Type") {
                     String[] type = context.getResources().getStringArray(R.array.hairstyleType);
@@ -310,6 +312,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
                     intent.putExtra("HairstyleType", "" + index);
                     intent.putExtra("HairstyleFor", "0");
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "SearchHairstyleFeedParamType", index);
                 }
                 if (type == "For") {
                     String[] hfor = context.getResources().getStringArray(R.array.hairstyleFor);
@@ -321,6 +324,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
                     intent.putExtra("HairstyleType", "0");
                     intent.putExtra("HairstyleFor", "" + index);
                     context.startActivity(intent);
+                    FireAnal.sendString("2", "SearchHairstyleParamFor", index);
                 }
             }
         });
