@@ -15,8 +15,8 @@ android {
         applicationId "appcorp.mmb"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 6
-        versionName "1.05"
+        versionCode 8
+        versionName "1.07"
         multiDexEnabled true
         signingConfig signingConfigs.config
     }
@@ -54,6 +54,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.2.0'
     compile 'de.hdodenhof:circleimageview:1.1.0'
     compile 'com.google.firebase:firebase-crash:9.2.0'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
 apply plugin: 'com.google.gms.google-services'
 

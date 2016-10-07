@@ -17,6 +17,8 @@ import appcorp.mmb.activities.other.InternetNotification;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class SelectCategory extends AppCompatActivity {
 
@@ -26,6 +28,8 @@ public class SelectCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_feed);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         Storage.init(getApplicationContext());
         initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));

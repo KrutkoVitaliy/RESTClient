@@ -1,5 +1,6 @@
 <resources>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4151792091524133/8805221291</string>
+    <string name="facebook_app_id" translatable="false">542389459298988</string>
     <string name="translation">English</string>
 
     <!-- MAIN VALUES -->

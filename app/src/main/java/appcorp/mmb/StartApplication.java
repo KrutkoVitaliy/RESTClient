@@ -13,6 +13,8 @@ import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class StartApplication extends AppCompatActivity {
 
@@ -20,6 +22,8 @@ public class StartApplication extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_application);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         //initStorage();
         //initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
