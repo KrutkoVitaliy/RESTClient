@@ -13,8 +13,10 @@ import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.vk.sdk.VKSdk;
 
 public class StartApplication extends AppCompatActivity {
 
@@ -22,64 +24,40 @@ public class StartApplication extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_application);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
-
-        //initStorage();
-        //initLocalization(Intermediates.convertToString(getApplicationContext(), R.string.translation));
-        //initScreen();
-        //initFirebase();
-        //initAdMob();
+        TextView logoText = (TextView) findViewById(R.id.splashText);
+        logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
+        initFirebase();
+        sendOpenApplication();
+        initScreen();
+        initFacebook();
         timer();
     }
 
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
-    }
-
-    private void initStorage() {
-        Storage.init(getApplicationContext());
-    }
-
     private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
+        Storage.init(getApplicationContext());
+        Display display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+        Storage.addInt("Width", display.getWidth());
+        Storage.addInt("Height", (int) (display.getWidth() * 0.75F));
+    }
+
+    private void initFacebook() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
     }
 
-    private void initAdMob() {
-        /*MobileAds.initialize(getApplicationContext(), "ca-app-pub-4151792091524133/8805221291");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);*/
+    private void sendOpenApplication() {
+        FireAnal.sendString("0", "OpenApplication", "OpenApplication");
     }
 
     private void timer() {
-        TextView logoText;
-        logoText = (TextView) findViewById(R.id.splashText);
-        logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-
         new CountDownTimer(2000, 1000) {
             @Override
             public void onTick(long l) {
             }
-
             @Override
             public void onFinish() {
                 startActivity(new Intent(getApplicationContext(), SelectCategory.class)

@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':vksdk'
+project(':vksdk').projectDir = new File('vksdk_library')

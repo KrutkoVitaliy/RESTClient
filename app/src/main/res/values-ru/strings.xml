@@ -240,4 +240,23 @@
     </string>
     <string name="skip">Пропустить</string>
     <string name="goToProfile">Начать</string>
+
+    <string name="squareShape">Форма ногтей: Квадратная</string>
+    <string name="ovalShape">Форма ногтей: Овальная</string>
+    <string name="stilettoShape">Форма ногтей: Стилеты</string>
+    <string name="french_classicDesign">Дизайн ногтей: Классический</string>
+    <string name="french_chevronDesign">Дизайн ногтей: Шеврон</string>
+    <string name="french_millenniumDesign">Дизайн ногтей: Миллениум</string>
+    <string name="french_funDesign">Дизайн ногтей: Фан</string>
+    <string name="french_crystalDesign">Дизайн ногтей: Хрустальный</string>
+    <string name="french_colorfulDesign">Дизайн ногтей: Цветной</string>
+    <string name="french_designerDesign">Дизайн ногтей: Дизайнерский</string>
+    <string name="french_spaDesign">Дизайн ногтей: Спа</string>
+    <string name="french_moonDesign">Дизайн ногтей: Лунный</string>
+    <string name="artDesign">Дизайн ногтей: Художественная роспись</string>
+    <string name="designerDesign">Дизайн ногтей: Дизайнерский</string>
+    <string name="volumeDesign">Дизайн ногтей: Объемный дизайн</string>
+    <string name="aquaDesign">Дизайн ногтей: Аквариумный дизайн</string>
+    <string name="americanDesign">Дизайн ногтей: Американский дизайн</string>
+    <string name="photoDesign">Дизайн ногтей: Фотодизайн</string>
 </resources>
