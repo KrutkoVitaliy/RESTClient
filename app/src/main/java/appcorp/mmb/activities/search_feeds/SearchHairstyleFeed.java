@@ -103,16 +103,22 @@ public class SearchHairstyleFeed extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.hairstyleToolbar);
-        toolbar.setTitle(toolbarTitle);
+        toolbar.setTitle(R.string.menu_item_hairstyle);
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getApplicationContext(), Search.class)
-                        .putExtra("from", "hairstyleFeed"));
+                startActivity(new Intent(getApplicationContext(), SearchHairstyleMatrix.class)
+                        .putExtra("Request", "" + request)
+                        .putExtra("HairstyleLength", "" + hairstyleLength)
+                        .putExtra("HairstyleType", "" + hairstyleType)
+                        .putExtra("HairstyleFor", "" + hairstyleFor)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
+        toolbar.inflateMenu(R.menu.menu_search_matrix);
     }
 
     private void initNavigationView() {
@@ -171,7 +177,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).resize(100,100).centerCrop().into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).resize(100, 100).centerCrop().into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);

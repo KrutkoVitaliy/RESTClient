@@ -28,10 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.feeds.MakeupFeed;
-import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
+import appcorp.mmb.activities.search_feeds.SearchMakeupMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
@@ -164,7 +163,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchMakeupFeed.class)
+                    context.startActivity(new Intent(context, SearchMakeupMatrix.class)
                             .putExtra("Category", "makeup")
                             .putExtra("Toolbar", item.getHashTags().get(finalI).toString())
                             .putExtra("Request", item.getHashTags().get(finalI).toString())
@@ -279,7 +278,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
                 if (type == "Occasion") {
                     String[] occasion = context.getResources().getStringArray(R.array.occasions);
                     ArrayList<String> makeupColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchMakeupFeed.class);
+                    Intent intent = new Intent(context, SearchMakeupMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Toolbar", ""+ occasion[new Integer(index)]);
                     intent.putExtra("Request", "");
@@ -352,7 +351,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+diff);
                 intent.putExtra("Request", "");
@@ -368,7 +367,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+diff);
                 intent.putExtra("Request", "");
@@ -398,7 +397,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
                 makeupColors.add(searchParameter);
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
@@ -460,7 +459,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+colorName);
                 intent.putExtra("Request", "");

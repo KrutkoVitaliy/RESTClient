@@ -106,6 +106,7 @@ public class SearchManicureFeed extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.manicureToolbar);
         toolbar.setTitle(toolbarTitle);
+
         if (this.colors.size() > 0)
             if (!this.colors.get(0).equals("FFFFFF"))
                 toolbar.setBackgroundColor(Color.parseColor("#" + this.colors.get(0)));
@@ -115,12 +116,17 @@ public class SearchManicureFeed extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getApplicationContext(), Search.class)
-                        .putExtra("from", "manicureFeed"));
+                startActivity(new Intent(getApplicationContext(), SearchManicureMatrix.class)
+                        .putStringArrayListExtra("ManicureColors", colors)
+                        .putExtra("Request", "" + request)
+                        .putExtra("Shape", "" + shape)
+                        .putExtra("Design", "" + design)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
+        toolbar.inflateMenu(R.menu.menu_search_matrix);
     }
 
     private void initNavigationView() {
@@ -179,7 +185,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("PhotoURL", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).resize(100,100).centerCrop().into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).resize(100, 100).centerCrop().into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);

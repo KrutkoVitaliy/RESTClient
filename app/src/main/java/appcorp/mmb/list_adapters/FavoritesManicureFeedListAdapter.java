@@ -25,7 +25,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
-import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
@@ -141,7 +141,7 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
                 hashTag.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        context.startActivity(new Intent(context, SearchManicureFeed.class)
+                        context.startActivity(new Intent(context, SearchManicureMatrix.class)
                                 .putExtra("Request", item.getHashTags().get(finalI))
                                 .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
                                 .putExtra("Shape", "" + "0")
@@ -278,7 +278,7 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
                 if (type == "Shape") {
                     String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
@@ -291,7 +291,7 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
                 if (type == "Design") {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + designs[new Integer(index)]);

@@ -25,7 +25,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
-import appcorp.mmb.activities.search_feeds.SearchMakeupFeed;
+import appcorp.mmb.activities.search_feeds.SearchMakeupMatrix;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
@@ -137,7 +137,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 hashTag.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        context.startActivity(new Intent(context, SearchMakeupFeed.class)
+                        context.startActivity(new Intent(context, SearchMakeupMatrix.class)
                                 .putExtra("Category", "makeup")
                                 .putExtra("Request", item.getHashTags().get(finalI).toString())
                                 .putStringArrayListExtra("Colors", new ArrayList<String>())
@@ -254,7 +254,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 if (type == "Occasion") {
                     String[] occasion = context.getResources().getStringArray(R.array.occasions);
                     ArrayList<String> makeupColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchMakeupFeed.class);
+                    Intent intent = new Intent(context, SearchMakeupMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Toolbar", ""+ occasion[new Integer(index)]);
                     intent.putExtra("Request", "");
@@ -332,7 +332,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+difficult);
                 intent.putExtra("Request", "");
@@ -348,7 +348,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+difficult);
                 intent.putExtra("Request", "");
@@ -378,7 +378,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
                 makeupColors.add(searchParameter);
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Request", "");
                 intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
@@ -439,7 +439,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             @Override
             public void onClick(View view) {
                 ArrayList<String> makeupColors = new ArrayList<>();
-                Intent intent = new Intent(context, SearchMakeupFeed.class);
+                Intent intent = new Intent(context, SearchMakeupMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Toolbar", ""+colorName);
                 intent.putExtra("Request", "");

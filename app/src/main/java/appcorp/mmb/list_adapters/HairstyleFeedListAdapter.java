@@ -32,7 +32,7 @@ import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
-import appcorp.mmb.activities.search_feeds.SearchHairstyleFeed;
+import appcorp.mmb.activities.search_feeds.SearchHairstyleMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
@@ -165,7 +165,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                    context.startActivity(new Intent(context, SearchHairstyleMatrix.class)
                             .putExtra("Toolbar", item.getHashTags().get(finalI))
                             .putExtra("Request", item.getHashTags().get(finalI))
                             .putExtra("HairstyleLength", "0")
@@ -284,7 +284,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             public void onClick(View view) {
                 if (type == "Length") {
                     String[] length = context.getResources().getStringArray(R.array.hairstyleLength);
-                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    Intent intent = new Intent(context, SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Toolbar", "" + length[new Integer(index)]);
                     intent.putExtra("Request", "");
@@ -296,7 +296,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                 }
                 if (type == "Type") {
                     String[] type = context.getResources().getStringArray(R.array.hairstyleType);
-                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    Intent intent = new Intent(context, SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Toolbar", "" + type[new Integer(index)]);
                     intent.putExtra("Request", "");
@@ -308,7 +308,7 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                 }
                 if (type == "For") {
                     String[] hfor = context.getResources().getStringArray(R.array.hairstyleFor);
-                    Intent intent = new Intent(context, SearchHairstyleFeed.class);
+                    Intent intent = new Intent(context, SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Toolbar", "" + hfor[new Integer(index)]);
                     intent.putExtra("Request", "");

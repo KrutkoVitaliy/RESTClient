@@ -11,12 +11,10 @@ import android.widget.TextView;
 
 import appcorp.mmb.activities.feeds.SelectCategory;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.vk.sdk.VKSdk;
 
 public class StartApplication extends AppCompatActivity {
 

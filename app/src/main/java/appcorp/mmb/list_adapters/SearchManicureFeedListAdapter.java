@@ -248,42 +248,42 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                         }
                         moreContainer.addView(colors);
                         if (item.getShape().equals("square"))
-                            moreContainer.addView(createText("Форма ногтей: Квадратная", Typeface.DEFAULT_BOLD, 16, "Shape", "1"));
+                            moreContainer.addView(createText(convertToString(R.string.squareShape), Typeface.DEFAULT_BOLD, 16, "Shape", "1"));
                         else if (item.getShape().equals("oval"))
-                            moreContainer.addView(createText("Форма ногтей: Овальная", Typeface.DEFAULT_BOLD, 16, "Shape", "2"));
+                            moreContainer.addView(createText(convertToString(R.string.ovalShape), Typeface.DEFAULT_BOLD, 16, "Shape", "2"));
                         else if (item.getShape().equals("stiletto"))
-                            moreContainer.addView(createText("Форма ногтей: Стилеты", Typeface.DEFAULT_BOLD, 16, "Shape", "3"));
+                            moreContainer.addView(createText(convertToString(R.string.stilettoShape), Typeface.DEFAULT_BOLD, 16, "Shape", "3"));
 
                         if (item.getDesign().equals("french_classic"))
-                            moreContainer.addView(createText("Дизайн ногтей: Классический", Typeface.DEFAULT_BOLD, 16, "Design", "1"));
+                            moreContainer.addView(createText(convertToString(R.string.french_classicDesign), Typeface.DEFAULT_BOLD, 16, "Design", "1"));
                         else if (item.getDesign().equals("french_chevron"))
-                            moreContainer.addView(createText("Дизайн ногтей: Шеврон", Typeface.DEFAULT_BOLD, 16, "Design", "2"));
+                            moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), Typeface.DEFAULT_BOLD, 16, "Design", "2"));
                         else if (item.getDesign().equals("french_millennium"))
-                            moreContainer.addView(createText("Дизайн ногтей: Миллениум", Typeface.DEFAULT_BOLD, 16, "Design", "3"));
+                            moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), Typeface.DEFAULT_BOLD, 16, "Design", "3"));
                         else if (item.getDesign().equals("french_fun"))
-                            moreContainer.addView(createText("Дизайн ногтей: Фан", Typeface.DEFAULT_BOLD, 16, "Design", "4"));
+                            moreContainer.addView(createText(convertToString(R.string.french_funDesign), Typeface.DEFAULT_BOLD, 16, "Design", "4"));
                         else if (item.getDesign().equals("french_crystal"))
-                            moreContainer.addView(createText("Дизайн ногтей: Хрустальный", Typeface.DEFAULT_BOLD, 16, "Design", "5"));
+                            moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), Typeface.DEFAULT_BOLD, 16, "Design", "5"));
                         else if (item.getDesign().equals("french_colorful"))
-                            moreContainer.addView(createText("Дизайн ногтей: Цветной", Typeface.DEFAULT_BOLD, 16, "Design", "6"));
+                            moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), Typeface.DEFAULT_BOLD, 16, "Design", "6"));
                         else if (item.getDesign().equals("french_designer"))
-                            moreContainer.addView(createText("Дизайн ногтей: Дизайнерский френч", Typeface.DEFAULT_BOLD, 16, "Design", "7"));
+                            moreContainer.addView(createText(convertToString(R.string.french_designerDesign), Typeface.DEFAULT_BOLD, 16, "Design", "7"));
                         else if (item.getDesign().equals("french_spa"))
-                            moreContainer.addView(createText("Дизайн ногтей: Спа", Typeface.DEFAULT_BOLD, 16, "Design", "8"));
+                            moreContainer.addView(createText(convertToString(R.string.french_spaDesign), Typeface.DEFAULT_BOLD, 16, "Design", "8"));
                         else if (item.getDesign().equals("french_moon"))
-                            moreContainer.addView(createText("Дизайн ногтей: Лунный", Typeface.DEFAULT_BOLD, 16, "Design", "9"));
+                            moreContainer.addView(createText(convertToString(R.string.french_moonDesign), Typeface.DEFAULT_BOLD, 16, "Design", "9"));
                         else if (item.getDesign().equals("art"))
-                            moreContainer.addView(createText("Дизайн ногтей: Художественная роспись", Typeface.DEFAULT_BOLD, 16, "Design", "10"));
+                            moreContainer.addView(createText(convertToString(R.string.artDesign), Typeface.DEFAULT_BOLD, 16, "Design", "10"));
                         else if (item.getDesign().equals("designer"))
-                            moreContainer.addView(createText("Дизайн ногтей: Дизайнерский", Typeface.DEFAULT_BOLD, 16, "Design", "11"));
+                            moreContainer.addView(createText(convertToString(R.string.designerDesign), Typeface.DEFAULT_BOLD, 16, "Design", "11"));
                         else if (item.getDesign().equals("volume"))
-                            moreContainer.addView(createText("Дизайн ногтей: Объемный дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "12"));
+                            moreContainer.addView(createText(convertToString(R.string.volumeDesign), Typeface.DEFAULT_BOLD, 16, "Design", "12"));
                         else if (item.getDesign().equals("aqua"))
-                            moreContainer.addView(createText("Дизайн ногтей: Аквариумный дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "13"));
+                            moreContainer.addView(createText(convertToString(R.string.aquaDesign), Typeface.DEFAULT_BOLD, 16, "Design", "13"));
                         else if (item.getDesign().equals("american"))
-                            moreContainer.addView(createText("Дизайн ногтей: Американский дизайн", Typeface.DEFAULT_BOLD, 16, "Design", "14"));
+                            moreContainer.addView(createText(convertToString(R.string.americanDesign), Typeface.DEFAULT_BOLD, 16, "Design", "14"));
                         else if (item.getDesign().equals("photo"))
-                            moreContainer.addView(createText("Дизайн ногтей: Фотодизайн", Typeface.DEFAULT_BOLD, 16, "Design", "15"));
+                            moreContainer.addView(createText(convertToString(R.string.photoDesign), Typeface.DEFAULT_BOLD, 16, "Design", "15"));
 
                         holder.moreContainer.addView(moreContainer);
                     } else if (holder.showMore.getText().equals(HIDE)) {
@@ -293,6 +293,12 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
                 }
             });
         }
+    }
+
+    public String convertToString(int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private TextView createText(String title, final Typeface tf, int padding, final String type, final String index) {

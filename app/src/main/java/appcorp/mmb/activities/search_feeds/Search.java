@@ -1,6 +1,5 @@
 package appcorp.mmb.activities.search_feeds;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,7 +11,6 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -218,7 +216,7 @@ public class Search extends AppCompatActivity {
             public void onClick(View view) {
                 switch (category) {
                     case "makeup":
-                        startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchMakeupMatrix.class)
                                 .putExtra("Toolbar", "makeup")
                                 .putExtra("Category", "makeup")
                                 .putExtra("Request", requestField.getText().toString())
@@ -234,7 +232,7 @@ public class Search extends AppCompatActivity {
                         break;
                     case "hairstyle":
                         String[] hairstylesForArray = getResources().getStringArray(R.array.hairstyleFor);
-                        startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchHairstyleMatrix.class)
                                 .putExtra("Toolbar", ""+hairstylesForArray[hairstyleFor.getSelectedItemPosition()])
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
@@ -248,7 +246,7 @@ public class Search extends AppCompatActivity {
                         FireAnal.sendString("2", "SearchHairstyleFor", ""+hairstyleFor.getSelectedItemPosition());
                         break;
                     case "manicure":
-                        startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchManicureMatrix.class)
                                 .putExtra("Toolbar", "manicure")
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())
@@ -260,6 +258,18 @@ public class Search extends AppCompatActivity {
                         FireAnal.sendString("2", "SearchManicureShape", ""+shape.getSelectedItemPosition());
                         FireAnal.sendString("2", "SearchManicureDesign", ""+design.getSelectedItemPosition());
                         break;
+                    /*startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
+                            .putExtra("Toolbar", "manicure")
+                            .putExtra("Category", "manicure")
+                            .putExtra("Request", requestField.getText().toString())
+                            .putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors))
+                            .putExtra("Shape", "" + shape.getSelectedItemPosition())
+                            .putExtra("Design", "" + design.getSelectedItemPosition())
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    FireAnal.sendString("2", "SearchManicureRequest", requestField.getText().toString());
+                    FireAnal.sendString("2", "SearchManicureShape", ""+shape.getSelectedItemPosition());
+                    FireAnal.sendString("2", "SearchManicureDesign", ""+design.getSelectedItemPosition());
+                    break;*/
                 }
             }
         });
@@ -273,7 +283,7 @@ public class Search extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (category) {
                     case "makeup":
-                        startActivity(new Intent(getApplicationContext(), SearchMakeupFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchMakeupMatrix.class)
                                 .putExtra("Toolbar", "makeup")
                                 .putExtra("Category", "makeup")
                                 .putExtra("Request", requestField.getText().toString())
@@ -285,7 +295,7 @@ public class Search extends AppCompatActivity {
                         break;
                     case "hairstyle":
                         String[] hairstylesForArray = getResources().getStringArray(R.array.hairstyleFor);
-                        startActivity(new Intent(getApplicationContext(), SearchHairstyleFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchHairstyleMatrix.class)
                                 .putExtra("Toolbar", ""+hairstylesForArray[hairstyleFor.getSelectedItemPosition()])
                                 .putExtra("Category", "hairstyle")
                                 .putExtra("Request", requestField.getText().toString())
@@ -295,7 +305,7 @@ public class Search extends AppCompatActivity {
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case "manicure":
-                        startActivity(new Intent(getApplicationContext(), SearchManicureFeed.class)
+                        startActivity(new Intent(getApplicationContext(), SearchManicureMatrix.class)
                                 .putExtra("Toolbar", "manicure")
                                 .putExtra("Category", "manicure")
                                 .putExtra("Request", requestField.getText().toString())

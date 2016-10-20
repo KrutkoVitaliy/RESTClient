@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="Matrix"
+        android:id="@+id/matrixRender"
+        android:orderInCategory="1"
+        android:icon="@mipmap/grid"
+        app:showAsAction="ifRoom"/>
+</menu>

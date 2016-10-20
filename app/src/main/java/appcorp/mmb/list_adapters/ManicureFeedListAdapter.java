@@ -32,7 +32,7 @@ import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
+import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
@@ -170,8 +170,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             hashTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchManicureFeed.class)
-                            .putExtra("Toolbar", item.getHashTags().get(finalI).trim())
+                    context.startActivity(new Intent(context, SearchManicureMatrix.class)
                             .putExtra("Request", item.getHashTags().get(finalI).trim())
                             .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
                             .putExtra("Shape", "" + "0")
@@ -307,7 +306,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 if (type == "Shape") {
                     String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
@@ -321,7 +320,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 if (type == "Design") {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
-                    Intent intent = new Intent(context, SearchManicureFeed.class);
+                    Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
@@ -351,7 +350,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             public void onClick(View view) {
                 ArrayList<String> manicureColors = new ArrayList<>();
                 manicureColors.add(searchParameter);
-                Intent intent = new Intent(context, SearchManicureFeed.class);
+                Intent intent = new Intent(context, SearchManicureMatrix.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putStringArrayListExtra("ManicureColors", sortManicureColors(manicureColors));
                 intent.putExtra("Request", "");

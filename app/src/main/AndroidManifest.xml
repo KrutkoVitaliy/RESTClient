@@ -5,16 +5,33 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:required="false" />
-    <uses-permission android:name="android.permission.CALL_PHONE" android:required="false" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="false" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.CALL_PHONE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="false" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" android:required="false" />
-    <uses-permission android:name="android.permission.READ_PROFILE" android:required="false" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" android:required="false" />
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_PROFILE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -23,8 +40,10 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <!--<activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" />-->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <!-- <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" /> -->
         <activity
             android:name=".activities.feeds.SelectCategory"
             android:screenOrientation="portrait" />
@@ -35,10 +54,10 @@
         <activity
             android:name=".activities.search_feeds.Search"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.user.Profile"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.user.Authorization"
             android:screenOrientation="portrait"
@@ -73,7 +92,7 @@
         <activity
             android:name=".activities.user.EditMyProfile"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.search_feeds.SearchMakeupFeed"
             android:screenOrientation="portrait" />
@@ -96,6 +115,24 @@
         <activity
             android:name=".activities.search_feeds.SearchStylistFeed"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.search_feeds.SearchManicureMatrix"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.search_feeds.SearchMakeupMatrix"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.search_feeds.SearchHairstyleMatrix"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.other.PostManicure"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.other.PostMakeup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.other.PostHairstyle"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
