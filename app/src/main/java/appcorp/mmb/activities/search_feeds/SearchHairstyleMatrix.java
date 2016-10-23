@@ -113,9 +113,7 @@ public class SearchHairstyleMatrix extends AppCompatActivity {
                         .putExtra("Request", "" + request)
                         .putExtra("HairstyleLength", "" + hairstyleLength)
                         .putExtra("HairstyleType", "" + hairstyleType)
-                        .putExtra("HairstyleFor", "" + hairstyleFor)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        .putExtra("HairstyleFor", "" + hairstyleFor));
                 return true;
             }
         });
@@ -142,6 +140,8 @@ public class SearchHairstyleMatrix extends AppCompatActivity {
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;*/
                     case R.id.navMenuSearch:
+                        startActivity(new Intent(getApplicationContext(), Search.class)
+                                .putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuSearchStylist:
                         startActivity(new Intent(getApplicationContext(), SearchStylist.class));

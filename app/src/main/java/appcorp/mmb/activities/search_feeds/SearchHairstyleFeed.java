@@ -112,9 +112,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
                         .putExtra("Request", "" + request)
                         .putExtra("HairstyleLength", "" + hairstyleLength)
                         .putExtra("HairstyleType", "" + hairstyleType)
-                        .putExtra("HairstyleFor", "" + hairstyleFor)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        .putExtra("HairstyleFor", "" + hairstyleFor));
                 return true;
             }
         });

@@ -149,6 +149,8 @@ public class SearchManicureMatrix extends AppCompatActivity {
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;*/
                     case R.id.navMenuSearch:
+                        startActivity(new Intent(getApplicationContext(), Search.class)
+                                .putExtra("hashTag", "empty"));
                         break;
                     case R.id.navMenuSearchStylist:
                         startActivity(new Intent(getApplicationContext(), SearchStylist.class));

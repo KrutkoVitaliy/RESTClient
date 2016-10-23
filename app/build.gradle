@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId "appcorp.mmb"
         minSdkVersion 17
-        targetSdkVersion 24
-        versionCode 10
-        versionName "1.09"
+        targetSdkVersion 25
+        versionCode 12
+        versionName "1.11"
         multiDexEnabled true
         signingConfig signingConfigs.config
     }
