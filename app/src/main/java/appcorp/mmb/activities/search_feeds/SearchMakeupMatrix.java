@@ -48,7 +48,7 @@ public class SearchMakeupMatrix extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private SearchMakeupMatrixAdapter adapter;
     private ArrayList<String> thumbs = new ArrayList<>();
-    private static String request, eyeColor, difficult, occasion, toolbarTitle;
+    private String request, eyeColor, difficult, occasion, toolbarTitle;
     private ArrayList<String> colors = new ArrayList<>();
     private ProgressDialog progressDialog;
 
@@ -148,7 +148,7 @@ public class SearchMakeupMatrix extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class)
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;*/

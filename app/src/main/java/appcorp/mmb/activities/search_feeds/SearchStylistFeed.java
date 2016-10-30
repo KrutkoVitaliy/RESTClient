@@ -2,47 +2,53 @@ package appcorp.mmb.activities.search_feeds;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.dto.StylistDTO;
-import appcorp.mmb.fragment_adapters.SearchManicureFeedFragmentAdapter;
 import appcorp.mmb.fragment_adapters.SearchStylistFeedFragmentAdapter;
-import appcorp.mmb.loaders.SearchStylistLoader;
 
 public class SearchStylistFeed extends AppCompatActivity {
 
-    private static Toolbar toolbar;
-    private static DrawerLayout drawerLayout;
-    private static ViewPager viewPager;
-    private static SearchStylistFeedFragmentAdapter adapter;
-    private static String city, skill;
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private SearchStylistFeedFragmentAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +56,6 @@ public class SearchStylistFeed extends AppCompatActivity {
         setContentView(R.layout.activity_search_stylist_feed);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "SearchStylistFeed");
@@ -60,44 +64,18 @@ public class SearchStylistFeed extends AppCompatActivity {
         initNavigationView();
         initViewPager();
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
-        city = getIntent().getStringExtra("City");
-        skill = getIntent().getStringExtra("Skill");
+        String city = getIntent().getStringExtra("City");
+        String skill = getIntent().getStringExtra("Skill");
 
-        new SearchStylistLoader(adapter, city, skill, 1, progressDialog).execute();
-    }
-
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
+        new SearchStylistLoader(city, skill, 1).execute();
     }
 
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
-    }
-
-    public static void addStylistFeed(final int position) {
-        new SearchStylistLoader(adapter, city, skill, position).execute();
     }
 
     private void initToolbar() {
@@ -116,7 +94,7 @@ public class SearchStylistFeed extends AppCompatActivity {
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.searchStylistFeedDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.searchStylistFeedNavigation);
@@ -124,11 +102,11 @@ public class SearchStylistFeed extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
@@ -192,8 +170,95 @@ public class SearchStylistFeed extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        viewPager = (ViewPager) findViewById(R.id.searchStylistFeedViewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.searchStylistFeedViewPager);
         adapter = new SearchStylistFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<StylistDTO>());
         viewPager.setAdapter(adapter);
+    }
+
+    public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
+
+        private String resultJsonFeed = "";
+        private String city;
+        private String skill;
+        int position;
+
+        SearchStylistLoader(String city, String skill, int position) {
+            this.position = position;
+            this.city = city;
+            this.skill = skill;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                HttpURLConnection urlFeedConnection;
+                BufferedReader reader;
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", "");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            List<StylistDTO> data = new ArrayList<>();
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    StylistDTO stylistDTO = new StylistDTO(
+                            item.getLong("id"),
+                            item.getString("firstName"),
+                            item.getString("lastName"),
+                            item.getString("photo"),
+                            item.getString("phoneNumber"),
+                            item.getString("city"),
+                            item.getString("address"),
+                            item.getString("gplus"),
+                            item.getString("facebook"),
+                            item.getString("vkontakte"),
+                            item.getString("instagram"),
+                            item.getString("odnoklassniki"));
+                    data.add(stylistDTO);
+                    adapter.setData(data);
+                    progressDialog.dismiss();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            FireAnal.sendString("1", "Open", "StylistLoaded");
+        }
     }
 }

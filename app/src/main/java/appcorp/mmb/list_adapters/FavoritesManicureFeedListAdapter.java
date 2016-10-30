@@ -95,10 +95,10 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
         if (position < getItemCount()) {
             final ManicureDTO item = manicureData.get(position);
 
-            if (position == manicureData.size() - 1) {
+            /*if (position == manicureData.size() - 1) {
                 if (manicureData.size() - 1 % 100 != 8)
                     Favorites.addManicureFeed(manicureData.size() / 100 + 1);
-            }
+            }*/
 
             final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
             final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);

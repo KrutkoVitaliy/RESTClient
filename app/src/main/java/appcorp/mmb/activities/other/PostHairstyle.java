@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.Gravity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import appcorp.mmb.R;
 import appcorp.mmb.activities.search_feeds.SearchHairstyleMatrix;
@@ -45,7 +43,6 @@ public class PostHairstyle extends AppCompatActivity {
     HorizontalScrollView postHairstyleImageViewerHorizontal;
     ImageView postHairstyleAvatar, postHairstyleAddLike;
     TextView postHairstyleTitle, postHairstyleAvailableDate, postHairstyleLikesCount;
-    int width, height;
     private List<Long> likes = new ArrayList<>();
 
     @Override
@@ -54,9 +51,6 @@ public class PostHairstyle extends AppCompatActivity {
         setContentView(R.layout.activity_post_hairstyle);
         initViews();
         Storage.init(getApplicationContext());
-        Display display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
 
         imageUrl = getIntent().getStringExtra("hairstyleImageUrl");
         new LoadPost().execute();
@@ -95,7 +89,7 @@ public class PostHairstyle extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null)
                     buffer.append(line);
@@ -122,28 +116,32 @@ public class PostHairstyle extends AppCompatActivity {
                     final ArrayList<String> hashTags = new ArrayList<>();
                     if (Storage.getString("Localization", "").equals("English"))
                         for (int a = 0; a < item.getString("tags").split(",").length; a++)
-                            hashTags.add(item.getString("tags").split(",")[a]);
+                            if (!item.getString("tags").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tags").split(",")[a]);
                     if (Storage.getString("Localization", "").equals("Russian"))
                         for (int a = 0; a < item.getString("tagsRu").split(",").length; a++)
-                            hashTags.add(item.getString("tagsRu").split(",")[a]);
+                            if (!item.getString("tagsRu").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tagsRu").split(",")[a]);
                     for (int j = 0; j < hashTags.size(); j++) {
                         TextView hashTag = new TextView(getApplicationContext());
                         hashTag.setTextColor(Color.argb(255, 51, 102, 153));
                         hashTag.setTextSize(16);
                         final int finalI = j;
-                        hashTag.setText("#" + hashTags.get(j).replace(" ", "") + " ");
+                        hashTag.setText(String.valueOf("#" + hashTags.get(j).replace(" ", "")));
                         hashTag.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 getApplicationContext().startActivity(new Intent(getApplicationContext(), SearchHairstyleMatrix.class)
+                                        .putExtra("Toolbar", hashTags.get(finalI).trim())
                                         .putExtra("Request", hashTags.get(finalI).trim())
                                         .putStringArrayListExtra("HairstyleColors", new ArrayList<String>())
-                                        .putExtra("Shape", "" + "0")
-                                        .putExtra("Design", "" + "0")
+                                        .putExtra("HairstyleLength", "0")
+                                        .putExtra("HairstyleType", "0")
+                                        .putExtra("HairstyleFor", "0")
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             }
                         });
-                        if (hashTag.getText().toString().equals(""))
+                        if (!hashTag.getText().toString().equals(""))
                             postHairstyleHashTags.addView(hashTag);
                     }
 
@@ -153,11 +151,11 @@ public class PostHairstyle extends AppCompatActivity {
                             screenshots.add(item.getString("screen" + j));
                     for (int k = 0; k < screenshots.size(); k++) {
                         ImageView screenShot = new ImageView(getApplicationContext());
-                        screenShot.setMinimumWidth(width);
-                        screenShot.setMinimumHeight(height);
+                        screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                        screenShot.setMinimumHeight(Storage.getInt("Width", 480));
                         screenShot.setPadding(0, 0, 1, 0);
                         screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(width, height).centerCrop().into(screenShot);
+                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
                         screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         final int finalI = k;
                         screenShot.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +170,7 @@ public class PostHairstyle extends AppCompatActivity {
                         postHairstyleImageViewer.addView(screenShot);
                         postHairstyleImageViewerHorizontal.scrollTo(0, 0);
                         LinearLayout countLayout = new LinearLayout(getApplicationContext());
-                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
                         TextView count = new TextView(getApplicationContext());
                         count.setText("< " + (k + 1) + "/" + screenshots.size() + " >");
                         count.setTextSize(24);
@@ -183,22 +181,22 @@ public class PostHairstyle extends AppCompatActivity {
                         postHairstyleCountImages.addView(countLayout);
                     }
 
-                    postHairstyleLikesCount.setText("" + item.getString("likes"));
+                    postHairstyleLikesCount.setText(String.valueOf(item.getString("likes")));
 
                     postHairstyleAddLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
                                 try {
-                                    if (!likes.contains(item.getString("id"))) {
+                                    if (!likes.contains(item.getLong("id"))) {
                                         postHairstyleAddLike.setBackgroundResource(R.mipmap.ic_heart);
-                                        likes.add(new Long(item.getString("id")));
-                                        postHairstyleLikesCount.setText("" + (item.getString("likes") + 1));
+                                        likes.add(item.getLong("id"));
+                                        postHairstyleLikesCount.setText(String.valueOf(item.getString("likes") + 1));
                                         new GetRequest("http://195.88.209.17/app/in/makeupLike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
-                                    } else if (likes.contains(item.getString("id"))) {
+                                    } else if (likes.contains(item.getLong("id"))) {
                                         postHairstyleAddLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                                        likes.remove(item.getString("id"));
-                                        postHairstyleLikesCount.setText("" + (new Long(postHairstyleLikesCount.getText().toString()) - 1));
+                                        likes.remove(item.getLong("id"));
+                                        postHairstyleLikesCount.setText(String.valueOf(postHairstyleLikesCount.getText()));
                                         new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
                                     }
                                 } catch (JSONException e) {
@@ -218,37 +216,37 @@ public class PostHairstyle extends AppCompatActivity {
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
 
                     if (item.getString("length").equals("short"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.shortHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "1"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.shortHairstyle), 16, "Length", "1"));
                     else if (item.getString("length").equals("medium"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.mediumHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "2"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.mediumHairstyle), 16, "Length", "2"));
                     else if (item.getString("length").equals("long"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.longHairstyle), Typeface.DEFAULT_BOLD, 16, "Length", "3"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.longHairstyle), 16, "Length", "3"));
 
                     if (item.getString("type").equals("straight"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.straightHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "1"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.straightHairstyleType), 16, "Type", "1"));
                     else if (item.getString("type").equals("braid"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.braidHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "2"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.braidHairstyleType), 16, "Type", "2"));
                     else if (item.getString("type").equals("tail"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.tailHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "3"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.tailHairstyleType), 16, "Type", "3"));
                     else if (item.getString("type").equals("bunch"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.bunchHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "4"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.bunchHairstyleType), 16, "Type", "4"));
                     else if (item.getString("type").equals("netting"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.nettingHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "5"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.nettingHairstyleType), 16, "Type", "5"));
                     else if (item.getString("type").equals("curls"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.curlsHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "6"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.curlsHairstyleType), 16, "Type", "6"));
                     else if (item.getString("type").equals("unstandart"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.unstandartHairstyleType), Typeface.DEFAULT_BOLD, 16, "Type", "7"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.unstandartHairstyleType), 16, "Type", "7"));
 
                     if (item.getString("for").equals("kids"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.forKids), Typeface.DEFAULT_BOLD, 16, "For", "1"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forKids), 16, "For", "1"));
                     else if (item.getString("for").equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.forEveryday), Typeface.DEFAULT_BOLD, 16, "For", "2"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forEveryday), 16, "For", "2"));
                     else if (item.getString("for").equals("wedding"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.forWedding), Typeface.DEFAULT_BOLD, 16, "For", "3"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forWedding), 16, "For", "3"));
                     else if (item.getString("for").equals("evening"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.forEvening), Typeface.DEFAULT_BOLD, 16, "For", "4"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forEvening), 16, "For", "4"));
                     else if (item.getString("for").equals("exclusive"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.forExclusive), Typeface.DEFAULT_BOLD, 16, "For", "5"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forExclusive), 16, "For", "5"));
 
                     postHairstyleMoreContainer.addView(moreContainer);
                 }
@@ -258,20 +256,20 @@ public class PostHairstyle extends AppCompatActivity {
         }
     }
 
-    private TextView createText(String title, Typeface tf, int padding, final String type, final String index) {
+    private TextView createText(String title, int padding, final String type, final String index) {
         TextView tw = new TextView(getApplicationContext());
-        tw.setText("" + title);
+        tw.setText(String.valueOf(title));
         tw.setPadding(0, padding, 0, padding);
         tw.setTextSize(14);
         tw.setTextColor(Color.argb(255, 50, 50, 50));
         tw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (type == "Length") {
+                if (Objects.equals(type, "Length")) {
                     String[] length = getResources().getStringArray(R.array.hairstyleLength);
                     Intent intent = new Intent(getApplicationContext(), SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Toolbar", "" + length[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + length[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "" + index);
                     intent.putExtra("HairstyleType", "0");
@@ -279,11 +277,11 @@ public class PostHairstyle extends AppCompatActivity {
                     startActivity(intent);
                     FireAnal.sendString("2", "SearchHairstyleMatrixParamLength", index);
                 }
-                if (type == "Type") {
+                if (Objects.equals(type, "Type")) {
                     String[] type = getResources().getStringArray(R.array.hairstyleType);
                     Intent intent = new Intent(getApplicationContext(), SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Toolbar", "" + type[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + type[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "" + index);
@@ -291,11 +289,11 @@ public class PostHairstyle extends AppCompatActivity {
                     startActivity(intent);
                     FireAnal.sendString("2", "SearchHairstyleMatrixParamType", index);
                 }
-                if (type == "For") {
+                if (Objects.equals(type, "For")) {
                     String[] hfor = getResources().getStringArray(R.array.hairstyleFor);
                     Intent intent = new Intent(getApplicationContext(), SearchHairstyleMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("Toolbar", "" + hfor[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + hfor[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("HairstyleLength", "0");
                     intent.putExtra("HairstyleType", "0");
@@ -305,7 +303,6 @@ public class PostHairstyle extends AppCompatActivity {
                 }
             }
         });
-        //tw.setTypeface(tf);
         return tw;
     }
 
@@ -313,11 +310,10 @@ public class PostHairstyle extends AppCompatActivity {
 
         HttpURLConnection connection = null;
         BufferedReader reader = null;
-        String url = "";
         String result = "";
         String email = "";
 
-        public CheckLikes(String email) {
+        CheckLikes(String email) {
             this.email = email;
         }
 
@@ -330,7 +326,7 @@ public class PostHairstyle extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
+                StringBuilder profileBuffer = new StringBuilder();
                 String profileLine;
                 while ((profileLine = reader.readLine()) != null) {
                     profileBuffer.append(profileLine);
@@ -345,9 +341,9 @@ public class PostHairstyle extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             String[] array = s.split(",");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals(""))
-                    likes.add(new Long(array[i]));
+            for (String anArray : array) {
+                if (!anArray.equals(""))
+                    likes.add(Long.valueOf(anArray));
             }
         }
     }

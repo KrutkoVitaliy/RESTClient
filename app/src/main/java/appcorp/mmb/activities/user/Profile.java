@@ -7,26 +7,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,28 +44,20 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private TextView name, location, phone, likes, followers;
-    private TextView serviceMakeupText, serviceManicureText, serviceHairstyleText;
-    private LinearLayout serviceMakeup, serviceManicure, serviceHairstyle;
+    private TextView name, location, phone;
     private ImageView gplusButton, fbButton, vkButton, instagramButton, okButton;
     private ImageView photo;
     private String gplusLink = "", fbLink = "", vkLink = "", instagramLink = "", okLink = "";
     private String photoUrl;
-    private ScrollView makeupUserGallery, manicureUserGallery, hairstyleUserGallery;
-    private LinearLayout servicesMakeup;
-    private LinearLayout servicesManicure;
-    private LinearLayout servicesHairstyle;
+    private LinearLayout services;
     private ProgressDialog progressDialog;
     private int id;
-    Display display;
-    int width, height;
 
     public Profile() {
 
@@ -82,8 +69,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "Profile");
@@ -92,76 +77,36 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         initNavigationView();
         initViews();
 
-        display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
-
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
-        id = new Integer(getIntent().getStringExtra("ID"));
-        changeServiceStatus(1);
+        id = Integer.valueOf(getIntent().getStringExtra("ID"));
         new Get().execute();
     }
 
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
     }
 
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
-    }
-
     private void initViews() {
-        name = (TextView) findViewById(R.id.name);
-        location = (TextView) findViewById(R.id.location);
-        phone = (TextView) findViewById(R.id.phone);
+        name = (TextView) findViewById(R.id.profileName);
+        location = (TextView) findViewById(R.id.profileLocation);
+        phone = (TextView) findViewById(R.id.profilePhone);
         photo = (ImageView) findViewById(R.id.profileAvatar);
-        //likes = (TextView) findViewById(R.id.likes);
-        //followers = (TextView) findViewById(R.id.followers);
-        serviceMakeupText = (TextView) findViewById(R.id.serviceMakeupText);
-        serviceManicureText = (TextView) findViewById(R.id.serviceManicureText);
-        serviceHairstyleText = (TextView) findViewById(R.id.serviceHairstyleText);
-        serviceMakeupText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceManicureText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceHairstyleText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceMakeup = (LinearLayout) findViewById(R.id.serviceMakeup);
-        serviceManicure = (LinearLayout) findViewById(R.id.serviceManicure);
-        serviceHairstyle = (LinearLayout) findViewById(R.id.serviceHairstyle);
-        gplusButton = (ImageView) findViewById(R.id.gplusButton);
-        fbButton = (ImageView) findViewById(R.id.fbButton);
-        vkButton = (ImageView) findViewById(R.id.vkButton);
-        instagramButton = (ImageView) findViewById(R.id.instagramButton);
-        okButton = (ImageView) findViewById(R.id.okButton);
-        makeupUserGallery = (ScrollView) findViewById(R.id.makeupUserGallery);
-        manicureUserGallery = (ScrollView) findViewById(R.id.manicureUserGallery);
-        hairstyleUserGallery = (ScrollView) findViewById(R.id.hairstyleUserGallery);
-        servicesMakeup = (LinearLayout) findViewById(R.id.servicesMakeup);
-        servicesManicure = (LinearLayout) findViewById(R.id.servicesManicure);
-        servicesHairstyle = (LinearLayout) findViewById(R.id.servicesHairstyle);
+        gplusButton = (ImageView) findViewById(R.id.profileGplusButton);
+        fbButton = (ImageView) findViewById(R.id.profileFbButton);
+        vkButton = (ImageView) findViewById(R.id.profileVkButton);
+        instagramButton = (ImageView) findViewById(R.id.profileInstagramButton);
+        okButton = (ImageView) findViewById(R.id.profileOkButton);
+        services = (LinearLayout) findViewById(R.id.profileServices);
 
-        serviceMakeup.setOnClickListener(this);
-        serviceManicure.setOnClickListener(this);
-        serviceHairstyle.setOnClickListener(this);
         gplusButton.setOnClickListener(this);
         fbButton.setOnClickListener(this);
         vkButton.setOnClickListener(this);
@@ -178,7 +123,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.profileDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.profileNavigation);
@@ -186,11 +131,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
@@ -255,15 +200,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == serviceMakeup) {
-            changeServiceStatus(1);
-        }
-        if (view == serviceManicure) {
-            changeServiceStatus(2);
-        }
-        if (view == serviceHairstyle) {
-            changeServiceStatus(3);
-        }
         if (view == gplusButton) {
             if (!gplusLink.equals(""))
                 createThreeButtonsAlertDialog("Google Plus", "gplus", gplusLink);
@@ -361,35 +297,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         builder.show();
     }
 
-    private void changeServiceStatus(int status) {
-        switch (status) {
-            case 1:
-                serviceMakeup.setAlpha(1F);
-                serviceManicure.setAlpha(0.6F);
-                serviceHairstyle.setAlpha(0.6F);
-                makeupUserGallery.setVisibility(View.VISIBLE);
-                manicureUserGallery.setVisibility(View.INVISIBLE);
-                hairstyleUserGallery.setVisibility(View.INVISIBLE);
-                break;
-            case 2:
-                serviceMakeup.setAlpha(0.6F);
-                serviceManicure.setAlpha(1F);
-                serviceHairstyle.setAlpha(0.6F);
-                makeupUserGallery.setVisibility(View.INVISIBLE);
-                manicureUserGallery.setVisibility(View.VISIBLE);
-                hairstyleUserGallery.setVisibility(View.INVISIBLE);
-                break;
-            case 3:
-                serviceMakeup.setAlpha(0.6F);
-                serviceManicure.setAlpha(0.6F);
-                serviceHairstyle.setAlpha(1F);
-                makeupUserGallery.setVisibility(View.INVISIBLE);
-                manicureUserGallery.setVisibility(View.INVISIBLE);
-                hairstyleUserGallery.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
     class Get extends AsyncTask<Void, Void, String> {
         HttpURLConnection profileConnection = null;
         BufferedReader profileReader = null;
@@ -404,7 +311,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 profileConnection.connect();
                 InputStream inputStream = profileConnection.getInputStream();
                 profileReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
+                StringBuilder profileBuffer = new StringBuilder();
                 String profileLine;
                 while ((profileLine = profileReader.readLine()) != null) {
                     profileBuffer.append(profileLine);
@@ -446,15 +353,15 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 instagramLink = profileItem.getString("instagram");
                 okLink = profileItem.getString("odnoklassniki");
 
-                if (!profileItem.getString("makeupServices").equals("")) {
-                    String[] makeupServicesArray = profileItem.getString("makeupServices").substring(1, profileItem.getString("makeupServices").length()).split(",");
-                    String[] makeupCostsArray = profileItem.getString("makeupCosts").substring(1, profileItem.getString("makeupCosts").length()).split(",");
-                    for (int j = 0; j < makeupServicesArray.length; j++) {
+                if (!profileItem.getString("services").equals("")) {
+                    String[] servicesArray = profileItem.getString("services").substring(1, profileItem.getString("services").length()).split(",");
+                    String[] costsArray = profileItem.getString("costs").substring(1, profileItem.getString("costs").length()).split(",");
+                    for (int j = 0; j < servicesArray.length; j++) {
                         LinearLayout stroke = new LinearLayout(getApplicationContext());
                         LinearLayout strService = new LinearLayout(getApplicationContext());
                         LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strService.setLayoutParams(new ViewGroup.LayoutParams((Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        strCost.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
                         strService.setOrientation(LinearLayout.HORIZONTAL);
                         strCost.setOrientation(LinearLayout.HORIZONTAL);
                         stroke.addView(strService);
@@ -464,76 +371,16 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         serviceTextView.setTextColor(Color.parseColor("#808080"));
                         serviceTextView.setTextSize(16);
                         serviceTextView.setPadding(0, 8, 0, 8);
-                        serviceTextView.setText(makeupServicesArray[j].toString());
+                        serviceTextView.setText(servicesArray[j]);
                         strService.addView(serviceTextView);
 
                         TextView costsTextView = new TextView(getApplicationContext());
                         costsTextView.setTextColor(Color.parseColor("#404040"));
                         costsTextView.setTextSize(16);
                         costsTextView.setPadding(0, 8, 0, 8);
-                        costsTextView.setText(makeupCostsArray[j].toString());
+                        costsTextView.setText(costsArray[j]);
                         strCost.addView(costsTextView);
-                        servicesMakeup.addView(stroke);
-                    }
-                }
-                if (!profileItem.getString("manicureServices").equals("")) {
-                    String[] manicureServicesArray = profileItem.getString("manicureServices").substring(1, profileItem.getString("manicureServices").length()).split(",");
-                    String[] manicureCostsArray = profileItem.getString("manicureCosts").substring(1, profileItem.getString("manicureCosts").length()).split(",");
-                    for (int j = 0; j < manicureServicesArray.length; j++) {
-                        LinearLayout stroke = new LinearLayout(getApplicationContext());
-                        LinearLayout strService = new LinearLayout(getApplicationContext());
-                        LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strService.setOrientation(LinearLayout.HORIZONTAL);
-                        strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        stroke.addView(strService);
-                        stroke.addView(strCost);
-
-                        TextView serviceTextView = new TextView(getApplicationContext());
-                        serviceTextView.setTextColor(Color.parseColor("#808080"));
-                        serviceTextView.setTextSize(16);
-                        serviceTextView.setPadding(0, 8, 0, 8);
-                        serviceTextView.setText(manicureServicesArray[j].toString());
-                        strService.addView(serviceTextView);
-
-                        TextView costsTextView = new TextView(getApplicationContext());
-                        costsTextView.setTextColor(Color.parseColor("#404040"));
-                        costsTextView.setTextSize(16);
-                        costsTextView.setPadding(0, 8, 0, 8);
-                        costsTextView.setText(manicureCostsArray[j].toString());
-                        strCost.addView(costsTextView);
-                        servicesManicure.addView(stroke);
-                    }
-                }
-                if (!profileItem.getString("hairstyleServices").equals("")) {
-                    String[] hairstyleServicesArray = profileItem.getString("hairstyleServices").substring(1, profileItem.getString("hairstyleServices").length()).split(",");
-                    String[] hairstyleCostsArray = profileItem.getString("hairstyleCosts").substring(1, profileItem.getString("hairstyleCosts").length()).split(",");
-                    for (int j = 0; j < hairstyleServicesArray.length; j++) {
-                        LinearLayout stroke = new LinearLayout(getApplicationContext());
-                        LinearLayout strService = new LinearLayout(getApplicationContext());
-                        LinearLayout strCost = new LinearLayout(getApplicationContext());
-                        strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 4), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        strService.setOrientation(LinearLayout.HORIZONTAL);
-                        strCost.setOrientation(LinearLayout.HORIZONTAL);
-                        stroke.addView(strService);
-                        stroke.addView(strCost);
-
-                        TextView serviceTextView = new TextView(getApplicationContext());
-                        serviceTextView.setTextColor(Color.parseColor("#808080"));
-                        serviceTextView.setTextSize(16);
-                        serviceTextView.setPadding(0, 8, 0, 8);
-                        serviceTextView.setText(hairstyleServicesArray[j].toString());
-                        strService.addView(serviceTextView);
-
-                        TextView costsTextView = new TextView(getApplicationContext());
-                        costsTextView.setTextColor(Color.parseColor("#404040"));
-                        costsTextView.setTextSize(16);
-                        costsTextView.setPadding(0, 8, 0, 8);
-                        costsTextView.setText(hairstyleCostsArray[j].toString());
-                        strCost.addView(costsTextView);
-                        servicesHairstyle.addView(stroke);
+                        services.addView(stroke);
                     }
                 }
                 photoUrl = "http://195.88.209.17/storage/photos/" + profileItem.getString("photo");

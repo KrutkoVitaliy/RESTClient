@@ -3,22 +3,18 @@ package appcorp.mmb.activities.user;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,11 +33,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.feeds.SelectCategory;
-import appcorp.mmb.activities.search_feeds.Search;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
@@ -51,16 +47,13 @@ import appcorp.mmb.network.UploadProfileImage;
 
 public class EditMyProfile extends AppCompatActivity {
 
-    private WebView webView;
     private ImageView editAvatar;
     private EditText editName, editLastname, editCity, editAddress, editPhone;
     private EditText editGplus, editFB, editVK, editInst, editOK;
     private int id;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private ProgressDialog progressDialog;
     private ProgressDialog loadProgressDialog;
-    private Button logOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +61,19 @@ public class EditMyProfile extends AppCompatActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "EditProfile");
 
         loadProgressDialog = new ProgressDialog(this);
-        loadProgressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
+        loadProgressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         loadProgressDialog.show();
 
         initToolbar();
         initNavigationView();
         initFields();
 
-        id = new Integer(getIntent().getStringExtra("ID"));
+        id = Integer.valueOf(getIntent().getStringExtra("ID"));
         editAvatar = (ImageView) findViewById(R.id.editAvatar);
         Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + Storage.getString("PhotoURL", "")).into(editAvatar);
         new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
@@ -94,34 +85,10 @@ public class EditMyProfile extends AppCompatActivity {
                 startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
             }
         });
-        //webView = (WebView) findViewById(R.id.uploadPhoto);
-        //webView.loadUrl("http://195.88.209.17/app/actions/editform.php?id="+id);
-    }
-
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
     }
 
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -134,25 +101,31 @@ public class EditMyProfile extends AppCompatActivity {
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                    }
 
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
+                    int columnIndex = 0;
+                    if (cursor != null) {
+                        columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    }
+                    String filePath = null;
+                    if (cursor != null) {
+                        filePath = cursor.getString(columnIndex);
+                    }
+                    if (cursor != null) {
+                        cursor.close();
+                    }
 
-                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png")) {
-                        progressDialog = new ProgressDialog(this);
-                        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
+                    if (filePath != null && (filePath.endsWith(".jpg") || filePath.endsWith(".png"))) {
+                        ProgressDialog progressDialog = new ProgressDialog(this);
+                        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
                         progressDialog.show();
                         new UploadProfileImage(filePath, progressDialog).execute();
                     }
                     new LoadCurrentData(Storage.getString("E-mail", "Click to sign in")).execute();
-
-                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-                    // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
                 }
         }
-
     }
 
     private void initFields() {
@@ -166,7 +139,7 @@ public class EditMyProfile extends AppCompatActivity {
         editVK = (EditText) findViewById(R.id.editVK);
         editInst = (EditText) findViewById(R.id.editInst);
         editOK = (EditText) findViewById(R.id.editOK);
-        logOut = (Button) findViewById(R.id.logOut);
+        Button logOut = (Button) findViewById(R.id.logOut);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,7 +147,7 @@ public class EditMyProfile extends AppCompatActivity {
                 Storage.clearString("Name");
                 Storage.clearString("PhotoURL");
                 Storage.clearString("MyCity");
-                startActivity(new Intent(getApplicationContext(), SelectCategory.class)
+                startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
@@ -183,21 +156,21 @@ public class EditMyProfile extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.editMyProfileToolbar);
-        toolbar.setTitle(Storage.getString("Name", Intermediates.getInstance().convertToString(getApplicationContext(), R.string.app_name)));
+        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 new GetRequest("http://195.88.209.17/app/in/updateuser.php" +
-                        "?firstname=" + Intermediates.getInstance().encodeToURL(editName.getText().toString()) +
-                        "&lastname=" + Intermediates.getInstance().encodeToURL(editLastname.getText().toString()) +
-                        "&city=" + Intermediates.getInstance().encodeToURL(editCity.getText().toString()) +
-                        "&address=" + Intermediates.getInstance().encodeToURL(editAddress.getText().toString()) +
-                        "&phone=" + Intermediates.getInstance().encodeToURL(editPhone.getText().toString()) +
-                        "&gplus=" + Intermediates.getInstance().encodeToURL(editGplus.getText().toString()) +
-                        "&facebook=" + Intermediates.getInstance().encodeToURL(editFB.getText().toString()) +
-                        "&vk=" + Intermediates.getInstance().encodeToURL(editVK.getText().toString()) +
-                        "&instagram=" + Intermediates.getInstance().encodeToURL(editInst.getText().toString()) +
-                        "&ok=" + Intermediates.getInstance().encodeToURL(editOK.getText().toString()) +
+                        "?firstname=" + Intermediates.encodeToURL(editName.getText().toString()) +
+                        "&lastname=" + Intermediates.encodeToURL(editLastname.getText().toString()) +
+                        "&city=" + Intermediates.encodeToURL(editCity.getText().toString()) +
+                        "&address=" + Intermediates.encodeToURL(editAddress.getText().toString()) +
+                        "&phone=" + Intermediates.encodeToURL(editPhone.getText().toString()) +
+                        "&gplus=" + Intermediates.encodeToURL(editGplus.getText().toString()) +
+                        "&facebook=" + Intermediates.encodeToURL(editFB.getText().toString()) +
+                        "&vk=" + Intermediates.encodeToURL(editVK.getText().toString()) +
+                        "&instagram=" + Intermediates.encodeToURL(editInst.getText().toString()) +
+                        "&ok=" + Intermediates.encodeToURL(editOK.getText().toString()) +
                         "&id=" + id).execute();
                 startActivity(new Intent(getApplicationContext(), MyProfile.class));
                 return true;
@@ -214,7 +187,7 @@ public class EditMyProfile extends AppCompatActivity {
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.editMyProfileDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.editMyProfileNavigation);
@@ -222,11 +195,11 @@ public class EditMyProfile extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
@@ -297,7 +270,7 @@ public class EditMyProfile extends AppCompatActivity {
         String result = "";
         String email = "";
 
-        public LoadCurrentData(String email) {
+        LoadCurrentData(String email) {
             this.email = email;
         }
 
@@ -310,7 +283,7 @@ public class EditMyProfile extends AppCompatActivity {
                 profilePageConnection.connect();
                 InputStream inputStream = profilePageConnection.getInputStream();
                 profileReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = profileReader.readLine()) != null)
                     buffer.append(line);

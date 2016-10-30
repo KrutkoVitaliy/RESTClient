@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,9 +27,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.SearchMakeupMatrix;
 import appcorp.mmb.activities.search_feeds.SearchMakeupMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
@@ -45,7 +43,6 @@ public class PostMakeup extends AppCompatActivity {
     HorizontalScrollView postMakeupImageViewerHorizontal;
     ImageView postMakeupAvatar, postMakeupAddLike;
     TextView postMakeupTitle, postMakeupAvailableDate, postMakeupLikesCount;
-    int width, height;
     private List<Long> likes = new ArrayList<>();
 
     @Override
@@ -54,9 +51,6 @@ public class PostMakeup extends AppCompatActivity {
         setContentView(R.layout.activity_post_makeup);
         initViews();
         Storage.init(getApplicationContext());
-        Display display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
 
         imageUrl = getIntent().getStringExtra("makeupImageUrl");
         new LoadPost().execute();
@@ -95,7 +89,7 @@ public class PostMakeup extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null)
                     buffer.append(line);
@@ -122,10 +116,12 @@ public class PostMakeup extends AppCompatActivity {
                     final ArrayList<String> hashTags = new ArrayList<>();
                     if (Storage.getString("Localization", "").equals("English"))
                         for (int a = 0; a < item.getString("tags").split(",").length; a++)
-                            hashTags.add(item.getString("tags").split(",")[a]);
+                            if (!item.getString("tags").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tags").split(",")[a]);
                     if (Storage.getString("Localization", "").equals("Russian"))
                         for (int a = 0; a < item.getString("tagsRu").split(",").length; a++)
-                            hashTags.add(item.getString("tagsRu").split(",")[a]);
+                            if (!item.getString("tagsRu").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tagsRu").split(",")[a]);
                     for (int j = 0; j < hashTags.size(); j++) {
                         TextView hashTag = new TextView(getApplicationContext());
                         hashTag.setTextColor(Color.argb(255, 51, 102, 153));
@@ -135,15 +131,19 @@ public class PostMakeup extends AppCompatActivity {
                         hashTag.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                getApplicationContext().startActivity(new Intent(getApplicationContext(), SearchMakeupMatrix.class)
+                                startActivity(new Intent(getApplicationContext(), SearchMakeupMatrix.class)
+                                        .putExtra("Toolbar", hashTags.get(finalI).trim())
                                         .putExtra("Request", hashTags.get(finalI).trim())
-                                        .putStringArrayListExtra("MakeupColors", new ArrayList<String>())
-                                        .putExtra("Shape", "" + "0")
-                                        .putExtra("Design", "" + "0")
+                                        .putStringArrayListExtra("Colors", new ArrayList<String>())
+                                        .putExtra("EyeColor", "")
+                                        .putExtra("Difficult", "")
+                                        .putExtra("Occasion", "0")
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             }
                         });
-                        postMakeupHashTags.addView(hashTag);
+
+                        if (hashTag.getText().toString().equals(""))
+                            postMakeupHashTags.addView(hashTag);
                     }
 
                     final ArrayList<String> screenshots = new ArrayList<>();
@@ -152,11 +152,11 @@ public class PostMakeup extends AppCompatActivity {
                             screenshots.add(item.getString("screen" + j));
                     for (int k = 0; k < screenshots.size(); k++) {
                         ImageView screenShot = new ImageView(getApplicationContext());
-                        screenShot.setMinimumWidth(width);
-                        screenShot.setMinimumHeight(height);
+                        screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                        screenShot.setMinimumHeight(Storage.getInt("Width", 480));
                         screenShot.setPadding(0, 0, 1, 0);
                         screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(width, height).centerCrop().into(screenShot);
+                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
                         screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         final int finalI = k;
                         screenShot.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +171,7 @@ public class PostMakeup extends AppCompatActivity {
                         postMakeupImageViewer.addView(screenShot);
                         postMakeupImageViewerHorizontal.scrollTo(0, 0);
                         LinearLayout countLayout = new LinearLayout(getApplicationContext());
-                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
                         TextView count = new TextView(getApplicationContext());
                         count.setText("< " + (k + 1) + "/" + screenshots.size() + " >");
                         count.setTextSize(24);
@@ -182,22 +182,22 @@ public class PostMakeup extends AppCompatActivity {
                         postMakeupCountImages.addView(countLayout);
                     }
 
-                    postMakeupLikesCount.setText("" + item.getString("likes"));
+                    postMakeupLikesCount.setText(String.valueOf(item.getString("likes")));
 
                     postMakeupAddLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
                                 try {
-                                    if (!likes.contains(item.getString("id"))) {
+                                    if (!likes.contains(item.getLong("id"))) {
                                         postMakeupAddLike.setBackgroundResource(R.mipmap.ic_heart);
-                                        likes.add(new Long(item.getString("id")));
-                                        postMakeupLikesCount.setText("" + (item.getString("likes") + 1));
+                                        likes.add(item.getLong("id"));
+                                        postMakeupLikesCount.setText(String.valueOf(item.getString("likes") + 1));
                                         new GetRequest("http://195.88.209.17/app/in/makeupLike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
-                                    } else if (likes.contains(item.getString("id"))) {
+                                    } else if (likes.contains(item.getLong("id"))) {
                                         postMakeupAddLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                                        likes.remove(item.getString("id"));
-                                        postMakeupLikesCount.setText("" + (new Long(postMakeupLikesCount.getText().toString()) - 1));
+                                        likes.remove(item.getLong("id"));
+                                        postMakeupLikesCount.setText(String.valueOf((postMakeupLikesCount.getText())));
                                         new GetRequest("http://195.88.209.17/app/in/makeupDislike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
                                     }
                                 } catch (JSONException e) {
@@ -216,30 +216,30 @@ public class PostMakeup extends AppCompatActivity {
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
 
-                    moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16, "", ""));
+                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_eye_color), 16, "", ""));
                     moreContainer.addView(createImage(item.getString("eyeColor")));
-                    moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
+                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_used_colors), 16, "", ""));
                     LinearLayout colors = new LinearLayout(getApplicationContext());
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getString("colors").split(","));
-                    for (int j = 0; j < mColors.length; j++) {
-                        if (!mColors[j].equals("FFFFFF"))
-                            colors.addView(createCircle("#" + mColors[j], mColors[j]));
+                    for (String mColor : mColors) {
+                        if (!mColor.equals("FFFFFF"))
+                            colors.addView(createCircle("#" + mColor, mColor));
                         else
-                            colors.addView(createCircle("#EEEEEE", mColors[j]));
+                            colors.addView(createCircle("#EEEEEE", mColor));
                     }
                     moreContainer.addView(colors);
 
-                    moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.title_difficult), Typeface.DEFAULT_BOLD, 16, "", ""));
+                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_difficult), 16, "", ""));
                     moreContainer.addView(difficult(item.getString("difficult")));
                     if (item.getString("occasion").equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "1"));
                     else if (item.getString("occasion").equals("celebrity"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "2"));
                     else if (item.getString("occasion").equals("dramatic"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_dramatic), 16, "Occasion", "3"));
                     else if (item.getString("occasion").equals("holiday"))
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
+                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_holiday), 16, "Occasion", "4"));
                     postMakeupMoreContainer.addView(moreContainer);
                 }
             } catch (JSONException e) {
@@ -305,21 +305,21 @@ public class PostMakeup extends AppCompatActivity {
             return layout;
         }
 
-        private TextView createText(String title, Typeface tf, int padding, final String type, final String index) {
+        private TextView createText(String title, int padding, final String type, final String index) {
             TextView tw = new TextView(getApplicationContext());
-            tw.setText("" + title);
+            tw.setText(String.valueOf(title));
             tw.setPadding(0, padding, 0, padding);
             tw.setTextSize(14);
             tw.setTextColor(Color.argb(255, 50, 50, 50));
             tw.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (type == "Occasion") {
+                    if (Objects.equals(type, "Occasion")) {
                         String[] occasion = getResources().getStringArray(R.array.occasions);
                         ArrayList<String> makeupColors = new ArrayList<>();
                         Intent intent = new Intent(getApplicationContext(), SearchMakeupMatrix.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("Toolbar", "" + occasion[new Integer(index)]);
+                        intent.putExtra("Toolbar", "" + occasion[Integer.valueOf(index)]);
                         intent.putExtra("Request", "");
                         intent.putStringArrayListExtra("Colors", sortMakeupColors(makeupColors));
                         intent.putExtra("EyeColor", "");
@@ -330,11 +330,11 @@ public class PostMakeup extends AppCompatActivity {
                     }
                 }
             });
-            //tw.setTypeface(tf);
             return tw;
         }
 
         String colorName;
+
         private LinearLayout createImage(final String color) {
             LinearLayout layout = new LinearLayout(getApplicationContext());
             layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -398,7 +398,7 @@ public class PostMakeup extends AppCompatActivity {
 
         private ImageView createCircle(final String color, final String searchParameter) {
             ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Storage.getInt("Width", 480) * 0.075F), (int) (Storage.getInt("Width", 480) * 0.075F)));
             imageView.setScaleX(0.9F);
             imageView.setScaleY(0.9F);
             imageView.setBackgroundColor(Color.parseColor(color));
@@ -441,10 +441,10 @@ public class PostMakeup extends AppCompatActivity {
                     "555555",
                     "000000"
             };
-            for (int i = 0; i < colorsCodes.length; i++) {
+            for (String colorsCode : colorsCodes) {
                 for (int j = 0; j < colors.size(); j++) {
-                    if (colorsCodes[i].equals(colors.get(j)))
-                        sortedColors.add(colorsCodes[i]);
+                    if (colorsCode.equals(colors.get(j)))
+                        sortedColors.add(colorsCode);
                 }
             }
             return sortedColors;
@@ -455,11 +455,10 @@ public class PostMakeup extends AppCompatActivity {
 
         HttpURLConnection connection = null;
         BufferedReader reader = null;
-        String url = "";
         String result = "";
         String email = "";
 
-        public CheckLikes(String email) {
+        CheckLikes(String email) {
             this.email = email;
         }
 
@@ -472,7 +471,7 @@ public class PostMakeup extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
+                StringBuilder profileBuffer = new StringBuilder();
                 String profileLine;
                 while ((profileLine = reader.readLine()) != null) {
                     profileBuffer.append(profileLine);
@@ -487,9 +486,9 @@ public class PostMakeup extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             String[] array = s.split(",");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals(""))
-                    likes.add(new Long(array[i]));
+            for (String anArray : array) {
+                if (!anArray.equals(""))
+                    likes.add(Long.valueOf(anArray));
             }
         }
     }

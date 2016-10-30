@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import appcorp.mmb.network.GetRequest;
 
 public class Authorization extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView logoText;
     private TextView signIn;
     private EditText email, pass, name, lastname;
     private Button submit;
@@ -41,8 +38,6 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_introduction);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "Authorization");
@@ -50,7 +45,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
-        logoText = (TextView) findViewById(R.id.logoText);
+        TextView logoText = (TextView) findViewById(R.id.logoText);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
 
         signIn = (TextView) findViewById(R.id.signIn);
@@ -64,30 +59,8 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
         submit.setOnClickListener(this);
     }
 
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
-    }
-
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     @Override
@@ -108,10 +81,10 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
     }
 
     private void registerUser() {
-        final String sEmail = Intermediates.getInstance().encodeToURL(email.getText().toString().trim());
-        final String sPass = Intermediates.getInstance().encodeToURL(pass.getText().toString().trim());
-        final String sName = Intermediates.getInstance().encodeToURL(name.getText().toString().trim());
-        final String sLastname = Intermediates.getInstance().encodeToURL(lastname.getText().toString().trim());
+        final String sEmail = Intermediates.encodeToURL(email.getText().toString().trim());
+        final String sPass = Intermediates.encodeToURL(pass.getText().toString().trim());
+        final String sName = Intermediates.encodeToURL(name.getText().toString().trim());
+        final String sLastname = Intermediates.encodeToURL(lastname.getText().toString().trim());
         final String firebaseEmail = email.getText().toString().trim();
         final String firebasePass = pass.getText().toString().trim();
 
@@ -132,7 +105,7 @@ public class Authorization extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.registering));
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.registering));
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(firebaseEmail, firebasePass)

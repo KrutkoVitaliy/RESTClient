@@ -72,10 +72,10 @@ public class SearchStylistFeedListAdapter extends RecyclerView.Adapter<SearchSty
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
         final StylistDTO item = data.get(position);
 
-        if (position == data.size() - 1) {
-            if (data.size() - 1 % 100 != 8)
-                ManicureFeed.addFeed(data.size() / 100 + 1);
-        }
+        //if (position == data.size() - 1) {
+            //if (data.size() - 1 % 100 != 8)
+                //ManicureFeed.addFeed(data.size() / 100 + 1);
+        //}
 
         Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).resize(200,200).centerCrop().into(holder.photo);
         holder.name.setText(item.getAuthorName() + " " + item.getAuthorLastname());

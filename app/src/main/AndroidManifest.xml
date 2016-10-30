@@ -45,7 +45,7 @@
             android:value="@string/facebook_app_id" />
         <!-- <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" /> -->
         <activity
-            android:name=".activities.feeds.SelectCategory"
+            android:name=".activities.feeds.GlobalFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.other.FullscreenPreview"

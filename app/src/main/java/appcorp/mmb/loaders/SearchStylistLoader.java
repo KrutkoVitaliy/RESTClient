@@ -22,13 +22,11 @@ import appcorp.mmb.fragment_adapters.SearchStylistFeedFragmentAdapter;
 
 public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
 
-    HttpURLConnection urlFeedConnection = null;
-    BufferedReader reader = null;
-    String resultJsonFeed = "";
-    String city;
-    String skill;
-    SearchStylistFeedFragmentAdapter adapter;
-    ProgressDialog progressDialog;
+    private String resultJsonFeed = "";
+    private String city;
+    private String skill;
+    private SearchStylistFeedFragmentAdapter adapter;
+    private ProgressDialog progressDialog;
     int position;
 
     public SearchStylistLoader(SearchStylistFeedFragmentAdapter adapter, String city, String skill, int position, ProgressDialog progressDialog) {
@@ -49,27 +47,29 @@ public class SearchStylistLoader extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... voids) {
         try {
+            HttpURLConnection urlFeedConnection = null;
+            BufferedReader reader = null;
             if (position == 1) {
-                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.getInstance().encodeToURL(city) + "&skill=" + Intermediates.getInstance().encodeToURL(skill));
+                URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                 urlFeedConnection.setRequestMethod("GET");
                 urlFeedConnection.connect();
                 InputStream inputStream = urlFeedConnection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null)
                     buffer.append(line);
                 resultJsonFeed += buffer.toString();
             } else {
                 for (int i = 1; i <= position; i++) {
-                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.getInstance().encodeToURL(city) + "&skill=" + Intermediates.getInstance().encodeToURL(skill));
+                    URL feedURL = new URL("http://195.88.209.17/app/out/stylists.php?position=" + position + "&city=" + Intermediates.encodeToURL(city) + "&skill=" + Intermediates.encodeToURL(skill));
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
                     InputStream inputStream = urlFeedConnection.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuffer buffer = new StringBuffer();
+                    StringBuilder buffer = new StringBuilder();
                     String line;
                     while ((line = reader.readLine()) != null)
                         buffer.append(line);

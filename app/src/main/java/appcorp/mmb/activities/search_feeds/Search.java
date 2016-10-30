@@ -2,15 +2,14 @@ package appcorp.mmb.activities.search_feeds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,33 +25,29 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
-import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
+import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class Search extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private String hashTag = "", request = "", eyeColor = "", difficult = "";
-    private String arrayColors = "", category = "";
+    private String eyeColor = "", difficult = "";
+    private String category = "";
     private EditText requestField;
     private Spinner hairstyleLength, hairstyleType, hairstyleFor;
-    private Button searchButton;
     private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
             eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
     private Spinner occasion, shape, design;
-    private ImageView cBB125B, c9210AE, c117DAE, c3B9670, c79BD14, cD4B515, cD46915, cD42415, cD2AF7F, cB48F58, c604E36, c555555, c000000;
-    private ImageView mc000000, mc404040, mcFF0000, mcFF6A00, mcFFD800, mcB6FF00, mc4CFF00, mc00FF21, mc00FF90,
-            mc00FFFF, mc0094FF, mc0026FF, mc4800FF, mcB200FF, mcFF00DC, mcFF006E, mc808080, mcFFFFFF, mcF79F49,
-            mc8733DD, mc62B922, mcF9F58D, mcA50909, mc1D416F, mcBCB693, mc644949, mcF9CBCB, mcD6C880;
     private ArrayList<String> colors = new ArrayList<>();
     private ArrayList<String> manicureColors = new ArrayList<>();
-    private LinearLayout catMakeup, catManicure, catHairstyle, makeupFrame, hairstyleFrame, manicureFrame;
+    private LinearLayout makeupFrame;
+    private LinearLayout hairstyleFrame;
+    private LinearLayout manicureFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +55,6 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "Search");
@@ -77,36 +70,14 @@ public class Search extends AppCompatActivity {
         initDifficult();
     }
 
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
-    }
-
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
     }
 
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
-    }
-
     public void initCategorySelector() {
-        catMakeup = (LinearLayout) findViewById(R.id.catMakeup);
-        catManicure = (LinearLayout) findViewById(R.id.catManicure);
-        catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
+        LinearLayout catMakeup = (LinearLayout) findViewById(R.id.catMakeup);
+        LinearLayout catManicure = (LinearLayout) findViewById(R.id.catManicure);
+        LinearLayout catHairstyle = (LinearLayout) findViewById(R.id.catHairstyle);
 
         catMakeup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +141,7 @@ public class Search extends AppCompatActivity {
 
     public void checkLocation() {
         if (getIntent().getStringExtra("from") != null)
-            switch (getIntent().getStringExtra("from").toString()) {
+            switch (String.valueOf(getIntent().getStringExtra("from"))) {
                 case "hairstyleFeed":
                     category = "hairstyle";
                     setUI("hairstyle");
@@ -210,7 +181,7 @@ public class Search extends AppCompatActivity {
         makeupFrame = (LinearLayout) findViewById(R.id.makeupFrame);
         hairstyleFrame = (LinearLayout) findViewById(R.id.hairstyleFrame);
         manicureFrame = (LinearLayout) findViewById(R.id.manicureFrame);
-        searchButton = (Button) findViewById(R.id.searchButton);
+        Button searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -356,10 +327,10 @@ public class Search extends AppCompatActivity {
                 "555555",
                 "000000"
         };
-        for (int i = 0; i < colorsCodes.length; i++) {
+        for (String colorsCode : colorsCodes) {
             for (int j = 0; j < colors.size(); j++) {
-                if (colorsCodes[i].equals(colors.get(j)))
-                    sortedColors.add(colorsCodes[i]);
+                if (colorsCode.equals(colors.get(j)))
+                    sortedColors.add(colorsCode);
             }
         }
         return sortedColors;
@@ -397,10 +368,10 @@ public class Search extends AppCompatActivity {
                 "F9CBCB",
                 "D6C880"
         };
-        for (int i = 0; i < colorsCodes.length; i++) {
+        for (String colorsCode : colorsCodes) {
             for (int j = 0; j < colors.size(); j++) {
-                if (colorsCodes[i].equals(colors.get(j)))
-                    sortedColors.add(colorsCodes[i]);
+                if (colorsCode.equals(colors.get(j)))
+                    sortedColors.add(colorsCode);
             }
         }
         return sortedColors;
@@ -409,7 +380,7 @@ public class Search extends AppCompatActivity {
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.searchDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.searchNavigation);
@@ -417,11 +388,11 @@ public class Search extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class)
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;*/
@@ -503,54 +474,61 @@ public class Search extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (inEyeColor.equals("blue")) {
-                    eyeBlueCircle.setAlpha(1.0F);
-                    eyeGreenCircle.setAlpha(0.3F);
-                    eyeHazelCircle.setAlpha(0.3F);
-                    eyeBrownCircle.setAlpha(0.3F);
-                    eyeGrayCircle.setAlpha(0.3F);
-                    eyeBlackCircle.setAlpha(0.3F);
-                    eyeColor = inEyeColor;
-                } else if (inEyeColor.equals("green")) {
-                    eyeBlueCircle.setAlpha(0.3F);
-                    eyeGreenCircle.setAlpha(1.0F);
-                    eyeHazelCircle.setAlpha(0.3F);
-                    eyeBrownCircle.setAlpha(0.3F);
-                    eyeGrayCircle.setAlpha(0.3F);
-                    eyeBlackCircle.setAlpha(0.3F);
-                    eyeColor = inEyeColor;
-                } else if (inEyeColor.equals("hazel")) {
-                    eyeBlueCircle.setAlpha(0.3F);
-                    eyeGreenCircle.setAlpha(0.3F);
-                    eyeHazelCircle.setAlpha(1.0F);
-                    eyeBrownCircle.setAlpha(0.3F);
-                    eyeGrayCircle.setAlpha(0.3F);
-                    eyeBlackCircle.setAlpha(0.3F);
-                    eyeColor = inEyeColor;
-                } else if (inEyeColor.equals("brown")) {
-                    eyeBlueCircle.setAlpha(0.3F);
-                    eyeGreenCircle.setAlpha(0.3F);
-                    eyeHazelCircle.setAlpha(0.3F);
-                    eyeBrownCircle.setAlpha(1.0F);
-                    eyeGrayCircle.setAlpha(0.3F);
-                    eyeBlackCircle.setAlpha(0.3F);
-                    eyeColor = inEyeColor;
-                } else if (inEyeColor.equals("gray")) {
-                    eyeBlueCircle.setAlpha(0.3F);
-                    eyeGreenCircle.setAlpha(0.3F);
-                    eyeHazelCircle.setAlpha(0.3F);
-                    eyeBrownCircle.setAlpha(0.3F);
-                    eyeGrayCircle.setAlpha(1.0F);
-                    eyeBlackCircle.setAlpha(0.3F);
-                    eyeColor = inEyeColor;
-                } else if (inEyeColor.equals("black")) {
-                    eyeBlueCircle.setAlpha(0.3F);
-                    eyeGreenCircle.setAlpha(0.3F);
-                    eyeHazelCircle.setAlpha(0.3F);
-                    eyeBrownCircle.setAlpha(0.3F);
-                    eyeGrayCircle.setAlpha(0.3F);
-                    eyeBlackCircle.setAlpha(1.0F);
-                    eyeColor = inEyeColor;
+                switch (inEyeColor) {
+                    case "blue":
+                        eyeBlueCircle.setAlpha(1.0F);
+                        eyeGreenCircle.setAlpha(0.3F);
+                        eyeHazelCircle.setAlpha(0.3F);
+                        eyeBrownCircle.setAlpha(0.3F);
+                        eyeGrayCircle.setAlpha(0.3F);
+                        eyeBlackCircle.setAlpha(0.3F);
+                        eyeColor = inEyeColor;
+                        break;
+                    case "green":
+                        eyeBlueCircle.setAlpha(0.3F);
+                        eyeGreenCircle.setAlpha(1.0F);
+                        eyeHazelCircle.setAlpha(0.3F);
+                        eyeBrownCircle.setAlpha(0.3F);
+                        eyeGrayCircle.setAlpha(0.3F);
+                        eyeBlackCircle.setAlpha(0.3F);
+                        eyeColor = inEyeColor;
+                        break;
+                    case "hazel":
+                        eyeBlueCircle.setAlpha(0.3F);
+                        eyeGreenCircle.setAlpha(0.3F);
+                        eyeHazelCircle.setAlpha(1.0F);
+                        eyeBrownCircle.setAlpha(0.3F);
+                        eyeGrayCircle.setAlpha(0.3F);
+                        eyeBlackCircle.setAlpha(0.3F);
+                        eyeColor = inEyeColor;
+                        break;
+                    case "brown":
+                        eyeBlueCircle.setAlpha(0.3F);
+                        eyeGreenCircle.setAlpha(0.3F);
+                        eyeHazelCircle.setAlpha(0.3F);
+                        eyeBrownCircle.setAlpha(1.0F);
+                        eyeGrayCircle.setAlpha(0.3F);
+                        eyeBlackCircle.setAlpha(0.3F);
+                        eyeColor = inEyeColor;
+                        break;
+                    case "gray":
+                        eyeBlueCircle.setAlpha(0.3F);
+                        eyeGreenCircle.setAlpha(0.3F);
+                        eyeHazelCircle.setAlpha(0.3F);
+                        eyeBrownCircle.setAlpha(0.3F);
+                        eyeGrayCircle.setAlpha(1.0F);
+                        eyeBlackCircle.setAlpha(0.3F);
+                        eyeColor = inEyeColor;
+                        break;
+                    case "black":
+                        eyeBlueCircle.setAlpha(0.3F);
+                        eyeGreenCircle.setAlpha(0.3F);
+                        eyeHazelCircle.setAlpha(0.3F);
+                        eyeBrownCircle.setAlpha(0.3F);
+                        eyeGrayCircle.setAlpha(0.3F);
+                        eyeBlackCircle.setAlpha(1.0F);
+                        eyeColor = inEyeColor;
+                        break;
                 }
             }
         });
@@ -569,40 +547,44 @@ public class Search extends AppCompatActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (inDifficult.equals("easy")) {
-                    easyDifficult.setAlpha(1.0F);
-                    mediumDifficult.setAlpha(0.3F);
-                    hardDifficult.setAlpha(0.3F);
-                    difficult = inDifficult;
-                } else if (inDifficult.equals("medium")) {
-                    easyDifficult.setAlpha(0.3F);
-                    mediumDifficult.setAlpha(1.0F);
-                    hardDifficult.setAlpha(0.3F);
-                    difficult = inDifficult;
-                } else if (inDifficult.equals("hard")) {
-                    easyDifficult.setAlpha(0.3F);
-                    mediumDifficult.setAlpha(0.3F);
-                    hardDifficult.setAlpha(1.0F);
-                    difficult = inDifficult;
+                switch (inDifficult) {
+                    case "easy":
+                        easyDifficult.setAlpha(1.0F);
+                        mediumDifficult.setAlpha(0.3F);
+                        hardDifficult.setAlpha(0.3F);
+                        difficult = inDifficult;
+                        break;
+                    case "medium":
+                        easyDifficult.setAlpha(0.3F);
+                        mediumDifficult.setAlpha(1.0F);
+                        hardDifficult.setAlpha(0.3F);
+                        difficult = inDifficult;
+                        break;
+                    case "hard":
+                        easyDifficult.setAlpha(0.3F);
+                        mediumDifficult.setAlpha(0.3F);
+                        hardDifficult.setAlpha(1.0F);
+                        difficult = inDifficult;
+                        break;
                 }
             }
         });
     }
 
     private void initMakeupColors() {
-        cBB125B = (ImageView) findViewById(R.id.cBB125B);
-        c9210AE = (ImageView) findViewById(R.id.c9210AE);
-        c117DAE = (ImageView) findViewById(R.id.c117DAE);
-        c3B9670 = (ImageView) findViewById(R.id.c3B9670);
-        c79BD14 = (ImageView) findViewById(R.id.c79BD14);
-        cD4B515 = (ImageView) findViewById(R.id.cD4B515);
-        cD46915 = (ImageView) findViewById(R.id.cD46915);
-        cD42415 = (ImageView) findViewById(R.id.cD42415);
-        cD2AF7F = (ImageView) findViewById(R.id.cD2AF7F);
-        cB48F58 = (ImageView) findViewById(R.id.cB48F58);
-        c604E36 = (ImageView) findViewById(R.id.c604E36);
-        c555555 = (ImageView) findViewById(R.id.c555555);
-        c000000 = (ImageView) findViewById(R.id.c000000);
+        ImageView cBB125B = (ImageView) findViewById(R.id.cBB125B);
+        ImageView c9210AE = (ImageView) findViewById(R.id.c9210AE);
+        ImageView c117DAE = (ImageView) findViewById(R.id.c117DAE);
+        ImageView c3B9670 = (ImageView) findViewById(R.id.c3B9670);
+        ImageView c79BD14 = (ImageView) findViewById(R.id.c79BD14);
+        ImageView cD4B515 = (ImageView) findViewById(R.id.cD4B515);
+        ImageView cD46915 = (ImageView) findViewById(R.id.cD46915);
+        ImageView cD42415 = (ImageView) findViewById(R.id.cD42415);
+        ImageView cD2AF7F = (ImageView) findViewById(R.id.cD2AF7F);
+        ImageView cB48F58 = (ImageView) findViewById(R.id.cB48F58);
+        ImageView c604E36 = (ImageView) findViewById(R.id.c604E36);
+        ImageView c555555 = (ImageView) findViewById(R.id.c555555);
+        ImageView c000000 = (ImageView) findViewById(R.id.c000000);
 
         setListener(cBB125B, "BB125B");
         setListener(c9210AE, "9210AE");
@@ -620,34 +602,34 @@ public class Search extends AppCompatActivity {
     }
 
     private void initManicureColors() {
-        mc000000 = (ImageView) findViewById(R.id.mc000000);
-        mc404040 = (ImageView) findViewById(R.id.mc404040);
-        mcFF0000 = (ImageView) findViewById(R.id.mcFF0000);
-        mcFF6A00 = (ImageView) findViewById(R.id.mcFF6A00);
-        mcFFD800 = (ImageView) findViewById(R.id.mcFFD800);
-        mcB6FF00 = (ImageView) findViewById(R.id.mcB6FF00);
-        mc4CFF00 = (ImageView) findViewById(R.id.mc4CFF00);
-        mc00FF21 = (ImageView) findViewById(R.id.mc00FF21);
-        mc00FF90 = (ImageView) findViewById(R.id.mc00FF90);
-        mc00FFFF = (ImageView) findViewById(R.id.mc00FFFF);
-        mc0094FF = (ImageView) findViewById(R.id.mc0094FF);
-        mc0026FF = (ImageView) findViewById(R.id.mc0026FF);
-        mc4800FF = (ImageView) findViewById(R.id.mc4800FF);
-        mcB200FF = (ImageView) findViewById(R.id.mcB200FF);
-        mcFF00DC = (ImageView) findViewById(R.id.mcFF00DC);
-        mcFF006E = (ImageView) findViewById(R.id.mcFF006E);
-        mc808080 = (ImageView) findViewById(R.id.mc808080);
-        mcFFFFFF = (ImageView) findViewById(R.id.mcFFFFFF);
-        mcF79F49 = (ImageView) findViewById(R.id.mcF79F49);
-        mc8733DD = (ImageView) findViewById(R.id.mc8733DD);
-        mc62B922 = (ImageView) findViewById(R.id.mc62B922);
-        mcF9F58D = (ImageView) findViewById(R.id.mcF9F58D);
-        mcA50909 = (ImageView) findViewById(R.id.mcA50909);
-        mc1D416F = (ImageView) findViewById(R.id.mc1D416F);
-        mcBCB693 = (ImageView) findViewById(R.id.mcBCB693);
-        mc644949 = (ImageView) findViewById(R.id.mc644949);
-        mcF9CBCB = (ImageView) findViewById(R.id.mcF9CBCB);
-        mcD6C880 = (ImageView) findViewById(R.id.mcD6C880);
+        ImageView mc000000 = (ImageView) findViewById(R.id.mc000000);
+        ImageView mc404040 = (ImageView) findViewById(R.id.mc404040);
+        ImageView mcFF0000 = (ImageView) findViewById(R.id.mcFF0000);
+        ImageView mcFF6A00 = (ImageView) findViewById(R.id.mcFF6A00);
+        ImageView mcFFD800 = (ImageView) findViewById(R.id.mcFFD800);
+        ImageView mcB6FF00 = (ImageView) findViewById(R.id.mcB6FF00);
+        ImageView mc4CFF00 = (ImageView) findViewById(R.id.mc4CFF00);
+        ImageView mc00FF21 = (ImageView) findViewById(R.id.mc00FF21);
+        ImageView mc00FF90 = (ImageView) findViewById(R.id.mc00FF90);
+        ImageView mc00FFFF = (ImageView) findViewById(R.id.mc00FFFF);
+        ImageView mc0094FF = (ImageView) findViewById(R.id.mc0094FF);
+        ImageView mc0026FF = (ImageView) findViewById(R.id.mc0026FF);
+        ImageView mc4800FF = (ImageView) findViewById(R.id.mc4800FF);
+        ImageView mcB200FF = (ImageView) findViewById(R.id.mcB200FF);
+        ImageView mcFF00DC = (ImageView) findViewById(R.id.mcFF00DC);
+        ImageView mcFF006E = (ImageView) findViewById(R.id.mcFF006E);
+        ImageView mc808080 = (ImageView) findViewById(R.id.mc808080);
+        ImageView mcFFFFFF = (ImageView) findViewById(R.id.mcFFFFFF);
+        ImageView mcF79F49 = (ImageView) findViewById(R.id.mcF79F49);
+        ImageView mc8733DD = (ImageView) findViewById(R.id.mc8733DD);
+        ImageView mc62B922 = (ImageView) findViewById(R.id.mc62B922);
+        ImageView mcF9F58D = (ImageView) findViewById(R.id.mcF9F58D);
+        ImageView mcA50909 = (ImageView) findViewById(R.id.mcA50909);
+        ImageView mc1D416F = (ImageView) findViewById(R.id.mc1D416F);
+        ImageView mcBCB693 = (ImageView) findViewById(R.id.mcBCB693);
+        ImageView mc644949 = (ImageView) findViewById(R.id.mc644949);
+        ImageView mcF9CBCB = (ImageView) findViewById(R.id.mcF9CBCB);
+        ImageView mcD6C880 = (ImageView) findViewById(R.id.mcD6C880);
 
         setManicureListener(mc000000, "000000");
         setManicureListener(mc404040, "404040");

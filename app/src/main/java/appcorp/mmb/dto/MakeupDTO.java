@@ -7,12 +7,12 @@ public class MakeupDTO {
 
     private long id;
     private String authorName;
+    private String authorPhoto;
     private String availableDate;
     private String colors;
     private String eye_color;
     private String occasion;
     private String difficult;
-    private String authorPhoto;
     private long likes;
     private List<String> images = new ArrayList<>();
     private List<String> hashTags = new ArrayList<>();

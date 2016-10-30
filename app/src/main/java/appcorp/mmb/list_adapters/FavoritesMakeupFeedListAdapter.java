@@ -92,10 +92,10 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         if (position <= getItemCount() && loaded == false) {
             final MakeupDTO item = makeupData.get(position);
 
-            if (position == makeupData.size() - 1) {
+            /*if (position == makeupData.size() - 1) {
                 if (makeupData.size() - 1 % 100 != 8)
                     Favorites.addMakeupFeed(makeupData.size() / 100 + 1);
-            }
+            }*/
             final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
             final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);
 

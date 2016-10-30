@@ -21,8 +21,8 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,18 +39,18 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         app:border_color="#FFFFFF"
-                        app:border_width="0dp"/>
+                        app:border_width="0dp" />
 
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/name"
+                        android:id="@+id/myProfileName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
@@ -59,7 +59,7 @@
                         android:textSize="7pt" />
 
                     <TextView
-                        android:id="@+id/location"
+                        android:id="@+id/myProfileLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
@@ -68,49 +68,55 @@
                         android:textSize="5pt" />
 
                     <TextView
-                        android:id="@+id/phone"
+                        android:id="@+id/myProfilePhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
                         android:text="@string/phoneNumber"
                         android:textColor="#336699"
-                        android:textSize="7pt"
-                        android:layout_marginTop="8dp"/>
+                        android:textSize="7pt" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
                         <ImageView
-                            android:id="@+id/gplusButton"
+                            android:id="@+id/myProfileGplusButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@mipmap/icon_gplus"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginLeft="4dp"
+                            android:src="@mipmap/icon_gplus" />
+
                         <ImageView
-                            android:id="@+id/fbButton"
+                            android:id="@+id/myProfileFbButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@mipmap/icon_fb"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginLeft="4dp"
+                            android:src="@mipmap/icon_fb" />
+
                         <ImageView
-                            android:id="@+id/vkButton"
+                            android:id="@+id/myProfileVkButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@mipmap/icon_vk"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginLeft="4dp"
+                            android:src="@mipmap/icon_vk" />
+
                         <ImageView
-                            android:id="@+id/instagramButton"
+                            android:id="@+id/myProfileInstagramButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@mipmap/icon_instagram"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginLeft="4dp"
+                            android:src="@mipmap/icon_instagram" />
+
                         <ImageView
-                            android:id="@+id/okButton"
+                            android:id="@+id/myProfileOkButton"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@mipmap/icon_ok"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginLeft="4dp"
+                            android:src="@mipmap/icon_ok" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -118,255 +124,36 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D0D0D0"/>
+                android:background="#D0D0D0" />
 
-            <!--<FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@mipmap/ic_heart_outline" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/likes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:text="0"
-                            android:textSize="6pt"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:text="@string/likes"
-                            android:textSize="5pt" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="32dp"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@mipmap/ic_account_multiple" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/followers"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:text="0"
-                            android:textSize="6pt"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:text="@string/followers"
-                            android:textSize="5pt" />
-                    </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#D0D0D0"/>-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
-                <LinearLayout
-                    android:id="@+id/serviceMakeup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/makeup"/>
-                    <TextView
-                        android:id="@+id/serviceMakeupText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000000"
-                        android:text="Makeup"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/serviceManicure"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/manicure"
-                        android:paddingRight="6dp"/>
-                    <TextView
-                        android:id="@+id/serviceManicureText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000000"
-                        android:text="Manicure"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/serviceHairstyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/hairstyle"
-                        android:paddingRight="4dp"/>
-                    <TextView
-                        android:id="@+id/serviceHairstyleText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hairstyle"
-                        android:textColor="#000000"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <FrameLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <ScrollView
-                    android:id="@+id/makeupUserGallery"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="invisible">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp">
-                            <LinearLayout
-                                android:id="@+id/servicesMakeup"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:orientation="vertical"/>
-                        </FrameLayout>
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/addMakeupToGallery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/ic_plus"/>
-                    </LinearLayout>
-                </ScrollView>
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <ScrollView
-                    android:id="@+id/manicureUserGallery"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible">
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:id="@+id/myProfileServices"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
                         android:orientation="vertical"
-                        android:gravity="center">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp">
-                            <LinearLayout
-                                android:id="@+id/servicesManicure"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:orientation="vertical"/>
-                        </FrameLayout>
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/addManicureToGallery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/ic_plus"/>
-                    </LinearLayout>
-                </ScrollView>
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp" />
 
-                <ScrollView
-                    android:id="@+id/hairstyleUserGallery"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp">
-                            <LinearLayout
-                                android:id="@+id/servicesHairstyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:orientation="vertical"/>
-                        </FrameLayout>
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/addHairstyleToGallery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/ic_plus"/>
-                    </LinearLayout>
-                </ScrollView>
-            </FrameLayout>
-
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/myProfileAddToGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_plus" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 

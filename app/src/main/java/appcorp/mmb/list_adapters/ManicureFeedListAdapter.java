@@ -6,12 +6,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,23 +16,25 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.user.Authorization;
 import appcorp.mmb.activities.other.FullscreenPreview;
-import appcorp.mmb.activities.search_feeds.Search;
-import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.network.GetRequest;
@@ -45,21 +44,14 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
     private List<ManicureDTO> data;
     private List<Long> likes = new ArrayList<>();
     private Context context;
-    Display display;
-    int width, height;
 
     public ManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
         this.data = data;
         this.context = context;
 
         Storage.init(context);
-        initLocalization(convertToString(R.string.translation));
-        initScreen();
         initFirebase();
 
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
         if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
@@ -70,30 +62,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         return textView.getText().toString();
     }
 
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) context
-                .getSystemService(context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
-    }
-
     private void initFirebase() {
         FireAnal.setContext(context);
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     @Override
@@ -108,7 +78,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
         if (position == data.size() - 1) {
             if (data.size() - 1 % 100 != 8)
-                ManicureFeed.addFeed(data.size() / 100 + 1);
+                new Load(data.size() / 100 + 1).execute();
         }
 
         final String SHOW = convertToString(R.string.show_more_container);
@@ -118,12 +88,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
         holder.title.setText(item.getAuthorName());
         holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-        holder.likesCount.setText("" + item.getLikes());
+        holder.likesCount.setText(String.valueOf(item.getLikes()));
         if (!likes.contains(item.getId())) {
             holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
         } else {
             holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-            holder.likesCount.setText("" + (item.getLikes() + 1));
+            holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
         }
 
         holder.addLike.setOnClickListener(new View.OnClickListener() {
@@ -133,12 +103,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     if (!likes.contains(item.getId())) {
                         holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
                         likes.add(item.getId());
-                        holder.likesCount.setText("" + (item.getLikes() + 1));
+                        holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
                         new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     } else if (likes.contains(item.getId())) {
                         holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
                         likes.remove(item.getId());
-                        holder.likesCount.setText("" + (new Long(holder.likesCount.getText().toString()) - 1));
+                        holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
                         new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                     }
                 } else {
@@ -186,11 +156,11 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         holder.countImages.removeAllViews();
         for (int i = 0; i < item.getImages().size(); i++) {
             ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(width);
-            screenShot.setMinimumHeight(height);
+            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+            screenShot.setMinimumHeight(Storage.getInt("Width", 480));
             screenShot.setPadding(0, 0, 1, 0);
             screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
 
             screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final int finalI = i;
@@ -209,7 +179,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             holder.imageViewerHorizontal.scrollTo(0, 0);
 
             LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
             TextView count = new TextView(context);
             count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
             count.setTextSize(24);
@@ -235,54 +205,76 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
                     moreContainer.setPadding(32, 32, 32, 0);
 
-                    moreContainer.addView(createText(convertToString(R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16, "", ""));
+                    moreContainer.addView(createText(convertToString(R.string.title_used_colors), 16, "", ""));
                     LinearLayout colors = new LinearLayout(context);
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getColors().split(","));
-                    for (int i = 0; i < mColors.length; i++) {
-                        if (!mColors[i].equals("FFFFFF"))
-                            colors.addView(createCircle("#" + mColors[i], mColors[i]));
+                    for (String mColor : mColors) {
+                        if (!mColor.equals("FFFFFF"))
+                            colors.addView(createCircle("#" + mColor, mColor));
                         else
-                            colors.addView(createCircle("#EEEEEE", mColors[i]));
+                            colors.addView(createCircle("#EEEEEE", mColor));
                     }
                     moreContainer.addView(colors);
-                    if (item.getShape().equals("square"))
-                        moreContainer.addView(createText(convertToString(R.string.squareShape), Typeface.DEFAULT_BOLD, 16, "Shape", "1"));
-                    else if (item.getShape().equals("oval"))
-                        moreContainer.addView(createText(convertToString(R.string.ovalShape), Typeface.DEFAULT_BOLD, 16, "Shape", "2"));
-                    else if (item.getShape().equals("stiletto"))
-                        moreContainer.addView(createText(convertToString(R.string.stilettoShape), Typeface.DEFAULT_BOLD, 16, "Shape", "3"));
+                    switch (item.getShape()) {
+                        case "square":
+                            moreContainer.addView(createText(convertToString(R.string.squareShape), 16, "Shape", "1"));
+                            break;
+                        case "oval":
+                            moreContainer.addView(createText(convertToString(R.string.ovalShape), 16, "Shape", "2"));
+                            break;
+                        case "stiletto":
+                            moreContainer.addView(createText(convertToString(R.string.stilettoShape), 16, "Shape", "3"));
+                            break;
+                    }
 
-                    if (item.getDesign().equals("french_classic"))
-                        moreContainer.addView(createText(convertToString(R.string.french_classicDesign), Typeface.DEFAULT_BOLD, 16, "Design", "1"));
-                    else if (item.getDesign().equals("french_chevron"))
-                        moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), Typeface.DEFAULT_BOLD, 16, "Design", "2"));
-                    else if (item.getDesign().equals("french_millennium"))
-                        moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), Typeface.DEFAULT_BOLD, 16, "Design", "3"));
-                    else if (item.getDesign().equals("french_fun"))
-                        moreContainer.addView(createText(convertToString(R.string.french_funDesign), Typeface.DEFAULT_BOLD, 16, "Design", "4"));
-                    else if (item.getDesign().equals("french_crystal"))
-                        moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), Typeface.DEFAULT_BOLD, 16, "Design", "5"));
-                    else if (item.getDesign().equals("french_colorful"))
-                        moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), Typeface.DEFAULT_BOLD, 16, "Design", "6"));
-                    else if (item.getDesign().equals("french_designer"))
-                        moreContainer.addView(createText(convertToString(R.string.french_designerDesign), Typeface.DEFAULT_BOLD, 16, "Design", "7"));
-                    else if (item.getDesign().equals("french_spa"))
-                        moreContainer.addView(createText(convertToString(R.string.french_spaDesign), Typeface.DEFAULT_BOLD, 16, "Design", "8"));
-                    else if (item.getDesign().equals("french_moon"))
-                        moreContainer.addView(createText(convertToString(R.string.french_moonDesign), Typeface.DEFAULT_BOLD, 16, "Design", "9"));
-                    else if (item.getDesign().equals("art"))
-                        moreContainer.addView(createText(convertToString(R.string.artDesign), Typeface.DEFAULT_BOLD, 16, "Design", "10"));
-                    else if (item.getDesign().equals("designer"))
-                        moreContainer.addView(createText(convertToString(R.string.designerDesign), Typeface.DEFAULT_BOLD, 16, "Design", "11"));
-                    else if (item.getDesign().equals("volume"))
-                        moreContainer.addView(createText(convertToString(R.string.volumeDesign), Typeface.DEFAULT_BOLD, 16, "Design", "12"));
-                    else if (item.getDesign().equals("aqua"))
-                        moreContainer.addView(createText(convertToString(R.string.aquaDesign), Typeface.DEFAULT_BOLD, 16, "Design", "13"));
-                    else if (item.getDesign().equals("american"))
-                        moreContainer.addView(createText(convertToString(R.string.americanDesign), Typeface.DEFAULT_BOLD, 16, "Design", "14"));
-                    else if (item.getDesign().equals("photo"))
-                        moreContainer.addView(createText(convertToString(R.string.photoDesign), Typeface.DEFAULT_BOLD, 16, "Design", "15"));
+                    switch (item.getDesign()) {
+                        case "french_classic":
+                            moreContainer.addView(createText(convertToString(R.string.french_classicDesign), 16, "Design", "1"));
+                            break;
+                        case "french_chevron":
+                            moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), 16, "Design", "2"));
+                            break;
+                        case "french_millennium":
+                            moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), 16, "Design", "3"));
+                            break;
+                        case "french_fun":
+                            moreContainer.addView(createText(convertToString(R.string.french_funDesign), 16, "Design", "4"));
+                            break;
+                        case "french_crystal":
+                            moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), 16, "Design", "5"));
+                            break;
+                        case "french_colorful":
+                            moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), 16, "Design", "6"));
+                            break;
+                        case "french_designer":
+                            moreContainer.addView(createText(convertToString(R.string.french_designerDesign), 16, "Design", "7"));
+                            break;
+                        case "french_spa":
+                            moreContainer.addView(createText(convertToString(R.string.french_spaDesign), 16, "Design", "8"));
+                            break;
+                        case "french_moon":
+                            moreContainer.addView(createText(convertToString(R.string.french_moonDesign), 16, "Design", "9"));
+                            break;
+                        case "art":
+                            moreContainer.addView(createText(convertToString(R.string.artDesign), 16, "Design", "10"));
+                            break;
+                        case "designer":
+                            moreContainer.addView(createText(convertToString(R.string.designerDesign), 16, "Design", "11"));
+                            break;
+                        case "volume":
+                            moreContainer.addView(createText(convertToString(R.string.volumeDesign), 16, "Design", "12"));
+                            break;
+                        case "aqua":
+                            moreContainer.addView(createText(convertToString(R.string.aquaDesign), 16, "Design", "13"));
+                            break;
+                        case "american":
+                            moreContainer.addView(createText(convertToString(R.string.americanDesign), 16, "Design", "14"));
+                            break;
+                        case "photo":
+                            moreContainer.addView(createText(convertToString(R.string.photoDesign), 16, "Design", "15"));
+                            break;
+                    }
 
                     holder.moreContainer.addView(moreContainer);
                 } else if (holder.showMore.getText().equals(HIDE)) {
@@ -293,9 +285,9 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         });
     }
 
-    private TextView createText(String title, final Typeface tf, int padding, final String type, final String index) {
+    private TextView createText(String title, int padding, final String type, final String index) {
         TextView tw = new TextView(context);
-        tw.setText("" + title);
+        tw.setText(String.valueOf(title));
         tw.setPadding(0, padding, 0, padding);
         tw.setTextSize(14);
         tw.setTextColor(Color.argb(255, 50, 50, 50));
@@ -303,28 +295,28 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         tw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (type == "Shape") {
+                if (Objects.equals(type, "Shape")) {
                     String[] shapes = context.getResources().getStringArray(R.array.manicureShapes);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
-                    intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + shapes[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "" + index);
                     intent.putExtra("Design", "0");
                     context.startActivity(intent);
                     FireAnal.sendString("2", "ManicureFeedParamShape", index);
                 }
-                if (type == "Design") {
+                if (Objects.equals(type, "Design")) {
                     String[] designs = context.getResources().getStringArray(R.array.manicureDesign);
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
-                    intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
+                    intent.putExtra("Toolbar", "" + designs[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
                     intent.putExtra("Shape", "0");
                     intent.putExtra("Design", "" + index);
@@ -333,13 +325,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 }
             }
         });
-        //tw.setTypeface(tf);
         return tw;
     }
 
     private ImageView createCircle(final String color, final String searchParameter) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Storage.getInt("Width", 480) * 0.075F), (int) (Storage.getInt("Width", 480) * 0.075F)));
         imageView.setScaleX(0.9F);
         imageView.setScaleY(0.9F);
         imageView.setBackgroundColor(Color.parseColor(color));
@@ -395,10 +386,10 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 "F9CBCB",
                 "D6C880"
         };
-        for (int i = 0; i < colorsCodes.length; i++) {
+        for (String colorsCode : colorsCodes) {
             for (int j = 0; j < colors.size(); j++) {
-                if (colorsCodes[i].equals(colors.get(j)))
-                    sortedColors.add(colorsCodes[i]);
+                if (colorsCode.equals(colors.get(j)))
+                    sortedColors.add(colorsCode);
             }
         }
         return sortedColors;
@@ -435,15 +426,14 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         }
     }
 
-    public class CheckLikes extends AsyncTask<Void, Void, String> {
+    private class CheckLikes extends AsyncTask<Void, Void, String> {
 
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-        String email = "";
+        private HttpURLConnection connection = null;
+        private BufferedReader reader = null;
+        private String result = "";
+        private String email = "";
 
-        public CheckLikes(String email) {
+        CheckLikes(String email) {
             this.email = email;
         }
 
@@ -456,7 +446,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
+                StringBuilder profileBuffer = new StringBuilder();
                 String profileLine;
                 while ((profileLine = reader.readLine()) != null) {
                     profileBuffer.append(profileLine);
@@ -471,9 +461,102 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         @Override
         protected void onPostExecute(String s) {
             String[] array = s.split(",");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals(""))
-                    likes.add(new Long(array[i]));
+            for (String anArray : array) {
+                if (!anArray.equals(""))
+                    likes.add(Long.valueOf(anArray));
+            }
+        }
+    }
+
+    private class Load extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        Load(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            long id, likes;
+            String availableDate, colors, shape, design, tags = "", authorPhoto, authorName;
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    List<String> images = new ArrayList<>();
+                    List<String> hashTags = new ArrayList<>();
+
+                    for (int j = 0; j < 10; j++)
+                        if (!item.getString("screen" + j).equals("empty.jpg"))
+                            images.add(item.getString("screen" + j));
+
+                    id = item.getLong("id");
+                    authorPhoto = item.getString("authorPhoto");
+                    authorName = item.getString("authorName");
+                    availableDate = item.getString("uploadDate");
+                    if (Storage.getString("Localization", "").equals("English"))
+                        tags = item.getString("tags");
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        tags = item.getString("tagsRu");
+                    shape = item.getString("shape");
+                    design = item.getString("design");
+                    colors = item.getString("colors");
+                    likes = item.getLong("likes");
+
+                    String[] tempTags = tags.split(",");
+                    Collections.addAll(hashTags, tempTags);
+
+                    ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
+                    data.add(manicureDTO);
+                }
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }

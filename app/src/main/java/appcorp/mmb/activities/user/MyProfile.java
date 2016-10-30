@@ -7,14 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,15 +20,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,27 +59,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private TextView name, location, phone, likes, followers;
-    private TextView serviceMakeupText, serviceManicureText, serviceHairstyleText;
-    private LinearLayout serviceMakeup, serviceManicure, serviceHairstyle;
+    private TextView name, location, phone;
     private ImageView gplusButton, fbButton, vkButton, instagramButton, okButton;
     private ImageView photo;
-    private String id, photoUrl;
+    private String id;
     private String gplusLink, fbLink, vkLink, instagramLink, okLink;
-    private ScrollView makeupUserGallery, manicureUserGallery, hairstyleUserGallery;
-    private FloatingActionButton addMakeup, addManicure, addHairstyle;
-    private LinearLayout servicesMakeup;
-    private LinearLayout servicesManicure;
-    private LinearLayout servicesHairstyle;
+    private LinearLayout myProfileServices;
+    private FloatingActionButton addToGallery;
     private ProgressDialog progressDialog;
-    private Display display;
-    private int width, height;
-    private String[] makeupServicesArray;
-    private String[] makeupCostsArray;
-    private String[] manicureServicesArray;
-    private String[] manicureCostsArray;
-    private String[] hairstyleServicesArray;
-    private String[] hairstyleCostsArray;
     List<Integer> numbers = new ArrayList<>();
 
     @Override
@@ -93,13 +75,11 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_my_profile);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "MyProfile");
 
-        for(int i = 0 ; i < 10;i++){
+        for (int i = 0; i < 10; i++) {
             numbers.add(i);
         }
 
@@ -107,105 +87,41 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         initViews();
         initNavigationView();
         new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
-        changeServiceStatus(1);
-
-        display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
-    }
-
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
     }
 
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
     }
 
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
-
     private void initViews() {
-        name = (TextView) findViewById(R.id.name);
-        location = (TextView) findViewById(R.id.location);
-        phone = (TextView) findViewById(R.id.phone);
+        name = (TextView) findViewById(R.id.myProfileName);
+        location = (TextView) findViewById(R.id.myProfileLocation);
+        phone = (TextView) findViewById(R.id.myProfilePhone);
         photo = (ImageView) findViewById(R.id.myProfileAvatar);
-        //likes = (TextView) findViewById(R.id.likes);
-        //followers = (TextView) findViewById(R.id.followers);
-        serviceMakeupText = (TextView) findViewById(R.id.serviceMakeupText);
-        serviceManicureText = (TextView) findViewById(R.id.serviceManicureText);
-        serviceHairstyleText = (TextView) findViewById(R.id.serviceHairstyleText);
-        serviceMakeupText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceManicureText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceHairstyleText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
-        serviceMakeup = (LinearLayout) findViewById(R.id.serviceMakeup);
-        serviceManicure = (LinearLayout) findViewById(R.id.serviceManicure);
-        serviceHairstyle = (LinearLayout) findViewById(R.id.serviceHairstyle);
-        gplusButton = (ImageView) findViewById(R.id.gplusButton);
-        fbButton = (ImageView) findViewById(R.id.fbButton);
-        vkButton = (ImageView) findViewById(R.id.vkButton);
-        instagramButton = (ImageView) findViewById(R.id.instagramButton);
-        okButton = (ImageView) findViewById(R.id.okButton);
-        makeupUserGallery = (ScrollView) findViewById(R.id.makeupUserGallery);
-        manicureUserGallery = (ScrollView) findViewById(R.id.manicureUserGallery);
-        hairstyleUserGallery = (ScrollView) findViewById(R.id.hairstyleUserGallery);
-        addMakeup = (FloatingActionButton) findViewById(R.id.addMakeupToGallery);
-        addManicure = (FloatingActionButton) findViewById(R.id.addManicureToGallery);
-        addHairstyle = (FloatingActionButton) findViewById(R.id.addHairstyleToGallery);
-        servicesMakeup = (LinearLayout) findViewById(R.id.servicesMakeup);
-        servicesManicure = (LinearLayout) findViewById(R.id.servicesManicure);
-        servicesHairstyle = (LinearLayout) findViewById(R.id.servicesHairstyle);
+        myProfileServices = (LinearLayout) findViewById(R.id.myProfileServices);
+        gplusButton = (ImageView) findViewById(R.id.myProfileGplusButton);
+        fbButton = (ImageView) findViewById(R.id.myProfileFbButton);
+        vkButton = (ImageView) findViewById(R.id.myProfileVkButton);
+        instagramButton = (ImageView) findViewById(R.id.myProfileInstagramButton);
+        okButton = (ImageView) findViewById(R.id.myProfileOkButton);
+        addToGallery = (FloatingActionButton) findViewById(R.id.myProfileAddToGallery);
 
-        serviceMakeup.setOnClickListener(this);
-        serviceManicure.setOnClickListener(this);
-        serviceHairstyle.setOnClickListener(this);
         gplusButton.setOnClickListener(this);
         fbButton.setOnClickListener(this);
         vkButton.setOnClickListener(this);
         instagramButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
-        addMakeup.setOnClickListener(this);
-        addManicure.setOnClickListener(this);
-        addHairstyle.setOnClickListener(this);
+        addToGallery.setOnClickListener(this);
         phone.setOnClickListener(this);
         photo.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view == serviceMakeup) {
-            changeServiceStatus(1);
-        }
-        if (view == serviceManicure) {
-            changeServiceStatus(2);
-        }
-        if (view == serviceHairstyle) {
-            changeServiceStatus(3);
-        }
         if (view == gplusButton) {
             if (!gplusLink.equals(""))
                 createThreeButtonsAlertDialog("Google Plus", "gplus", gplusLink);
@@ -226,14 +142,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
             if (!okLink.equals(""))
                 createThreeButtonsAlertDialog("Odnoklassniki", "ok", okLink);
         }
-        if (view == addMakeup) {
+        if (view == addToGallery) {
             newMakeup();
-        }
-        if (view == addManicure) {
-            newManicure();
-        }
-        if (view == addHairstyle) {
-            newHairstyle();
         }
         if (view == phone) {
             call();
@@ -255,22 +165,29 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                    }
 
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
+                    int columnIndex = 0;
+                    if (cursor != null) {
+                        columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    }
+                    String filePath = null;
+                    if (cursor != null) {
+                        filePath = cursor.getString(columnIndex);
+                    }
+                    if (cursor != null) {
+                        cursor.close();
+                    }
 
-                    if (filePath.endsWith(".jpg") || filePath.endsWith(".png")) {
+                    if (filePath != null && (filePath.endsWith(".jpg") || filePath.endsWith(".png"))) {
                         progressDialog = new ProgressDialog(this);
                         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
                         progressDialog.show();
                         new UploadProfileImage(filePath, progressDialog).execute();
                     }
                     new MyProfileLoader(Storage.getString("E-mail", "Click to sign in")).execute();
-
-                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-                    // Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want!
                 }
         }
 
@@ -332,8 +249,8 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 service.setText(service.getText().toString().trim());
                 cost.setText(cost.getText().toString().trim());
                 int tempCost;
-                try{
-                    tempCost = new Integer(cost.getText().toString());
+                try {
+                    tempCost = Integer.valueOf(cost.getText().toString());
                 } catch (NumberFormatException e) {
                     tempCost = -1;
                     e.printStackTrace();
@@ -346,9 +263,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                     ImageView remove = new ImageView(getApplicationContext());
                     remove.setImageResource(R.mipmap.ic_close_circle_outline);
                     removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strCost.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    strService.setLayoutParams(new ViewGroup.LayoutParams((Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 6) - Storage.getInt("Width", 480) / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    removeService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                     strService.setOrientation(LinearLayout.HORIZONTAL);
                     strCost.setOrientation(LinearLayout.HORIZONTAL);
                     removeService.setOrientation(LinearLayout.HORIZONTAL);
@@ -376,17 +293,17 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onClick(View v) {
                             new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
-                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
+                                    "?service=" + Intermediates.encodeToURL(tempService) +
+                                    "&cost=" + Intermediates.encodeToURL(tempCosts) +
                                     "&id=" + id).execute();
                             stroke.removeAllViews();
                         }
                     });
 
-                    servicesMakeup.addView(stroke);
+                    myProfileServices.addView(stroke);
                     new GetRequest("http://195.88.209.17/app/in/addmakeupservice.php" +
-                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
+                            "?service=" + Intermediates.encodeToURL(service.getText().toString()) +
+                            "&cost=" + Intermediates.encodeToURL(cost.getText().toString()) +
                             "&id=" + id).execute();
                 }
             }
@@ -399,180 +316,6 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         alert.show();
     }
 
-    private void newManicure() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.add_manicure_service);
-        alert.setMessage(R.string.enter_service_name);
-
-        final LinearLayout inputFields = new LinearLayout(getApplicationContext());
-        inputFields.setOrientation(LinearLayout.VERTICAL);
-        final EditText service = new EditText(this);
-        service.setHint(R.string.service_name);
-        inputFields.addView(service);
-        final EditText cost = new EditText(this);
-        cost.setHint(R.string.service_cost);
-        inputFields.addView(cost);
-        alert.setView(inputFields);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                service.setText(service.getText().toString().trim());
-                cost.setText(cost.getText().toString().trim());
-
-                int tempCost;
-                try{
-                    tempCost = new Integer(cost.getText().toString());
-                } catch (NumberFormatException e) {
-                    tempCost = -1;
-                    e.printStackTrace();
-                }
-                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("") && tempCost > 0) {
-                    final LinearLayout stroke = new LinearLayout(getApplicationContext());
-                    LinearLayout strService = new LinearLayout(getApplicationContext());
-                    LinearLayout strCost = new LinearLayout(getApplicationContext());
-                    LinearLayout removeService = new LinearLayout(getApplicationContext());
-                    ImageView remove = new ImageView(getApplicationContext());
-                    remove.setImageResource(R.mipmap.ic_close_circle_outline);
-                    removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setOrientation(LinearLayout.HORIZONTAL);
-                    strCost.setOrientation(LinearLayout.HORIZONTAL);
-                    removeService.setOrientation(LinearLayout.HORIZONTAL);
-                    stroke.addView(strService);
-                    stroke.addView(strCost);
-                    stroke.addView(removeService);
-
-                    TextView s = new TextView(getApplicationContext());
-                    s.setTextColor(Color.parseColor("#808080"));
-                    s.setTextSize(16);
-                    s.setPadding(0, 8, 0, 8);
-                    s.setText(service.getText().toString());
-                    strService.addView(s);
-                    TextView c = new TextView(getApplicationContext());
-                    c.setTextColor(Color.parseColor("#404040"));
-                    c.setTextSize(16);
-                    c.setPadding(0, 8, 0, 8);
-                    c.setText(cost.getText().toString());
-                    strCost.addView(c);
-
-                    final String tempService = service.getText().toString();
-                    final String tempCosts = cost.getText().toString();
-
-                    removeService.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
-                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
-                                    "&id=" + id).execute();
-                            stroke.removeAllViews();
-                        }
-                    });
-
-                    servicesManicure.addView(stroke);
-                    new GetRequest("http://195.88.209.17/app/in/addmanicureservice.php" +
-                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
-                            "&id=" + id).execute();
-                }
-            }
-        });
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-
-            }
-        });
-        alert.show();
-    }
-
-    private void newHairstyle() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.add_hairstyle_service);
-        alert.setMessage(R.string.enter_service_name);
-
-        final LinearLayout inputFields = new LinearLayout(getApplicationContext());
-        inputFields.setOrientation(LinearLayout.VERTICAL);
-        final EditText service = new EditText(this);
-        service.setHint(R.string.service_name);
-        inputFields.addView(service);
-        final EditText cost = new EditText(this);
-        cost.setHint(R.string.service_cost);
-        inputFields.addView(cost);
-        alert.setView(inputFields);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                service.setText(service.getText().toString().trim());
-                cost.setText(cost.getText().toString().trim());
-                int tempCost;
-                try{
-                    tempCost = new Integer(cost.getText().toString());
-                } catch (NumberFormatException e) {
-                    tempCost = -1;
-                    e.printStackTrace();
-                }
-                if (!service.getText().toString().equals("") && !cost.getText().toString().equals("") && tempCost > 0) {
-                    final LinearLayout stroke = new LinearLayout(getApplicationContext());
-                    LinearLayout strService = new LinearLayout(getApplicationContext());
-                    LinearLayout strCost = new LinearLayout(getApplicationContext());
-                    LinearLayout removeService = new LinearLayout(getApplicationContext());
-                    ImageView remove = new ImageView(getApplicationContext());
-                    remove.setImageResource(R.mipmap.ic_close_circle_outline);
-                    removeService.addView(remove);
-                    strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    strService.setOrientation(LinearLayout.HORIZONTAL);
-                    strCost.setOrientation(LinearLayout.HORIZONTAL);
-                    removeService.setOrientation(LinearLayout.HORIZONTAL);
-                    stroke.addView(strService);
-                    stroke.addView(strCost);
-                    stroke.addView(removeService);
-
-                    TextView s = new TextView(getApplicationContext());
-                    s.setTextColor(Color.parseColor("#808080"));
-                    s.setTextSize(16);
-                    s.setPadding(0, 8, 0, 8);
-                    s.setText(service.getText().toString());
-                    strService.addView(s);
-                    TextView c = new TextView(getApplicationContext());
-                    c.setTextColor(Color.parseColor("#404040"));
-                    c.setTextSize(16);
-                    c.setPadding(0, 8, 0, 8);
-                    c.setText(cost.getText().toString());
-                    strCost.addView(c);
-
-                    final String tempService = service.getText().toString();
-                    final String tempCosts = cost.getText().toString();
-
-                    removeService.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
-                                    "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                    "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
-                                    "&id=" + id).execute();
-                            stroke.removeAllViews();
-                        }
-                    });
-
-                    servicesHairstyle.addView(stroke);
-                    new GetRequest("http://195.88.209.17/app/in/addhairstyleservice.php" +
-                            "?service=" + Intermediates.getInstance().encodeToURL(service.getText().toString()) +
-                            "&cost=" + Intermediates.getInstance().encodeToURL(cost.getText().toString()) +
-                            "&id=" + id).execute();
-                }
-            }
-        });
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-
-            }
-        });
-        alert.show();
-    }
 
     private void createThreeButtonsAlertDialog(String title, final String type, final String content) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MyProfile.this);
@@ -606,38 +349,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         builder.show();
     }
 
-    private void changeServiceStatus(int status) {
-        switch (status) {
-            case 1:
-                serviceMakeup.setAlpha(1F);
-                serviceManicure.setAlpha(0.6F);
-                serviceHairstyle.setAlpha(0.6F);
-                makeupUserGallery.setVisibility(View.VISIBLE);
-                manicureUserGallery.setVisibility(View.INVISIBLE);
-                hairstyleUserGallery.setVisibility(View.INVISIBLE);
-                break;
-            case 2:
-                serviceMakeup.setAlpha(0.6F);
-                serviceManicure.setAlpha(1F);
-                serviceHairstyle.setAlpha(0.6F);
-                makeupUserGallery.setVisibility(View.INVISIBLE);
-                manicureUserGallery.setVisibility(View.VISIBLE);
-                hairstyleUserGallery.setVisibility(View.INVISIBLE);
-                break;
-            case 3:
-                serviceMakeup.setAlpha(0.6F);
-                serviceManicure.setAlpha(0.6F);
-                serviceHairstyle.setAlpha(1F);
-                makeupUserGallery.setVisibility(View.INVISIBLE);
-                manicureUserGallery.setVisibility(View.INVISIBLE);
-                hairstyleUserGallery.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.myProfileToolbar);
-        toolbar.setTitle(Storage.getString("Name", Intermediates.getInstance().convertToString(getApplicationContext(), R.string.app_name)));
+        toolbar.setTitle(Storage.getString("Name", Intermediates.convertToString(getApplicationContext(), R.string.app_name)));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -655,7 +369,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.myProfileDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) drawerLayout.findViewById(R.id.myProfileNavigation);
@@ -663,11 +377,11 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), SelectCategory.class));
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
                         break;*/
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
@@ -730,7 +444,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         });
     }
 
-    public class MyProfileLoader extends AsyncTask<Void, Void, String> {
+    class MyProfileLoader extends AsyncTask<Void, Void, String> {
 
         HttpURLConnection profilePageConnection = null;
         BufferedReader profileReader = null;
@@ -738,7 +452,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         String result = "";
         String email = "";
 
-        public MyProfileLoader(String email) {
+        MyProfileLoader(String email) {
             this.email = email;
         }
 
@@ -751,7 +465,7 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                 profilePageConnection.connect();
                 InputStream inputStream = profilePageConnection.getInputStream();
                 profileReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = profileReader.readLine()) != null)
                     buffer.append(line);
@@ -791,9 +505,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         instagramButton.setAlpha(0.4F);
                     if (item.getString("odnoklassniki").equals(""))
                         okButton.setAlpha(0.4F);
-                    if (!item.getString("makeupServices").equals("")) {
-                        makeupServicesArray = item.getString("makeupServices").substring(1, item.getString("makeupServices").length()).split(",");
-                        makeupCostsArray = item.getString("makeupCosts").substring(1, item.getString("makeupCosts").length()).split(",");
+                    if (!item.getString("services").equals("")) {
+                        String[] makeupServicesArray = item.getString("services").substring(1, item.getString("services").length()).split(",");
+                        String[] makeupCostsArray = item.getString("costs").substring(1, item.getString("costs").length()).split(",");
 
                         for (int j = 0; j < makeupServicesArray.length; j++) {
                             final LinearLayout stroke = new LinearLayout(getApplicationContext());
@@ -803,9 +517,9 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             ImageView remove = new ImageView(getApplicationContext());
                             remove.setImageResource(R.mipmap.ic_close_circle_outline);
                             removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strCost.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            strService.setLayoutParams(new ViewGroup.LayoutParams((Storage.getInt("Width", 480) - Storage.getInt("Width", 480) / 6) - Storage.getInt("Width", 480) / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            removeService.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480) / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
                             strService.setOrientation(LinearLayout.HORIZONTAL);
                             strCost.setOrientation(LinearLayout.HORIZONTAL);
                             removeService.setOrientation(LinearLayout.HORIZONTAL);
@@ -817,14 +531,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                             serviceTextView.setTextColor(Color.parseColor("#808080"));
                             serviceTextView.setTextSize(16);
                             serviceTextView.setPadding(0, 8, 0, 8);
-                            serviceTextView.setText(makeupServicesArray[j].toString());
+                            serviceTextView.setText(makeupServicesArray[j]);
                             strService.addView(serviceTextView);
 
                             TextView costsTextView = new TextView(getApplicationContext());
                             costsTextView.setTextColor(Color.parseColor("#404040"));
                             costsTextView.setTextSize(16);
                             costsTextView.setPadding(0, 8, 0, 8);
-                            costsTextView.setText(makeupCostsArray[j].toString());
+                            costsTextView.setText(makeupCostsArray[j]);
                             strCost.addView(costsTextView);
 
                             final String tempService = serviceTextView.getText().toString();
@@ -834,121 +548,18 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void onClick(View v) {
                                     new GetRequest("http://195.88.209.17/app/in/removemakeupservice.php" +
-                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
+                                            "?service=" + Intermediates.encodeToURL(tempService) +
+                                            "&cost=" + Intermediates.encodeToURL(tempCosts) +
                                             "&id=" + id).execute();
                                     stroke.removeAllViews();
                                 }
                             });
 
-                            servicesMakeup.addView(stroke);
+                            myProfileServices.addView(stroke);
                         }
                     }
-                    if (!item.getString("manicureServices").equals("")) {
-                        manicureServicesArray = item.getString("manicureServices").substring(1, item.getString("manicureServices").length()).split(",");
-                        manicureCostsArray = item.getString("manicureCosts").substring(1, item.getString("manicureCosts").length()).split(",");
-                        for (int j = 0; j < manicureServicesArray.length; j++) {
-                            final LinearLayout stroke = new LinearLayout(getApplicationContext());
-                            LinearLayout strService = new LinearLayout(getApplicationContext());
-                            LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            LinearLayout removeService = new LinearLayout(getApplicationContext());
-                            ImageView remove = new ImageView(getApplicationContext());
-                            remove.setImageResource(R.mipmap.ic_close_circle_outline);
-                            removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setOrientation(LinearLayout.HORIZONTAL);
-                            strCost.setOrientation(LinearLayout.HORIZONTAL);
-                            removeService.setOrientation(LinearLayout.HORIZONTAL);
-                            stroke.addView(strService);
-                            stroke.addView(strCost);
-                            stroke.addView(removeService);
-
-                            TextView serviceTextView = new TextView(getApplicationContext());
-                            serviceTextView.setTextColor(Color.parseColor("#808080"));
-                            serviceTextView.setTextSize(16);
-                            serviceTextView.setPadding(0, 8, 0, 8);
-                            serviceTextView.setText(manicureServicesArray[j].toString());
-                            strService.addView(serviceTextView);
-
-                            TextView costsTextView = new TextView(getApplicationContext());
-                            costsTextView.setTextColor(Color.parseColor("#404040"));
-                            costsTextView.setTextSize(16);
-                            costsTextView.setPadding(0, 8, 0, 8);
-                            costsTextView.setText(manicureCostsArray[j].toString());
-                            strCost.addView(costsTextView);
-
-                            final String tempService = serviceTextView.getText().toString();
-                            final String tempCosts = costsTextView.getText().toString();
-
-                            removeService.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    new GetRequest("http://195.88.209.17/app/in/removemanicureservice.php" +
-                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
-                                            "&id=" + id).execute();
-                                    stroke.removeAllViews();
-                                }
-                            });
-
-                            servicesManicure.addView(stroke);
-                        }
-                    }
-                    if (!item.getString("hairstyleServices").equals("")) {
-                        hairstyleServicesArray = item.getString("hairstyleServices").substring(1, item.getString("hairstyleServices").length()).split(",");
-                        hairstyleCostsArray = item.getString("hairstyleCosts").substring(1, item.getString("hairstyleCosts").length()).split(",");
-                        for (int j = 0; j < hairstyleServicesArray.length; j++) {
-                            final LinearLayout stroke = new LinearLayout(getApplicationContext());
-                            LinearLayout strService = new LinearLayout(getApplicationContext());
-                            LinearLayout strCost = new LinearLayout(getApplicationContext());
-                            LinearLayout removeService = new LinearLayout(getApplicationContext());
-                            ImageView remove = new ImageView(getApplicationContext());
-                            remove.setImageResource(R.mipmap.ic_close_circle_outline);
-                            removeService.addView(remove);
-                            strCost.setLayoutParams(new ViewGroup.LayoutParams(width / 6, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setLayoutParams(new ViewGroup.LayoutParams((width - width / 6) - width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            removeService.setLayoutParams(new ViewGroup.LayoutParams(width / 5, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            strService.setOrientation(LinearLayout.HORIZONTAL);
-                            strCost.setOrientation(LinearLayout.HORIZONTAL);
-                            removeService.setOrientation(LinearLayout.HORIZONTAL);
-                            stroke.addView(strService);
-                            stroke.addView(strCost);
-                            stroke.addView(removeService);
-
-                            TextView serviceTextView = new TextView(getApplicationContext());
-                            serviceTextView.setTextColor(Color.parseColor("#808080"));
-                            serviceTextView.setTextSize(16);
-                            serviceTextView.setPadding(0, 8, 0, 8);
-                            serviceTextView.setText(hairstyleServicesArray[j].toString());
-                            strService.addView(serviceTextView);
-
-                            TextView costsTextView = new TextView(getApplicationContext());
-                            costsTextView.setTextColor(Color.parseColor("#404040"));
-                            costsTextView.setTextSize(16);
-                            costsTextView.setPadding(0, 8, 0, 8);
-                            costsTextView.setText(hairstyleCostsArray[j].toString());
-                            strCost.addView(costsTextView);
-
-                            final String tempService = serviceTextView.getText().toString();
-                            final String tempCosts = costsTextView.getText().toString();
-
-                            removeService.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    new GetRequest("http://195.88.209.17/app/in/removehairstyleservice.php" +
-                                            "?service=" + Intermediates.getInstance().encodeToURL(tempService) +
-                                            "&cost=" + Intermediates.getInstance().encodeToURL(tempCosts) +
-                                            "&id=" + id).execute();
-                                    stroke.removeAllViews();
-                                }
-                            });
-
-                            servicesHairstyle.addView(stroke);
-                        }
-                    }
-                    photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
+                    String photoUrl = "http://195.88.209.17/storage/photos/" + item.getString("photo");
+                    Storage.addString("PhotoURL", item.getString("photo"));
                     Storage.addString("PhotoURL", item.getString("photo"));
                     Storage.addString("MyCity", item.getString("city"));
                     Picasso.with(getApplicationContext()).load(photoUrl).resize(photo.getWidth(), photo.getHeight()).centerCrop().into(photo);

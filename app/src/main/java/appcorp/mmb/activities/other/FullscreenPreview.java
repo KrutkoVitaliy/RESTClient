@@ -1,24 +1,16 @@
 package appcorp.mmb.activities.other;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebView;
 
 import appcorp.mmb.R;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
 public class FullscreenPreview extends Activity {
-
-    int i = 0;
-    int width, height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +18,10 @@ public class FullscreenPreview extends Activity {
         setContentView(R.layout.fullscreen_preview);
 
         Storage.init(getApplicationContext());
-        initLocalization(Intermediates.getInstance().convertToString(getApplicationContext(), R.string.translation));
-        initScreen();
         initFirebase();
 
         FireAnal.sendString("1", "Open", "FullscreenView");
 
-        width = Storage.getInt("Width", 480);
-        height = width;
 
         final WebView webView;
         webView = (WebView) findViewById(R.id.fullscreenView);
@@ -56,30 +44,8 @@ public class FullscreenPreview extends Activity {
 
     }
 
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) getApplicationContext()
-                .getSystemService(getApplicationContext().WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
-    }
-
     private void initFirebase() {
         FireAnal.setContext(getApplicationContext());
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     @Override

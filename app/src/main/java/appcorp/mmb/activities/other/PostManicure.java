@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,13 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.activities.search_feeds.SearchManicureFeed;
 import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.list_adapters.SearchManicureFeedListAdapter;
 import appcorp.mmb.network.GetRequest;
 
 public class PostManicure extends AppCompatActivity {
@@ -46,7 +41,6 @@ public class PostManicure extends AppCompatActivity {
     HorizontalScrollView postManicureImageViewerHorizontal;
     ImageView postManicureAvatar, postManicureAddLike;
     TextView postManicureTitle, postManicureAvailableDate, postManicureLikesCount, postManicureShape, postManicureDesign, postManicureColors;
-    int width, height;
     private List<Long> likes = new ArrayList<>();
 
     @Override
@@ -55,9 +49,6 @@ public class PostManicure extends AppCompatActivity {
         setContentView(R.layout.activity_post_manicure);
         initViews();
         Storage.init(getApplicationContext());
-        Display display = ((WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
 
         imageUrl = getIntent().getStringExtra("manicureImageUrl");
         new LoadPost().execute();
@@ -99,7 +90,7 @@ public class PostManicure extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null)
                     buffer.append(line);
@@ -126,10 +117,12 @@ public class PostManicure extends AppCompatActivity {
                     final ArrayList<String> hashTags = new ArrayList<>();
                     if (Storage.getString("Localization", "").equals("English"))
                         for (int a = 0; a < item.getString("tags").split(",").length; a++)
-                            hashTags.add(item.getString("tags").split(",")[a]);
+                            if (!item.getString("tags").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tags").split(",")[a]);
                     if (Storage.getString("Localization", "").equals("Russian"))
                         for (int a = 0; a < item.getString("tagsRu").split(",").length; a++)
-                            hashTags.add(item.getString("tagsRu").split(",")[a]);
+                            if (!item.getString("tagsRu").split(",")[a].equals(""))
+                                hashTags.add(item.getString("tagsRu").split(",")[a]);
                     for (int j = 0; j < hashTags.size(); j++) {
                         TextView hashTag = new TextView(getApplicationContext());
                         hashTag.setTextColor(Color.argb(255, 51, 102, 153));
@@ -147,7 +140,9 @@ public class PostManicure extends AppCompatActivity {
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             }
                         });
-                        postManicureHashTags.addView(hashTag);
+
+                        if (!hashTag.getText().toString().equals(""))
+                            postManicureHashTags.addView(hashTag);
                     }
 
 
@@ -157,11 +152,11 @@ public class PostManicure extends AppCompatActivity {
                             screenshots.add(item.getString("screen" + j));
                     for (int k = 0; k < screenshots.size(); k++) {
                         ImageView screenShot = new ImageView(getApplicationContext());
-                        screenShot.setMinimumWidth(width);
-                        screenShot.setMinimumHeight(height);
+                        screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                        screenShot.setMinimumHeight(Storage.getInt("Width", 480));
                         screenShot.setPadding(0, 0, 1, 0);
                         screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(width, height).centerCrop().into(screenShot);
+                        Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/images/" + screenshots.get(k)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
                         screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         final int finalI = k;
                         screenShot.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +171,7 @@ public class PostManicure extends AppCompatActivity {
                         postManicureImageViewer.addView(screenShot);
                         postManicureImageViewerHorizontal.scrollTo(0, 0);
                         LinearLayout countLayout = new LinearLayout(getApplicationContext());
-                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                        countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
                         TextView count = new TextView(getApplicationContext());
                         count.setText("< " + (k + 1) + "/" + screenshots.size() + " >");
                         count.setTextSize(24);
@@ -190,7 +185,7 @@ public class PostManicure extends AppCompatActivity {
                     postManicureColors.setText(R.string.title_used_colors);
                     final ArrayList<String> colors = new ArrayList<>();
                     for (int j = 0; j < item.getString("colors").split(",").length; j++)
-                        if (!item.getString("colors").split(",")[j].equals("")){
+                        if (!item.getString("colors").split(",")[j].equals("")) {
                             colors.add(item.getString("colors").split(",")[j]);
                         }
                     for (int l = 0; l < colors.size(); l++) {
@@ -224,7 +219,7 @@ public class PostManicure extends AppCompatActivity {
                                 ArrayList<String> manicureColors = new ArrayList<>();
                                 Intent intent = new Intent(getApplicationContext(), SearchManicureMatrix.class);
                                 intent.putStringArrayListExtra("ManicureColors", manicureColors);
-                                intent.putExtra("Toolbar", "" + shapes[new Integer(index)]);
+                                intent.putExtra("Toolbar", "" + shapes[index]);
                                 intent.putExtra("Request", "");
                                 intent.putExtra("Shape", "" + index);
                                 intent.putExtra("Design", "0");
@@ -277,7 +272,7 @@ public class PostManicure extends AppCompatActivity {
                                 ArrayList<String> manicureColors = new ArrayList<>();
                                 Intent intent = new Intent(getApplicationContext(), SearchManicureMatrix.class);
                                 intent.putStringArrayListExtra("ManicureColors", manicureColors);
-                                intent.putExtra("Toolbar", "" + designs[new Integer(index)]);
+                                intent.putExtra("Toolbar", "" + designs[index]);
                                 intent.putExtra("Request", "");
                                 intent.putExtra("Shape", "0");
                                 intent.putExtra("Design", "" + index);
@@ -321,22 +316,22 @@ public class PostManicure extends AppCompatActivity {
                     else if (item.getString("design").equals("photo"))
                         postManicureDesign.setText(R.string.photoDesign);
 
-                    postManicureLikesCount.setText("" + item.getString("likes"));
+                    postManicureLikesCount.setText(String.valueOf(item.getString("likes")));
 
                     postManicureAddLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
                                 try {
-                                    if (!likes.contains(item.getString("id"))) {
+                                    if (!likes.contains(item.getLong("id"))) {
                                         postManicureAddLike.setBackgroundResource(R.mipmap.ic_heart);
-                                        likes.add(new Long(item.getString("id")));
-                                        postManicureLikesCount.setText("" + (item.getString("likes") + 1));
+                                        likes.add(Long.valueOf(item.getString("id")));
+                                        postManicureLikesCount.setText(String.valueOf(item.getString("likes") + 1));
                                         new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
-                                    } else if (likes.contains(item.getString("id"))) {
+                                    } else if (likes.contains(item.getLong("id"))) {
                                         postManicureAddLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                                        likes.remove(item.getString("id"));
-                                        postManicureLikesCount.setText("" + (new Long(postManicureLikesCount.getText().toString()) - 1));
+                                        likes.remove(item.getLong("id"));
+                                        postManicureLikesCount.setText(String.valueOf(postManicureLikesCount.getText()));
                                         new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getString("id") + "&email=" + Storage.getString("E-mail", "")).execute();
                                     }
                                 } catch (JSONException e) {
@@ -357,7 +352,7 @@ public class PostManicure extends AppCompatActivity {
 
         private ImageView createCircle(final String color, final String searchParameter) {
             ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (width * 0.075F), (int) (width * 0.075F)));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Storage.getInt("Width", 480) * 0.075F), (int) (Storage.getInt("Width", 480) * 0.075F)));
             imageView.setScaleX(0.9F);
             imageView.setScaleY(0.9F);
             imageView.setBackgroundColor(Color.parseColor(color));
@@ -413,10 +408,10 @@ public class PostManicure extends AppCompatActivity {
                     "F9CBCB",
                     "D6C880"
             };
-            for (int i = 0; i < colorsCodes.length; i++) {
+            for (String colorsCode : colorsCodes) {
                 for (int j = 0; j < colors.size(); j++) {
-                    if (colorsCodes[i].equals(colors.get(j)))
-                        sortedColors.add(colorsCodes[i]);
+                    if (colorsCode.equals(colors.get(j)))
+                        sortedColors.add(colorsCode);
                 }
             }
             return sortedColors;
@@ -425,13 +420,12 @@ public class PostManicure extends AppCompatActivity {
 
     public class CheckLikes extends AsyncTask<Void, Void, String> {
 
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String url = "";
-        String result = "";
-        String email = "";
+        private HttpURLConnection connection = null;
+        private BufferedReader reader = null;
+        private String result = "";
+        private String email = "";
 
-        public CheckLikes(String email) {
+        CheckLikes(String email) {
             this.email = email;
         }
 
@@ -444,7 +438,7 @@ public class PostManicure extends AppCompatActivity {
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer profileBuffer = new StringBuffer();
+                StringBuilder profileBuffer = new StringBuilder();
                 String profileLine;
                 while ((profileLine = reader.readLine()) != null) {
                     profileBuffer.append(profileLine);
@@ -459,9 +453,9 @@ public class PostManicure extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             String[] array = s.split(",");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals(""))
-                    likes.add(new Long(array[i]));
+            for (String anArray : array) {
+                if (!anArray.equals(""))
+                    likes.add(Long.valueOf(anArray));
             }
         }
     }

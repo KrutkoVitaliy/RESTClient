@@ -3,6 +3,8 @@ package appcorp.mmb.classes;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.List;
+
 public class Storage {
 
     public static final String STORAGE_NAME = "MMB_STORAGE";
