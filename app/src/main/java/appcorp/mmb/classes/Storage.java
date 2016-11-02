@@ -3,11 +3,8 @@ package appcorp.mmb.classes;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.List;
-
 public class Storage {
 
-    public static final String STORAGE_NAME = "MMB_STORAGE";
     private static SharedPreferences sharedPreferences = null;
     private static SharedPreferences.Editor editor = null;
     private static Context context = null;
@@ -17,6 +14,7 @@ public class Storage {
     }
 
     private static void init() {
+        String STORAGE_NAME = "MMB_STORAGE";
         sharedPreferences = context.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }

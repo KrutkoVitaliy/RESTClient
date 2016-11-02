@@ -13,7 +13,6 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.MakeupDTO;
-import appcorp.mmb.list_adapters.MakeupFeedListAdapter;
 import appcorp.mmb.list_adapters.SearchMakeupFeedListAdapter;
 
 public class SearchMakeupFeedFragment extends AbstractTabFragment{

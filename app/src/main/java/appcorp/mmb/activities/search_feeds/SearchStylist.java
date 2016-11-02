@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
 import appcorp.mmb.activities.user.Authorization;
@@ -133,9 +134,9 @@ public class SearchStylist extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    /*case R.id.navMenuGlobalFeed:
+                    case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-                        break;*/
+                        break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));

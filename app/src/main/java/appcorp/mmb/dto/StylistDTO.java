@@ -1,8 +1,5 @@
 package appcorp.mmb.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class StylistDTO {
 
     private long id;

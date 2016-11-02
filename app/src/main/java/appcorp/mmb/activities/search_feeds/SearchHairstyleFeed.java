@@ -1,6 +1,7 @@
 package appcorp.mmb.activities.search_feeds;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
@@ -77,10 +79,16 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         initViewPager();
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new SearchHairstyleFeedLoader(request, hairstyleLength, hairstyleType, hairstyleFor, 1).execute();
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initFirebase() {
@@ -119,9 +127,9 @@ public class SearchHairstyleFeed extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    /*case R.id.navMenuGlobalFeed:
+                    case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-                        break;*/
+                        break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));

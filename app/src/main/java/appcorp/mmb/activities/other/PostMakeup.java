@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.other;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -56,6 +57,12 @@ public class PostMakeup extends AppCompatActivity {
         new LoadPost().execute();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initViews() {
@@ -216,9 +223,9 @@ public class PostMakeup extends AppCompatActivity {
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_eye_color), 16, "", ""));
+                    moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.title_eye_color), 16, "", ""));
                     moreContainer.addView(createImage(item.getString("eyeColor")));
-                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_used_colors), 16, "", ""));
+                    moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.title_used_colors), 16, "", ""));
                     LinearLayout colors = new LinearLayout(getApplicationContext());
                     colors.setOrientation(LinearLayout.HORIZONTAL);
                     String[] mColors = (item.getString("colors").split(","));
@@ -230,16 +237,16 @@ public class PostMakeup extends AppCompatActivity {
                     }
                     moreContainer.addView(colors);
 
-                    moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.title_difficult), 16, "", ""));
+                    moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.title_difficult), 16, "", ""));
                     moreContainer.addView(difficult(item.getString("difficult")));
                     if (item.getString("occasion").equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "1"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "1"));
                     else if (item.getString("occasion").equals("celebrity"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "2"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.occasion_everyday), 16, "Occasion", "2"));
                     else if (item.getString("occasion").equals("dramatic"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_dramatic), 16, "Occasion", "3"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.occasion_dramatic), 16, "Occasion", "3"));
                     else if (item.getString("occasion").equals("holiday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.occasion_holiday), 16, "Occasion", "4"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.occasion_holiday), 16, "Occasion", "4"));
                     postMakeupMoreContainer.addView(moreContainer);
                 }
             } catch (JSONException e) {

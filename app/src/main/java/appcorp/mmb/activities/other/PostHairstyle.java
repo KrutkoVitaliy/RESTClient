@@ -1,5 +1,6 @@
 package appcorp.mmb.activities.other;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -56,6 +57,12 @@ public class PostHairstyle extends AppCompatActivity {
         new LoadPost().execute();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initViews() {
@@ -216,37 +223,37 @@ public class PostHairstyle extends AppCompatActivity {
                     moreContainer.setOrientation(LinearLayout.VERTICAL);
 
                     if (item.getString("length").equals("short"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.shortHairstyle), 16, "Length", "1"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.shortHairstyle), 16, "Length", "1"));
                     else if (item.getString("length").equals("medium"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.mediumHairstyle), 16, "Length", "2"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.mediumHairstyle), 16, "Length", "2"));
                     else if (item.getString("length").equals("long"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.longHairstyle), 16, "Length", "3"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.longHairstyle), 16, "Length", "3"));
 
                     if (item.getString("type").equals("straight"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.straightHairstyleType), 16, "Type", "1"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.straightHairstyleType), 16, "Type", "1"));
                     else if (item.getString("type").equals("braid"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.braidHairstyleType), 16, "Type", "2"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.braidHairstyleType), 16, "Type", "2"));
                     else if (item.getString("type").equals("tail"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.tailHairstyleType), 16, "Type", "3"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.tailHairstyleType), 16, "Type", "3"));
                     else if (item.getString("type").equals("bunch"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.bunchHairstyleType), 16, "Type", "4"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.bunchHairstyleType), 16, "Type", "4"));
                     else if (item.getString("type").equals("netting"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.nettingHairstyleType), 16, "Type", "5"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.nettingHairstyleType), 16, "Type", "5"));
                     else if (item.getString("type").equals("curls"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.curlsHairstyleType), 16, "Type", "6"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.curlsHairstyleType), 16, "Type", "6"));
                     else if (item.getString("type").equals("unstandart"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.unstandartHairstyleType), 16, "Type", "7"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.unstandartHairstyleType), 16, "Type", "7"));
 
                     if (item.getString("for").equals("kids"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forKids), 16, "For", "1"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.forKids), 16, "For", "1"));
                     else if (item.getString("for").equals("everyday"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forEveryday), 16, "For", "2"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.forEveryday), 16, "For", "2"));
                     else if (item.getString("for").equals("wedding"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forWedding), 16, "For", "3"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.forWedding), 16, "For", "3"));
                     else if (item.getString("for").equals("evening"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forEvening), 16, "For", "4"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.forEvening), 16, "For", "4"));
                     else if (item.getString("for").equals("exclusive"))
-                        moreContainer.addView(createText(Intermediates.convertToString(getApplicationContext(), R.string.forExclusive), 16, "For", "5"));
+                        moreContainer.addView(createText(convertToString(getApplicationContext(), R.string.forExclusive), 16, "For", "5"));
 
                     postHairstyleMoreContainer.addView(moreContainer);
                 }

@@ -57,6 +57,12 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
             new CheckLikes(Storage.getString("E-mail", "")).execute();
     }
 
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
+    }
+
     private void initFirebase() {
         FireAnal.setContext(context);
     }
@@ -76,8 +82,8 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
                 new Load(data.size() / 100 + 1).execute();
         }
 
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+        final String SHOW = convertToString(context, R.string.show_more_container);
+        final String HIDE = convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
@@ -206,55 +212,55 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
 
                     switch (item.getHlenght()) {
                         case "short":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
+                            moreContainer.addView(createText(convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
                             break;
                         case "medium":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
+                            moreContainer.addView(createText(convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
                             break;
                         case "long":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
+                            moreContainer.addView(createText(convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
                             break;
                     }
 
                     switch (item.getHtype()) {
                         case "straight":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
+                            moreContainer.addView(createText(convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
                             break;
                         case "braid":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
+                            moreContainer.addView(createText(convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
                             break;
                         case "tail":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
+                            moreContainer.addView(createText(convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
                             break;
                         case "bunch":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
+                            moreContainer.addView(createText(convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
                             break;
                         case "netting":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
+                            moreContainer.addView(createText(convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
                             break;
                         case "curls":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
+                            moreContainer.addView(createText(convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
                             break;
                         case "unstandart":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
+                            moreContainer.addView(createText(convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
                             break;
                     }
 
                     switch (item.getHfor()) {
                         case "kids":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forKids), 16, "For", "1"));
+                            moreContainer.addView(createText(convertToString(context, R.string.forKids), 16, "For", "1"));
                             break;
                         case "everyday":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEveryday), 16, "For", "2"));
+                            moreContainer.addView(createText(convertToString(context, R.string.forEveryday), 16, "For", "2"));
                             break;
                         case "wedding":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forWedding), 16, "For", "3"));
+                            moreContainer.addView(createText(convertToString(context, R.string.forWedding), 16, "For", "3"));
                             break;
                         case "evening":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forEvening), 16, "For", "4"));
+                            moreContainer.addView(createText(convertToString(context, R.string.forEvening), 16, "For", "4"));
                             break;
                         case "exclusive":
-                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.forExclusive), 16, "For", "5"));
+                            moreContainer.addView(createText(convertToString(context, R.string.forExclusive), 16, "For", "5"));
                             break;
                     }
 

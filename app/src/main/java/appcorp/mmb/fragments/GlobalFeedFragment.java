@@ -13,9 +13,7 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.GlobalDTO;
-import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
-import appcorp.mmb.list_adapters.HairstyleFeedListAdapter;
 
 public class GlobalFeedFragment extends AbstractTabFragment{
 

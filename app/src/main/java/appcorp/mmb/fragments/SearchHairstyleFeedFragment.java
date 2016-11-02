@@ -13,7 +13,6 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.list_adapters.HairstyleFeedListAdapter;
 import appcorp.mmb.list_adapters.SearchHairstyleFeedListAdapter;
 
 public class SearchHairstyleFeedFragment extends AbstractTabFragment{

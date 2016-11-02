@@ -13,7 +13,6 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.list_adapters.ManicureFeedListAdapter;
 import appcorp.mmb.list_adapters.SearchManicureFeedListAdapter;
 
 public class SearchManicureFeedFragment extends AbstractTabFragment{

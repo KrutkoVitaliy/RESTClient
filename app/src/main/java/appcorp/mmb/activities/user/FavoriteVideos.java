@@ -45,7 +45,7 @@ import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
 
-public class Favorites extends AppCompatActivity {
+public class FavoriteVideos extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -54,7 +54,7 @@ public class Favorites extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
+        setContentView(R.layout.activity_favorite_videos);
 
         Storage.init(getApplicationContext());
         initFirebase();
@@ -88,7 +88,7 @@ public class Favorites extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.favoritesToolbar);
+        toolbar = (Toolbar) findViewById(R.id.favoriteVideosToolbar);
         toolbar.setTitle(R.string.toolbar_title_favorites);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -103,21 +103,21 @@ public class Favorites extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.favoritesViewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.favoriteVideosViewPager);
         adapter = new FavoritesFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<MakeupDTO>(), new ArrayList<HairstyleDTO>());
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.favoritesTabLayout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.favoriteVideosTabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.favoritesDrawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.favoriteVideosDrawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_toggle_open, R.string.drawer_toggle_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.favoritesNavigation);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.favoriteVideosNavigation);
         initHeaderLayout(navigationView);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -151,7 +151,7 @@ public class Favorites extends AppCompatActivity {
                         break;
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
-                            startActivity(new Intent(getApplicationContext(), Favorites.class));
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;

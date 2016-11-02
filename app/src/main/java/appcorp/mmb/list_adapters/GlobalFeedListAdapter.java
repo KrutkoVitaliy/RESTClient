@@ -62,6 +62,12 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         }
     }
 
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
+    }
+
     public void setData(List<GlobalDTO> data) {
         this.data = data;
     }
@@ -171,8 +177,8 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                 new Load(data.size() / 100 + 1).execute();
         }
 
-        final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
-        final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
+        final String SHOW = convertToString(context, R.string.show_more_container);
+        final String HIDE = convertToString(context, R.string.hide_more_container);
 
         String[] date = item.getAvailableDate().split("");
 
@@ -285,55 +291,55 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
 
                         switch (item.getHlength()) {
                             case "short":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
                                 break;
                             case "medium":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
                                 break;
                             case "long":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
                                 break;
                         }
 
                         switch (item.getHtype()) {
                             case "straight":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
                                 break;
                             case "braid":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
                                 break;
                             case "tail":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
                                 break;
                             case "bunch":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
                                 break;
                             case "netting":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
                                 break;
                             case "curls":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
                                 break;
                             case "unstandart":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
                                 break;
                         }
 
                         switch (item.getHfor()) {
                             case "kids":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.forKids), 16, "For", "1"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.forKids), 16, "For", "1"));
                                 break;
                             case "everyday":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.forEveryday), 16, "For", "2"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.forEveryday), 16, "For", "2"));
                                 break;
                             case "wedding":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.forWedding), 16, "For", "3"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.forWedding), 16, "For", "3"));
                                 break;
                             case "evening":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.forEvening), 16, "For", "4"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.forEvening), 16, "For", "4"));
                                 break;
                             case "exclusive":
-                                moreContainer.addView(createHText(Intermediates.convertToString(context, R.string.forExclusive), 16, "For", "5"));
+                                moreContainer.addView(createHText(convertToString(context, R.string.forExclusive), 16, "For", "5"));
                                 break;
                         }
 
@@ -440,9 +446,9 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                         moreContainer.setOrientation(LinearLayout.VERTICAL);
                         moreContainer.setPadding(32, 32, 32, 0);
 
-                        moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.title_eye_color), 16, "", ""));
+                        moreContainer.addView(createMakText(convertToString(context, R.string.title_eye_color), 16, "", ""));
                         moreContainer.addView(createImage(item.getEye_color()));
-                        moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.title_used_colors), 16, "", ""));
+                        moreContainer.addView(createMakText(convertToString(context, R.string.title_used_colors), 16, "", ""));
                         LinearLayout colors = new LinearLayout(context);
                         colors.setOrientation(LinearLayout.HORIZONTAL);
                         String[] mColors = (item.getColors().split(","));
@@ -454,20 +460,20 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                         }
                         moreContainer.addView(colors);
 
-                        moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.title_difficult), 16, "", ""));
+                        moreContainer.addView(createMakText(convertToString(context, R.string.title_difficult), 16, "", ""));
                         moreContainer.addView(difficult(item.getDifficult()));
                         switch (item.getOccasion()) {
                             case "everyday":
-                                moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.occasion_everyday), 16, "Occasion", "1"));
+                                moreContainer.addView(createMakText(convertToString(context, R.string.occasion_everyday), 16, "Occasion", "1"));
                                 break;
                             case "celebrity":
-                                moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.occasion_everyday), 16, "Occasion", "2"));
+                                moreContainer.addView(createMakText(convertToString(context, R.string.occasion_everyday), 16, "Occasion", "2"));
                                 break;
                             case "dramatic":
-                                moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.occasion_dramatic), 16, "Occasion", "3"));
+                                moreContainer.addView(createMakText(convertToString(context, R.string.occasion_dramatic), 16, "Occasion", "3"));
                                 break;
                             case "holiday":
-                                moreContainer.addView(createMakText(Intermediates.convertToString(context, R.string.occasion_holiday), 16, "Occasion", "4"));
+                                moreContainer.addView(createMakText(convertToString(context, R.string.occasion_holiday), 16, "Occasion", "4"));
                                 break;
                         }
 
@@ -590,17 +596,17 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         if (difficult.equals("easy")) {
             imageView.setImageResource(R.mipmap.easy);
             text.setText(R.string.difficult_easy);
-            diff = Intermediates.convertToString(context, R.string.difficult_easy);
+            diff = convertToString(context, R.string.difficult_easy);
         }
         if (difficult.equals("medium")) {
             imageView.setImageResource(R.mipmap.medium);
             text.setText(R.string.difficult_medium);
-            diff = Intermediates.convertToString(context, R.string.difficult_medium);
+            diff = convertToString(context, R.string.difficult_medium);
         }
         if (difficult.equals("hard")) {
             imageView.setImageResource(R.mipmap.hard);
             text.setText(R.string.difficult_hard);
-            diff = Intermediates.convertToString(context, R.string.difficult_hard);
+            diff = convertToString(context, R.string.difficult_hard);
         }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -714,7 +720,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                 }
             }
         });
-        //tw.setTypeface(tf);
         return tw;
     }
 
@@ -733,7 +738,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + shapes[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");
@@ -747,7 +751,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                     ArrayList<String> manicureColors = new ArrayList<>();
                     Intent intent = new Intent(context, SearchManicureMatrix.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putStringArrayListExtra("ManicureColors", manicureColors);
                     intent.putExtra("Toolbar", "" + designs[Integer.valueOf(index)]);
                     intent.putExtra("Request", "");

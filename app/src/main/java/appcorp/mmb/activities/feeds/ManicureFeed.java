@@ -1,6 +1,7 @@
 package appcorp.mmb.activities.feeds;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.ManicureDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
 
 public class ManicureFeed extends AppCompatActivity {
@@ -49,6 +51,8 @@ public class ManicureFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ManicureFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
+    private List<ManicureDTO> data = new ArrayList<>();
+    private List<VideoManicureDTO> videoData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +70,17 @@ public class ManicureFeed extends AppCompatActivity {
         initViewPager();
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new ManicureFeedLoader(1).execute();
+        new VideoManicureFeedLoader(1).execute();
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initFirebase() {
@@ -105,9 +116,9 @@ public class ManicureFeed extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    /*case R.id.navMenuGlobalFeed:
+                    case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-                        break;*/
+                        break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));
@@ -168,7 +179,7 @@ public class ManicureFeed extends AppCompatActivity {
 
     private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.manicureViewPager);
-        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
+        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<VideoManicureDTO>());
         viewPager.setAdapter(adapter);
     }
 
@@ -225,7 +236,6 @@ public class ManicureFeed extends AppCompatActivity {
             super.onPostExecute(resultJsonFeed);
 
             long id, likes;
-            List<ManicureDTO> data = new ArrayList<>();
             String availableDate, colors, shape, design, tags = "", authorPhoto, authorName;
 
             try {
@@ -259,8 +269,92 @@ public class ManicureFeed extends AppCompatActivity {
                     ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
                     data.add(manicureDTO);
                 }
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class VideoManicureFeedLoader extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        VideoManicureFeedLoader(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
+
+                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getLong("videoUploadDate"));
+                    videoData.add(videoManicureDTO);
+                }
                 if (adapter != null)
-                    adapter.setData(data);
+                    adapter.setData(data, videoData);
                 if (progressDialog != null)
                     progressDialog.dismiss();
 

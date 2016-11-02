@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import appcorp.mmb.R;
+import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
@@ -391,11 +392,9 @@ public class Search extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    /*case R.id.navMenuGlobalFeed:
-                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;*/
+                    case R.id.navMenuGlobalFeed:
+                        startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
+                        break;
                     case R.id.navMenuSearch:
                         break;
                     case R.id.navMenuSearchStylist:

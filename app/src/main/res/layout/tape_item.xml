@@ -140,6 +140,16 @@
                 android:paddingRight="16dp"
                 android:text="0"
                 android:textSize="7pt" />
+
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/ic_share_variant" />
         </LinearLayout>
         <!--<LinearLayout
             android:layout_width="wrap_content"

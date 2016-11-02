@@ -36,9 +36,6 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
 
     private List<MakeupDTO> makeupData;
     private Context context;
-    private List<Long> likesId = new ArrayList<>();
-    Display display;
-    int width, height;
     boolean loaded = false;
 
     public FavoritesMakeupFeedListAdapter(List<MakeupDTO> makeupData, Context context) {
@@ -46,39 +43,11 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
         this.context = context;
 
         Storage.init(context);
-        initLocalization(Intermediates.getInstance().convertToString(context, R.string.translation));
-        initScreen();
         initFirebase();
-
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
-    }
-
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) context
-                .getSystemService(context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
     }
 
     private void initFirebase() {
         FireAnal.setContext(context);
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     @Override
@@ -96,8 +65,8 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 if (makeupData.size() - 1 % 100 != 8)
                     Favorites.addMakeupFeed(makeupData.size() / 100 + 1);
             }*/
-            final String SHOW = Intermediates.getInstance().convertToString(context, R.string.show_more_container);
-            final String HIDE = Intermediates.getInstance().convertToString(context, R.string.hide_more_container);
+            final String SHOW = Intermediates.convertToString(context, R.string.show_more_container);
+            final String HIDE = Intermediates.convertToString(context, R.string.hide_more_container);
 
             String[] date = item.getAvailableDate().split("");
 
@@ -155,11 +124,11 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
             holder.countImages.removeAllViews();
             for (int i = 0; i < item.getImages().size(); i++) {
                 ImageView screenShot = new ImageView(context);
-                screenShot.setMinimumWidth(width);
-                screenShot.setMinimumHeight(height);
+                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                screenShot.setMinimumHeight(Storage.getInt("Width", 480));
                 screenShot.setPadding(0, 0, 1, 0);
                 screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
 
                 screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 final int finalI = i;
@@ -178,7 +147,7 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                 holder.imageViewerHorizontal.scrollTo(0,0);
 
                 LinearLayout countLayout = new LinearLayout(context);
-                countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
                 TextView count = new TextView(context);
                 count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
                 count.setTextSize(20);
@@ -204,9 +173,9 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                         moreContainer.setOrientation(LinearLayout.VERTICAL);
                         moreContainer.setPadding(32, 32, 32, 0);
 
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_eye_color), Typeface.DEFAULT_BOLD, 16,"",""));
                         moreContainer.addView(createImage(item.getEye_color()));
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_used_colors), Typeface.DEFAULT_BOLD, 16,"",""));
                         LinearLayout colors = new LinearLayout(context);
                         colors.setOrientation(LinearLayout.HORIZONTAL);
                         String[] mColors = (item.getColors().split(","));
@@ -218,16 +187,16 @@ public class FavoritesMakeupFeedListAdapter extends RecyclerView.Adapter<Favorit
                         }
                         moreContainer.addView(colors);
 
-                        moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
+                        moreContainer.addView(createText(Intermediates.convertToString(context, R.string.title_difficult), Typeface.DEFAULT_BOLD, 16,"",""));
                         moreContainer.addView(difficult(item.getDifficult()));
                         if (item.getOccasion().equals("everyday"))
-                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "1"));
                         else if (item.getOccasion().equals("celebrity"))
-                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_everyday), Typeface.DEFAULT_BOLD, 16, "Occasion", "2"));
                         else if (item.getOccasion().equals("dramatic"))
-                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_dramatic), Typeface.DEFAULT_BOLD, 16, "Occasion", "3"));
                         else if (item.getOccasion().equals("holiday"))
-                            moreContainer.addView(createText(Intermediates.getInstance().convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
+                            moreContainer.addView(createText(Intermediates.convertToString(context, R.string.occasion_holiday), Typeface.DEFAULT_BOLD, 16, "Occasion", "4"));
 
                         holder.moreContainer.addView(moreContainer);
                     } else if (holder.showMore.getText().equals(HIDE)) {

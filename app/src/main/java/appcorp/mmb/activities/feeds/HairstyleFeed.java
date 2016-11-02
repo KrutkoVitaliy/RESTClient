@@ -1,6 +1,7 @@
 package appcorp.mmb.activities.feeds;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,10 +67,16 @@ public class HairstyleFeed extends AppCompatActivity {
         initViewPager();
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
+        progressDialog.setMessage(convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
 
         new HairstyleFeedLoader(1).execute();
+    }
+
+    public static String convertToString(Context context, int r) {
+        TextView textView = new TextView(context);
+        textView.setText(r);
+        return textView.getText().toString();
     }
 
     private void initFirebase() {
@@ -105,9 +112,9 @@ public class HairstyleFeed extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    /*case R.id.navMenuGlobalFeed:
+                    case R.id.navMenuGlobalFeed:
                         startActivity(new Intent(getApplicationContext(), GlobalFeed.class));
-                        break;*/
+                        break;
                     case R.id.navMenuSearch:
                         startActivity(new Intent(getApplicationContext(), Search.class)
                                 .putExtra("hashTag", "empty"));

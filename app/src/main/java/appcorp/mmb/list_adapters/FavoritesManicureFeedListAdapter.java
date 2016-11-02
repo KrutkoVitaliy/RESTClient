@@ -37,8 +37,6 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
     private List<ManicureDTO> manicureData;
     private Context context;
     private List<Long> likesId = new ArrayList<>();
-    Display display;
-    int width, height;
     boolean loaded = false;
 
     public FavoritesManicureFeedListAdapter(List<ManicureDTO> manicureData, Context context) {
@@ -46,39 +44,11 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
         this.context = context;
 
         Storage.init(context);
-        initLocalization(Intermediates.getInstance().convertToString(context, R.string.translation));
-        initScreen();
         initFirebase();
-
-        display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
-        width = display.getWidth();
-        height = width;
-    }
-
-    private void initScreen() {
-        Display display;
-        int width, height;
-        display = ((WindowManager) context
-                .getSystemService(context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        width = display.getWidth();
-        height = (int) (width * 0.75F);
-        Storage.addInt("Width", width);
-        Storage.addInt("Height", height);
     }
 
     private void initFirebase() {
         FireAnal.setContext(context);
-    }
-
-    private void initLocalization(final String translation) {
-        if (translation.equals("English")) {
-            Storage.addString("Localization", "English");
-        }
-
-        if (translation.equals("Russian")) {
-            Storage.addString("Localization", "Russian");
-        }
     }
 
     @Override
@@ -157,11 +127,11 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
             holder.countImages.removeAllViews();
             for (int i = 0; i < item.getImages().size(); i++) {
                 ImageView screenShot = new ImageView(context);
-                screenShot.setMinimumWidth(width);
-                screenShot.setMinimumHeight(height);
+                screenShot.setMinimumWidth( Storage.getInt("Width", 480));
+                screenShot.setMinimumHeight( Storage.getInt("Width", 480));
                 screenShot.setPadding(0, 0, 1, 0);
                 screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(width, height).centerCrop().into(screenShot);
+                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize( Storage.getInt("Width", 480),  Storage.getInt("Width", 480)).centerCrop().into(screenShot);
 
                 screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 final int finalI = i;
@@ -180,7 +150,7 @@ public class FavoritesManicureFeedListAdapter extends RecyclerView.Adapter<Favor
                 holder.imageViewerHorizontal.scrollTo(0,0);
 
                 LinearLayout countLayout = new LinearLayout(context);
-                countLayout.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+                countLayout.setLayoutParams(new ViewGroup.LayoutParams( Storage.getInt("Width", 480),  Storage.getInt("Width", 480)));
                 TextView count = new TextView(context);
                 count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
                 count.setTextSize(20);

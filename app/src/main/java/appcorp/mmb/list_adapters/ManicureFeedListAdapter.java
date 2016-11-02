@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -36,17 +43,21 @@ import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.classes.VKShare;
 import appcorp.mmb.dto.ManicureDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.network.GetRequest;
 
 public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedListAdapter.TapeViewHolder> {
 
     private List<ManicureDTO> data;
+    private List<VideoManicureDTO> videoData;
     private List<Long> likes = new ArrayList<>();
     private Context context;
 
-    public ManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
+    public ManicureFeedListAdapter(List<ManicureDTO> data, List<VideoManicureDTO> videoData, Context context) {
         this.data = data;
+        this.videoData = videoData;
         this.context = context;
 
         Storage.init(context);
@@ -74,51 +85,111 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final ManicureDTO item = data.get(position);
+        if (position % 10 == 0) {
+            final VideoManicureDTO video = videoData.get(position / 10);
 
-        if (position == data.size() - 1) {
-            if (data.size() - 1 % 100 != 8)
-                new Load(data.size() / 100 + 1).execute();
-        }
-
-        final String SHOW = convertToString(R.string.show_more_container);
-        final String HIDE = convertToString(R.string.hide_more_container);
-
-        String[] date = item.getAvailableDate().split("");
-
-        holder.title.setText(item.getAuthorName());
-        holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-        holder.likesCount.setText(String.valueOf(item.getLikes()));
-        if (!likes.contains(item.getId())) {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-        } else {
-            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-            holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-        }
-
-        holder.addLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!Storage.getString("E-mail", "").equals("")) {
-                    if (!likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                        likes.add(item.getId());
-                        holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-                        new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    } else if (likes.contains(item.getId())) {
-                        holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                        likes.remove(item.getId());
-                        holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
-                        new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                    }
-                } else {
-                    context.startActivity(new Intent(context, SignIn.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            final VideoView videoView = new VideoView(context);
+            videoView.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
+            videoView.setVideoURI(Uri.parse("http://195.88.209.17/storage/videos/" + video.getSource()));
+            videoView.setBackgroundColor(Color.parseColor("#336699FF"));
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    videoView.setBackgroundColor(Color.parseColor("#33669900"));
+                    videoView.start();
                 }
-            }
-        });
+            });
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoView.start();
+                }
+            });
 
-        Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
+            holder.user_avatar.setVisibility(View.INVISIBLE);
+            holder.showMore.setVisibility(View.INVISIBLE);
+            holder.imageViewer.addView(videoView);
+
+            holder.title.setText(video.getTitle());
+            String[] date = String.valueOf(video.getAvailableDate()).split("");
+            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+
+            holder.hashTags.removeAllViews();
+            for (int i = 0; i < video.getTags().size(); i++) {
+                TextView hashTag = new TextView(context);
+                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                hashTag.setTextSize(16);
+                final int finalI = i;
+                hashTag.setText("#" + video.getTags().get(i).replace(" ", "") + " ");
+                hashTag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        /*context.startActivity(new Intent(context, SearchManicureVideoMatrix.class)
+                                .putExtra("Request", video.getTags().get(finalI).trim())
+                                .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
+                                .putExtra("Shape", "" + "0")
+                                .putExtra("Design", "" + "0")
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "ManicureFeedTag", video.getTags().get(finalI));*/
+                    }
+                });
+                holder.hashTags.addView(hashTag);
+                holder.likesCount.setText(String.valueOf(video.getLikes()));
+                Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").into(holder.user_avatar);
+            }
+        } else {
+            final ManicureDTO item = data.get(position);
+
+            if (position == data.size() - 1) {
+                if (data.size() - 1 % 100 != 8)
+                    new Load(data.size() / 100 + 1).execute();
+            }
+
+            final String SHOW = convertToString(R.string.show_more_container);
+            final String HIDE = convertToString(R.string.hide_more_container);
+
+            holder.title.setText(item.getAuthorName());
+            String[] date = item.getAvailableDate().split("");
+            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+            holder.likesCount.setText(String.valueOf(item.getLikes()));
+            if (!likes.contains(item.getId())) {
+                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+            } else {
+                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+            }
+
+            holder.addLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!Storage.getString("E-mail", "").equals("")) {
+                        if (!likes.contains(item.getId())) {
+                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                            likes.add(item.getId());
+                            holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+                            new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                        } else if (likes.contains(item.getId())) {
+                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                            likes.remove(item.getId());
+                            holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
+                            new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                        }
+                    } else {
+                        context.startActivity(new Intent(context, SignIn.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                }
+            });
+
+            holder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.startActivity(new Intent(context, VKShare.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            });
+
+            Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,159 +201,160 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             }
         });*/
 
-        holder.hashTags.removeAllViews();
-        for (int i = 0; i < item.getHashTags().size(); i++) {
-            TextView hashTag = new TextView(context);
-            hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-            hashTag.setTextSize(16);
-            final int finalI = i;
-            hashTag.setText("#" + item.getHashTags().get(i).replace(" ", "") + " ");
-            hashTag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    context.startActivity(new Intent(context, SearchManicureMatrix.class)
-                            .putExtra("Request", item.getHashTags().get(finalI).trim())
-                            .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
-                            .putExtra("Shape", "" + "0")
-                            .putExtra("Design", "" + "0")
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    FireAnal.sendString("2", "ManicureFeedTag", item.getHashTags().get(finalI));
-                }
-            });
-            holder.hashTags.addView(hashTag);
-        }
-
-        holder.imageViewer.removeAllViews();
-        holder.countImages.removeAllViews();
-        for (int i = 0; i < item.getImages().size(); i++) {
-            ImageView screenShot = new ImageView(context);
-            screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-            screenShot.setMinimumHeight(Storage.getInt("Width", 480));
-            screenShot.setPadding(0, 0, 1, 0);
-            screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-            Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
-
-            screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            final int finalI = i;
-            screenShot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (holder.showMore.getText().equals(SHOW)) {
-                        Intent intent = new Intent(context, FullscreenPreview.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                        context.startActivity(intent);
+            holder.hashTags.removeAllViews();
+            for (int i = 0; i < item.getHashTags().size(); i++) {
+                TextView hashTag = new TextView(context);
+                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                hashTag.setTextSize(16);
+                final int finalI = i;
+                hashTag.setText("#" + item.getHashTags().get(i).replace(" ", "") + " ");
+                hashTag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        context.startActivity(new Intent(context, SearchManicureMatrix.class)
+                                .putExtra("Request", item.getHashTags().get(finalI).trim())
+                                .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
+                                .putExtra("Shape", "" + "0")
+                                .putExtra("Design", "" + "0")
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        FireAnal.sendString("2", "ManicureFeedTag", item.getHashTags().get(finalI));
                     }
-                }
-            });
-            holder.imageViewer.addView(screenShot);
-            holder.imageViewerHorizontal.scrollTo(0, 0);
-
-            LinearLayout countLayout = new LinearLayout(context);
-            countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
-            TextView count = new TextView(context);
-            count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
-            count.setTextSize(24);
-            count.setTextColor(Color.WHITE);
-            count.setPadding(32, 32, 32, 32);
-            count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-            countLayout.addView(count);
-            holder.countImages.addView(countLayout);
-        }
-
-        holder.moreContainer.removeAllViews();
-        holder.showMore.setText(SHOW);
-        holder.showMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (holder.showMore.getText().equals(SHOW)) {
-                    holder.showMore.setText(HIDE);
-                    LinearLayout moreContainer = new LinearLayout(context);
-                    moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    moreContainer.setOrientation(LinearLayout.VERTICAL);
-                    moreContainer.setPadding(32, 32, 32, 0);
-
-                    moreContainer.addView(createText(convertToString(R.string.title_used_colors), 16, "", ""));
-                    LinearLayout colors = new LinearLayout(context);
-                    colors.setOrientation(LinearLayout.HORIZONTAL);
-                    String[] mColors = (item.getColors().split(","));
-                    for (String mColor : mColors) {
-                        if (!mColor.equals("FFFFFF"))
-                            colors.addView(createCircle("#" + mColor, mColor));
-                        else
-                            colors.addView(createCircle("#EEEEEE", mColor));
-                    }
-                    moreContainer.addView(colors);
-                    switch (item.getShape()) {
-                        case "square":
-                            moreContainer.addView(createText(convertToString(R.string.squareShape), 16, "Shape", "1"));
-                            break;
-                        case "oval":
-                            moreContainer.addView(createText(convertToString(R.string.ovalShape), 16, "Shape", "2"));
-                            break;
-                        case "stiletto":
-                            moreContainer.addView(createText(convertToString(R.string.stilettoShape), 16, "Shape", "3"));
-                            break;
-                    }
-
-                    switch (item.getDesign()) {
-                        case "french_classic":
-                            moreContainer.addView(createText(convertToString(R.string.french_classicDesign), 16, "Design", "1"));
-                            break;
-                        case "french_chevron":
-                            moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), 16, "Design", "2"));
-                            break;
-                        case "french_millennium":
-                            moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), 16, "Design", "3"));
-                            break;
-                        case "french_fun":
-                            moreContainer.addView(createText(convertToString(R.string.french_funDesign), 16, "Design", "4"));
-                            break;
-                        case "french_crystal":
-                            moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), 16, "Design", "5"));
-                            break;
-                        case "french_colorful":
-                            moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), 16, "Design", "6"));
-                            break;
-                        case "french_designer":
-                            moreContainer.addView(createText(convertToString(R.string.french_designerDesign), 16, "Design", "7"));
-                            break;
-                        case "french_spa":
-                            moreContainer.addView(createText(convertToString(R.string.french_spaDesign), 16, "Design", "8"));
-                            break;
-                        case "french_moon":
-                            moreContainer.addView(createText(convertToString(R.string.french_moonDesign), 16, "Design", "9"));
-                            break;
-                        case "art":
-                            moreContainer.addView(createText(convertToString(R.string.artDesign), 16, "Design", "10"));
-                            break;
-                        case "designer":
-                            moreContainer.addView(createText(convertToString(R.string.designerDesign), 16, "Design", "11"));
-                            break;
-                        case "volume":
-                            moreContainer.addView(createText(convertToString(R.string.volumeDesign), 16, "Design", "12"));
-                            break;
-                        case "aqua":
-                            moreContainer.addView(createText(convertToString(R.string.aquaDesign), 16, "Design", "13"));
-                            break;
-                        case "american":
-                            moreContainer.addView(createText(convertToString(R.string.americanDesign), 16, "Design", "14"));
-                            break;
-                        case "photo":
-                            moreContainer.addView(createText(convertToString(R.string.photoDesign), 16, "Design", "15"));
-                            break;
-                    }
-
-                    holder.moreContainer.addView(moreContainer);
-                } else if (holder.showMore.getText().equals(HIDE)) {
-                    holder.showMore.setText(SHOW);
-                    holder.moreContainer.removeAllViews();
-                }
+                });
+                holder.hashTags.addView(hashTag);
             }
-        });
+
+            holder.imageViewer.removeAllViews();
+            holder.countImages.removeAllViews();
+            for (int i = 0; i < item.getImages().size(); i++) {
+                ImageView screenShot = new ImageView(context);
+                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                screenShot.setMinimumHeight(Storage.getInt("Width", 480));
+                screenShot.setPadding(0, 0, 1, 0);
+                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
+
+                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                final int finalI = i;
+                screenShot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.showMore.getText().equals(SHOW)) {
+                            Intent intent = new Intent(context, FullscreenPreview.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                            context.startActivity(intent);
+                        }
+                    }
+                });
+                holder.imageViewer.addView(screenShot);
+                holder.imageViewerHorizontal.scrollTo(0, 0);
+
+                LinearLayout countLayout = new LinearLayout(context);
+                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
+                TextView count = new TextView(context);
+                count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
+                count.setTextSize(24);
+                count.setTextColor(Color.WHITE);
+                count.setPadding(32, 32, 32, 32);
+                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+                countLayout.addView(count);
+                holder.countImages.addView(countLayout);
+            }
+
+            holder.moreContainer.removeAllViews();
+            holder.showMore.setText(SHOW);
+            holder.showMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (holder.showMore.getText().equals(SHOW)) {
+                        holder.showMore.setText(HIDE);
+                        LinearLayout moreContainer = new LinearLayout(context);
+                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        moreContainer.setOrientation(LinearLayout.VERTICAL);
+                        moreContainer.setPadding(32, 32, 32, 0);
+
+                        moreContainer.addView(createText(convertToString(R.string.title_used_colors), 16, "", ""));
+                        LinearLayout colors = new LinearLayout(context);
+                        colors.setOrientation(LinearLayout.HORIZONTAL);
+                        String[] mColors = (item.getColors().split(","));
+                        for (String mColor : mColors) {
+                            if (!mColor.equals("FFFFFF"))
+                                colors.addView(createCircle("#" + mColor, mColor));
+                            else
+                                colors.addView(createCircle("#EEEEEE", mColor));
+                        }
+                        moreContainer.addView(colors);
+                        switch (item.getShape()) {
+                            case "square":
+                                moreContainer.addView(createText(convertToString(R.string.squareShape), 16, "Shape", "1"));
+                                break;
+                            case "oval":
+                                moreContainer.addView(createText(convertToString(R.string.ovalShape), 16, "Shape", "2"));
+                                break;
+                            case "stiletto":
+                                moreContainer.addView(createText(convertToString(R.string.stilettoShape), 16, "Shape", "3"));
+                                break;
+                        }
+
+                        switch (item.getDesign()) {
+                            case "french_classic":
+                                moreContainer.addView(createText(convertToString(R.string.french_classicDesign), 16, "Design", "1"));
+                                break;
+                            case "french_chevron":
+                                moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), 16, "Design", "2"));
+                                break;
+                            case "french_millennium":
+                                moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), 16, "Design", "3"));
+                                break;
+                            case "french_fun":
+                                moreContainer.addView(createText(convertToString(R.string.french_funDesign), 16, "Design", "4"));
+                                break;
+                            case "french_crystal":
+                                moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), 16, "Design", "5"));
+                                break;
+                            case "french_colorful":
+                                moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), 16, "Design", "6"));
+                                break;
+                            case "french_designer":
+                                moreContainer.addView(createText(convertToString(R.string.french_designerDesign), 16, "Design", "7"));
+                                break;
+                            case "french_spa":
+                                moreContainer.addView(createText(convertToString(R.string.french_spaDesign), 16, "Design", "8"));
+                                break;
+                            case "french_moon":
+                                moreContainer.addView(createText(convertToString(R.string.french_moonDesign), 16, "Design", "9"));
+                                break;
+                            case "art":
+                                moreContainer.addView(createText(convertToString(R.string.artDesign), 16, "Design", "10"));
+                                break;
+                            case "designer":
+                                moreContainer.addView(createText(convertToString(R.string.designerDesign), 16, "Design", "11"));
+                                break;
+                            case "volume":
+                                moreContainer.addView(createText(convertToString(R.string.volumeDesign), 16, "Design", "12"));
+                                break;
+                            case "aqua":
+                                moreContainer.addView(createText(convertToString(R.string.aquaDesign), 16, "Design", "13"));
+                                break;
+                            case "american":
+                                moreContainer.addView(createText(convertToString(R.string.americanDesign), 16, "Design", "14"));
+                                break;
+                            case "photo":
+                                moreContainer.addView(createText(convertToString(R.string.photoDesign), 16, "Design", "15"));
+                                break;
+                        }
+
+                        holder.moreContainer.addView(moreContainer);
+                    } else if (holder.showMore.getText().equals(HIDE)) {
+                        holder.showMore.setText(SHOW);
+                        holder.moreContainer.removeAllViews();
+                    }
+                }
+            });
+        }
     }
 
     private TextView createText(String title, int padding, final String type, final String index) {
@@ -400,14 +472,15 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         return data.size();
     }
 
-    public void setData(List<ManicureDTO> data) {
+    public void setData(List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
         this.data = data;
+        this.videoData = videoData;
     }
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
         LinearLayout imageViewer, countImages, hashTags, moreContainer;
-        ImageView user_avatar, addLike;
+        ImageView user_avatar, addLike, share;
         HorizontalScrollView imageViewerHorizontal;
 
         public TapeViewHolder(View itemView) {
@@ -423,6 +496,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
+            share = (ImageView) itemView.findViewById(R.id.share);
         }
     }
 
