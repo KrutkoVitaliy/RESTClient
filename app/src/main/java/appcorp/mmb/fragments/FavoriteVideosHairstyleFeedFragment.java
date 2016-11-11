@@ -12,22 +12,23 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.dto.GlobalDTO;
-import appcorp.mmb.dto.VideoMakeupDTO;
-import appcorp.mmb.dto.VideoManicureDTO;
-import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
+import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.dto.VideoHairstyleDTO;
+import appcorp.mmb.list_adapters.FavoriteVideosHairstyleFeedListAdapter;
+import appcorp.mmb.list_adapters.FavoritesHairstyleFeedListAdapter;
 
-public class GlobalFeedFragment extends AbstractTabFragment{
+public class FavoriteVideosHairstyleFeedFragment extends AbstractTabFragment{
 
-    private List<GlobalDTO> data;
-    private GlobalFeedListAdapter adapter;
+    private List<VideoHairstyleDTO> videoHairstyleData;
+    private FavoriteVideosHairstyleFeedListAdapter adapter;
 
-    public static GlobalFeedFragment getInstance(Context context, List<GlobalDTO> data) {
+    public static FavoriteVideosHairstyleFeedFragment getInstance(Context context, List<VideoHairstyleDTO> hairstyleData) {
         Bundle args = new Bundle();
-        GlobalFeedFragment fragment = new GlobalFeedFragment();
+        FavoriteVideosHairstyleFeedFragment fragment = new FavoriteVideosHairstyleFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(data);
+        fragment.setData(hairstyleData);
+        fragment.setTitle("Hairstyle");
         return fragment;
     }
 
@@ -35,8 +36,8 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<GlobalDTO> data) {
-        this.data = data;
+    public void setData(List<VideoHairstyleDTO> videoHairstyleData) {
+        this.videoHairstyleData = videoHairstyleData;
     }
 
     @Nullable
@@ -45,13 +46,13 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new GlobalFeedListAdapter(data, context);
+        adapter = new FavoriteVideosHairstyleFeedListAdapter(videoHairstyleData, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<GlobalDTO> data) {
-        adapter.setData(data);
+    public void refreshData(List<VideoHairstyleDTO> hairstyleData) {
+        adapter.setData(hairstyleData);
         adapter.notifyDataSetChanged();
     }
 }

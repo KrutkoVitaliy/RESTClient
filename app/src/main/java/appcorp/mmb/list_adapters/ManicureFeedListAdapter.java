@@ -8,19 +8,19 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -43,16 +43,18 @@ import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.classes.VKShare;
+import appcorp.mmb.sharing.vkontakte.GetToken;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.network.GetRequest;
+import appcorp.mmb.sharing.vkontakte.WallPost;
 
 public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedListAdapter.TapeViewHolder> {
 
     private List<ManicureDTO> data;
     private List<VideoManicureDTO> videoData;
     private List<Long> likes = new ArrayList<>();
+    private List<Long> videoLikes = new ArrayList<>();
     private Context context;
 
     public ManicureFeedListAdapter(List<ManicureDTO> data, List<VideoManicureDTO> videoData, Context context) {
@@ -63,8 +65,10 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         Storage.init(context);
         initFirebase();
 
-        if (!Storage.getString("E-mail", "").equals(""))
+        if (!Storage.getString("E-mail", "").equals("")) {
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+            new CheckVideoLikes(Storage.getString("E-mail", "")).execute();
+        }
     }
 
     public String convertToString(int r) {
@@ -85,9 +89,15 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        if (position % 10 == 0) {
-            final VideoManicureDTO video = videoData.get(position / 10);
-
+        if (position % 8 == 0 && position != 0) {
+            holder.post.removeAllViews();
+            NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
+            nativeExpressAdView.setAdUnitId("ca-app-pub-4982253629578691/5250720366");
+            nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            nativeExpressAdView.loadAd(new AdRequest.Builder().build());
+            holder.post.addView(nativeExpressAdView);
+        } else if (position % 3 == 0 && position / 3 < videoData.size()) {
+            final VideoManicureDTO video = videoData.get(position / 3);
             final VideoView videoView = new VideoView(context);
             videoView.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
             videoView.setVideoURI(Uri.parse("http://195.88.209.17/storage/videos/" + video.getSource()));
@@ -106,13 +116,24 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 }
             });
 
-            holder.user_avatar.setVisibility(View.INVISIBLE);
+            videoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(videoView.isPlaying()){
+                        videoView.pause();
+                    } else {
+                        videoView.start();
+                    }
+                    return false;
+                }
+            });
             holder.showMore.setVisibility(View.INVISIBLE);
+            holder.hashTags.setVisibility(View.INVISIBLE);
             holder.imageViewer.addView(videoView);
 
             holder.title.setText(video.getTitle());
-            String[] date = String.valueOf(video.getAvailableDate()).split("");
-            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+            String[] dateVideo = String.valueOf(video.getAvailableDate()).split("");
+            holder.availableDate.setText(dateVideo[1] + dateVideo[2] + "-" + dateVideo[3] + dateVideo[4] + "-" + dateVideo[5] + dateVideo[6] + " " + dateVideo[7] + dateVideo[8] + ":" + dateVideo[9] + dateVideo[10]);
 
             holder.hashTags.removeAllViews();
             for (int i = 0; i < video.getTags().size(); i++) {
@@ -135,12 +156,35 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 });
                 holder.hashTags.addView(hashTag);
                 holder.likesCount.setText(String.valueOf(video.getLikes()));
-                Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").into(holder.user_avatar);
+                holder.addLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!Storage.getString("E-mail", "").equals("")) {
+                            if (!videoLikes.contains(video.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                                videoLikes.add(video.getId());
+                                holder.likesCount.setText(String.valueOf(video.getLikes() + 1));
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + video.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            } else if (videoLikes.contains(video.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                                videoLikes.remove(video.getId());
+                                holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + video.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            }
+                        } else {
+                            context.startActivity(new Intent(context, SignIn.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        }
+                        new CheckLikes(Storage.getString("E-mail", "")).execute();
+                        new CheckVideoLikes(Storage.getString("E-mail", "")).execute();
+                    }
+                });
             }
+            Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").into(holder.user_avatar);
         } else {
             final ManicureDTO item = data.get(position);
 
-            if (position == data.size() - 1) {
+            if (position == data.size() - data.size()/10) {
                 if (data.size() - 1 % 100 != 8)
                     new Load(data.size() / 100 + 1).execute();
             }
@@ -167,12 +211,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                             holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
                             likes.add(item.getId());
                             holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-                            new GetRequest("http://195.88.209.17/app/in/manicureLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                         } else if (likes.contains(item.getId())) {
                             holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
                             likes.remove(item.getId());
                             holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
-                            new GetRequest("http://195.88.209.17/app/in/manicureDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                         }
                     } else {
                         context.startActivity(new Intent(context, SignIn.class)
@@ -184,8 +228,12 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             holder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, VKShare.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    if (Objects.equals(Storage.getString("VKAccessToken", ""), ""))
+                        context.startActivity(new Intent(context, GetToken.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    else
+                        context.startActivity(new Intent(context, WallPost.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
 
@@ -354,6 +402,8 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     }
                 }
             });
+            holder.showMore.setVisibility(View.VISIBLE);
+            holder.hashTags.setVisibility(View.VISIBLE);
         }
     }
 
@@ -479,7 +529,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
         ImageView user_avatar, addLike, share;
         HorizontalScrollView imageViewerHorizontal;
 
@@ -497,6 +547,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
             share = (ImageView) itemView.findViewById(R.id.share);
+            post = (LinearLayout) itemView.findViewById(R.id.post);
         }
     }
 
@@ -542,6 +593,48 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         }
     }
 
+    private class CheckVideoLikes extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection connection = null;
+        private BufferedReader reader = null;
+        private String result = "";
+        private String email = "";
+
+        CheckVideoLikes(String email) {
+            this.email = email;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoriteVideosManicure.php?email=" + email);
+                connection = (HttpURLConnection) feedURL.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder profileBuffer = new StringBuilder();
+                String profileLine;
+                while ((profileLine = reader.readLine()) != null) {
+                    profileBuffer.append(profileLine);
+                }
+                result = profileBuffer.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            String[] array = s.split(",");
+            for (String anArray : array) {
+                if (!anArray.equals(""))
+                    videoLikes.add(Long.valueOf(anArray));
+            }
+        }
+    }
+
     private class Load extends AsyncTask<Void, Void, String> {
 
         private HttpURLConnection urlFeedConnection = null;
@@ -556,34 +649,17 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         @Override
         protected String doInBackground(Void... params) {
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                resultJsonFeed += buffer.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -628,6 +704,88 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                     ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
                     data.add(manicureDTO);
                 }
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class VideoLoad extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        VideoLoad(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
+
+                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    videoData.add(videoManicureDTO);
+                }
+
                 FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();

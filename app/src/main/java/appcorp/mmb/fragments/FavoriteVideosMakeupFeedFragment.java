@@ -12,22 +12,23 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.dto.GlobalDTO;
+import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.VideoMakeupDTO;
-import appcorp.mmb.dto.VideoManicureDTO;
-import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
+import appcorp.mmb.list_adapters.FavoriteVideosMakeupFeedListAdapter;
+import appcorp.mmb.list_adapters.FavoritesMakeupFeedListAdapter;
 
-public class GlobalFeedFragment extends AbstractTabFragment{
+public class FavoriteVideosMakeupFeedFragment extends AbstractTabFragment{
 
-    private List<GlobalDTO> data;
-    private GlobalFeedListAdapter adapter;
+    private List<VideoMakeupDTO> videoMakeupData;
+    private FavoriteVideosMakeupFeedListAdapter adapter;
 
-    public static GlobalFeedFragment getInstance(Context context, List<GlobalDTO> data) {
+    public static FavoriteVideosMakeupFeedFragment getInstance(Context context, List<VideoMakeupDTO> makeupData) {
         Bundle args = new Bundle();
-        GlobalFeedFragment fragment = new GlobalFeedFragment();
+        FavoriteVideosMakeupFeedFragment fragment = new FavoriteVideosMakeupFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(data);
+        fragment.setData(makeupData);
+        fragment.setTitle("Makeup");
         return fragment;
     }
 
@@ -35,8 +36,8 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<GlobalDTO> data) {
-        this.data = data;
+    public void setData(List<VideoMakeupDTO> makeupData) {
+        this.videoMakeupData = makeupData;
     }
 
     @Nullable
@@ -45,13 +46,13 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new GlobalFeedListAdapter(data, context);
+        adapter = new FavoriteVideosMakeupFeedListAdapter(videoMakeupData, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<GlobalDTO> data) {
-        adapter.setData(data);
+    public void refreshData(List<VideoMakeupDTO> makeupData) {
+        adapter.setData(makeupData);
         adapter.notifyDataSetChanged();
     }
 }

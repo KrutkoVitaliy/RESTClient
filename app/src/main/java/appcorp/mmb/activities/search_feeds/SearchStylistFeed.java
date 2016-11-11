@@ -34,6 +34,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.user.FavoriteVideos;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.user.SignIn;
@@ -136,6 +137,12 @@ public class SearchStylistFeed extends AppCompatActivity {
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
+                    case R.id.navMenuFavoriteVideos:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        break;
                 }
                 return true;
             }
@@ -233,7 +240,7 @@ public class SearchStylistFeed extends AppCompatActivity {
 
             List<StylistDTO> data = new ArrayList<>();
             try {
-                JSONArray items = new JSONArray(resultJsonFeed);
+                JSONArray items = new JSONArray(s);
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
 
@@ -251,7 +258,9 @@ public class SearchStylistFeed extends AppCompatActivity {
                             item.getString("instagram"),
                             item.getString("odnoklassniki"));
                     data.add(stylistDTO);
+                    if(adapter != null)
                     adapter.setData(data);
+                    if(progressDialog != null)
                     progressDialog.dismiss();
                 }
             } catch (JSONException e) {

@@ -12,22 +12,22 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appcorp.mmb.R;
-import appcorp.mmb.dto.GlobalDTO;
-import appcorp.mmb.dto.VideoMakeupDTO;
 import appcorp.mmb.dto.VideoManicureDTO;
-import appcorp.mmb.list_adapters.GlobalFeedListAdapter;
+import appcorp.mmb.list_adapters.FavoriteVideosManicureFeedListAdapter;
+import appcorp.mmb.list_adapters.FavoritesManicureFeedListAdapter;
 
-public class GlobalFeedFragment extends AbstractTabFragment{
+public class FavoriteVideosManicureFeedFragment extends AbstractTabFragment{
 
-    private List<GlobalDTO> data;
-    private GlobalFeedListAdapter adapter;
+    private List<VideoManicureDTO> videoManicureData;
+    private FavoriteVideosManicureFeedListAdapter adapter;
 
-    public static GlobalFeedFragment getInstance(Context context, List<GlobalDTO> data) {
+    public static FavoriteVideosManicureFeedFragment getInstance(Context context, List<VideoManicureDTO> manicureData) {
         Bundle args = new Bundle();
-        GlobalFeedFragment fragment = new GlobalFeedFragment();
+        FavoriteVideosManicureFeedFragment fragment = new FavoriteVideosManicureFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(data);
+        fragment.setData(manicureData);
+        fragment.setTitle("Manicure");
         return fragment;
     }
 
@@ -35,8 +35,8 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<GlobalDTO> data) {
-        this.data = data;
+    public void setData(List<VideoManicureDTO> manicureData) {
+        this.videoManicureData = manicureData;
     }
 
     @Nullable
@@ -45,13 +45,13 @@ public class GlobalFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new GlobalFeedListAdapter(data, context);
+        adapter = new FavoriteVideosManicureFeedListAdapter(videoManicureData, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<GlobalDTO> data) {
-        adapter.setData(data);
+    public void refreshData(List<VideoManicureDTO> manicureData) {
+        adapter.setData(manicureData);
         adapter.notifyDataSetChanged();
     }
 }

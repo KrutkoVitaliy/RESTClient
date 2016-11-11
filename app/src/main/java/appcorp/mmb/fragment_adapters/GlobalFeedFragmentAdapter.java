@@ -11,6 +11,8 @@ import java.util.Map;
 
 import appcorp.mmb.dto.GlobalDTO;
 import appcorp.mmb.dto.HairstyleDTO;
+import appcorp.mmb.dto.VideoMakeupDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragments.AbstractTabFragment;
 import appcorp.mmb.fragments.GlobalFeedFragment;
 import appcorp.mmb.fragments.HairstyleFeedFragment;

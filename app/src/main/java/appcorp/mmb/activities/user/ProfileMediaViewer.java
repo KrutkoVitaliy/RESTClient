@@ -61,7 +61,7 @@ public class ProfileMediaViewer extends Activity {
         if (type.equals("vk"))
             url = "https://www.vk.com/" + url;
         if (type.equals("instagram"))
-            url = "https://www.instagram.com/" + url;
+            url = "https://www.instagram.com/" + url + "/";
         if (type.equals("ok"))
             url = "https://www.ok.ru.com/" + url;
 

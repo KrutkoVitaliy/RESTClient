@@ -40,16 +40,19 @@ import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
-import appcorp.mmb.dto.HairstyleDTO;
-import appcorp.mmb.dto.MakeupDTO;
-import appcorp.mmb.dto.ManicureDTO;
-import appcorp.mmb.fragment_adapters.FavoritesFragmentAdapter;
+import appcorp.mmb.dto.VideoHairstyleDTO;
+import appcorp.mmb.dto.VideoMakeupDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
+import appcorp.mmb.fragment_adapters.FavoriteVideosFragmentAdapter;
 
 public class FavoriteVideos extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private FavoritesFragmentAdapter adapter;
+    private FavoriteVideosFragmentAdapter adapter;
+    private List<VideoManicureDTO> manicureVideoData = new ArrayList<>();
+    private List<VideoMakeupDTO> makeupVideoData = new ArrayList<>();
+    private List<VideoHairstyleDTO> hairstyleVideoData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class FavoriteVideos extends AppCompatActivity {
         Storage.init(getApplicationContext());
         initFirebase();
 
-        FireAnal.sendString("1", "Open", "Favorites");
+        FireAnal.sendString("1", "Open", "FavoriteVideos");
 
         initToolbar();
         initNavigationView();
@@ -76,20 +79,20 @@ public class FavoriteVideos extends AppCompatActivity {
     }
 
     public void addManicureFeed(int position) {
-        new FavoriteManicureLoader(position).execute();
+        new FavoriteManicureVideosLoader(position).execute();
     }
 
     public void addMakeupFeed(int position) {
-        new FavoriteMakeupLoader(position).execute();
+        new FavoriteMakeupVideosLoader(position).execute();
     }
 
     public void addHairstyleFeed(int position) {
-        new FavoriteHairstyleLoader(position).execute();
+        new FavoriteHairstyleVideosLoader(position).execute();
     }
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.favoriteVideosToolbar);
-        toolbar.setTitle(R.string.toolbar_title_favorites);
+        toolbar.setTitle(R.string.toolbar_title_favorite_videos);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -104,7 +107,7 @@ public class FavoriteVideos extends AppCompatActivity {
 
     private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.favoriteVideosViewPager);
-        adapter = new FavoritesFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<MakeupDTO>(), new ArrayList<HairstyleDTO>());
+        adapter = new FavoriteVideosFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<VideoManicureDTO>(), new ArrayList<VideoMakeupDTO>(), new ArrayList<VideoHairstyleDTO>());
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.favoriteVideosTabLayout);
@@ -166,7 +169,7 @@ public class FavoriteVideos extends AppCompatActivity {
         ImageView avatar = (ImageView) menuHeader.findViewById(R.id.accountPhoto);
         TextView switcherHint = (TextView) menuHeader.findViewById(R.id.accountHint);
         if (!Storage.getString("E-mail", "").equals("")) {
-            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/"+Storage.getString("PhotoURL", "")).resize(100,100).centerCrop().into(avatar);
+            Picasso.with(getApplicationContext()).load("http://195.88.209.17/storage/photos/" + Storage.getString("PhotoURL", "")).resize(100, 100).centerCrop().into(avatar);
             switcherHint.setText(R.string.header_unauthorized_hint);
         } else {
             avatar.setImageResource(R.mipmap.nav_icon);
@@ -188,7 +191,7 @@ public class FavoriteVideos extends AppCompatActivity {
         });
     }
 
-    public class FavoriteManicureLoader extends AsyncTask<Void, Void, String> {
+    public class FavoriteManicureVideosLoader extends AsyncTask<Void, Void, String> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
@@ -199,14 +202,14 @@ public class FavoriteVideos extends AppCompatActivity {
         String resultGet = "";
         String ids;
 
-        FavoriteManicureLoader(int position) {
+        FavoriteManicureVideosLoader(int position) {
             this.position = position;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesManicure.php?email=" + Storage.getString("E-mail", ""));
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoriteVideosManicure.php?email=" + Storage.getString("E-mail", ""));
                 connectionGet = (HttpURLConnection) feedURL.openConnection();
                 connectionGet.setRequestMethod("GET");
                 connectionGet.connect();
@@ -224,7 +227,7 @@ public class FavoriteVideos extends AppCompatActivity {
             }
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/favorites/manicure.php?position=" + position + "&ids=" + ids);
+                    URL feedURL = new URL("http://195.88.209.17/favorites/manicureVideos.php?position=" + position + "&ids=" + ids);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -237,7 +240,7 @@ public class FavoriteVideos extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/favorites/manicure.php?position=" + position + "&ids=" + ids);
+                        URL feedURL = new URL("http://195.88.209.17/favorites/manicureVideos.php?position=" + position + "&ids=" + ids);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();
@@ -261,44 +264,31 @@ public class FavoriteVideos extends AppCompatActivity {
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
 
-            long id, likes;
-            List<ManicureDTO> data = new ArrayList<>();
-            String availableDate, colors, shape, design, tags = "", authorPhoto, authorName;
-
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
 
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
-
-                    id = item.getLong("id");
-                    authorPhoto = item.getString("authorPhoto");
-                    authorName = item.getString("authorName");
-                    availableDate = item.getString("uploadDate");
+                    List<String> tags = new ArrayList<>();
                     if (Storage.getString("Localization", "").equals("English"))
-                        tags = item.getString("tags");
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
                     else if (Storage.getString("Localization", "").equals("Russian"))
-                        tags = item.getString("tagsRu");
-                    shape = item.getString("shape");
-                    design = item.getString("design");
-                    colors = item.getString("colors");
-                    likes = item.getLong("likes");
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
 
-                    String[] tempTags = tags.split(",");
-                    Collections.addAll(hashTags, tempTags);
-
-                    ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
-                    data.add(manicureDTO);
+                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    manicureVideoData.add(videoManicureDTO);
                     if (adapter != null)
-                        adapter.setManicureData(data);
+                        adapter.setManicureData(manicureVideoData);
 
-                    FireAnal.sendString("1", "Open", "FavoriteManicureLoaded");
+                    FireAnal.sendString("1", "Open", "FavoriteManicureVideosLoaded");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -306,7 +296,7 @@ public class FavoriteVideos extends AppCompatActivity {
         }
     }
 
-    public class FavoriteMakeupLoader extends AsyncTask<Void, Void, String> {
+    public class FavoriteMakeupVideosLoader extends AsyncTask<Void, Void, String> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
@@ -317,14 +307,14 @@ public class FavoriteVideos extends AppCompatActivity {
         String resultGet = "";
         String ids;
 
-        FavoriteMakeupLoader(int position) {
+        FavoriteMakeupVideosLoader(int position) {
             this.position = position;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesMakeup.php?email=" + Storage.getString("E-mail", ""));
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoriteVideosMakeup.php?email=" + Storage.getString("E-mail", ""));
                 connectionGet = (HttpURLConnection) feedURL.openConnection();
                 connectionGet.setRequestMethod("GET");
                 connectionGet.connect();
@@ -342,7 +332,7 @@ public class FavoriteVideos extends AppCompatActivity {
             }
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/favorites/makeup.php?position=" + position + "&ids=" + ids);
+                    URL feedURL = new URL("http://195.88.209.17/favorites/makeupVideos.php?position=" + position + "&ids=" + ids);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -355,7 +345,7 @@ public class FavoriteVideos extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/favorites/makeup.php?position=" + position + "&ids=" + ids);
+                        URL feedURL = new URL("http://195.88.209.17/favorites/makeupVideos.php?position=" + position + "&ids=" + ids);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();
@@ -379,45 +369,32 @@ public class FavoriteVideos extends AppCompatActivity {
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
 
-            List<MakeupDTO> makeupData = new ArrayList<>();
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
 
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
 
-                    String[] tempTags;
-                    if (Storage.getString("Localization", "").equals("English")) {
-                        tempTags = item.getString("tags").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    } else if (Storage.getString("Localization", "").equals("Russian")) {
-                        tempTags = item.getString("tagsRu").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    }
+                    VideoMakeupDTO videoMakeupDTO = new VideoMakeupDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    makeupVideoData.add(videoMakeupDTO);
 
-                    MakeupDTO makeupDTO = new MakeupDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            images,
-                            item.getString("colors"),
-                            item.getString("eyeColor"),
-                            item.getString("occasion"),
-                            item.getString("difficult"),
-                            hashTags,
-                            item.getLong("likes"));
-                    makeupData.add(makeupDTO);
                     if (adapter != null)
-                        adapter.setMakeupData(makeupData);
+                        adapter.setMakeupData(makeupVideoData);
 
-                    FireAnal.sendString("1", "Open", "FavoriteMakeupLoaded");
+                    FireAnal.sendString("1", "Open", "FavoriteManicureVideosLoaded");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -425,7 +402,7 @@ public class FavoriteVideos extends AppCompatActivity {
         }
     }
 
-    public class FavoriteHairstyleLoader extends AsyncTask<Void, Void, String> {
+    public class FavoriteHairstyleVideosLoader extends AsyncTask<Void, Void, String> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
@@ -436,14 +413,14 @@ public class FavoriteVideos extends AppCompatActivity {
         HttpURLConnection connectionGet = null;
         String resultGet = "";
 
-        FavoriteHairstyleLoader(int position) {
+        FavoriteHairstyleVideosLoader(int position) {
             this.position = position;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL feedURL = new URL("http://195.88.209.17/app/in/favoritesHairstyle.php?email=" + Storage.getString("E-mail", ""));
+                URL feedURL = new URL("http://195.88.209.17/app/in/favoriteVideosHairstyle.php?email=" + Storage.getString("E-mail", ""));
                 connectionGet = (HttpURLConnection) feedURL.openConnection();
                 connectionGet.setRequestMethod("GET");
                 connectionGet.connect();
@@ -461,7 +438,7 @@ public class FavoriteVideos extends AppCompatActivity {
             }
             try {
                 if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/favorites/hairstyle.php?position=" + position + "&ids=" + ids);
+                    URL feedURL = new URL("http://195.88.209.17/favorites/hairstyleVideos.php?position=" + position + "&ids=" + ids);
                     urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                     urlFeedConnection.setRequestMethod("GET");
                     urlFeedConnection.connect();
@@ -474,7 +451,7 @@ public class FavoriteVideos extends AppCompatActivity {
                     resultJsonFeed += buffer.toString();
                 } else {
                     for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/favorites/hairstyle.php?position=" + position + "&ids=" + ids);
+                        URL feedURL = new URL("http://195.88.209.17/favorites/hairstyleVideos.php?position=" + position + "&ids=" + ids);
                         urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
                         urlFeedConnection.setRequestMethod("GET");
                         urlFeedConnection.connect();
@@ -498,46 +475,34 @@ public class FavoriteVideos extends AppCompatActivity {
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
 
-            List<HairstyleDTO> hairstyleData = new ArrayList<>();
+            List<VideoHairstyleDTO> hairstyleVideoData = new ArrayList<>();
 
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
 
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
 
-                    String[] tempTags;
-                    if (Storage.getString("Localization", "").equals("English")) {
-                        tempTags = item.getString("tags").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    } else if (Storage.getString("Localization", "").equals("Russian")) {
-                        tempTags = item.getString("tagsRu").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    }
+                    VideoHairstyleDTO videoHairstyleDTO = new VideoHairstyleDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    hairstyleVideoData.add(videoHairstyleDTO);
 
-                    HairstyleDTO hairstyleDTO = new HairstyleDTO(
-                            item.getLong("id"),
-                            item.getString("uploadDate"),
-                            item.getString("authorName"),
-                            item.getString("authorPhoto"),
-                            item.getString("hairstyleType"),
-                            images,
-                            hashTags,
-                            item.getLong("likes"),
-                            item.getString("length"),
-                            item.getString("type"),
-                            item.getString("for"));
-                    hairstyleData.add(hairstyleDTO);
                     if (adapter != null)
-                        adapter.setHairstyleData(hairstyleData);
+                        adapter.setHairstyleData(hairstyleVideoData);
 
-                    FireAnal.sendString("1", "Open", "FavoriteHairstyleLoaded");
+                    FireAnal.sendString("1", "Open", "FavoriteManicureVideosLoaded");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

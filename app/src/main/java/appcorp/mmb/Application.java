@@ -1,25 +1,13 @@
 package appcorp.mmb;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
-import android.view.WindowManager;
-import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.util.VKUtil;
 
-import appcorp.mmb.activities.feeds.GlobalFeed;
-import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Intermediates;
-import appcorp.mmb.classes.Storage;
-import appcorp.mmb.classes.VKShare;
+import appcorp.mmb.sharing.vkontakte.GetToken;
 
 public class Application extends android.app.Application {
 
@@ -27,8 +15,8 @@ public class Application extends android.app.Application {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
             if (newToken == null) {
-                Intent intent = new Intent(Application.this, VKShare.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(Application.this, GetToken.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         }
@@ -36,8 +24,8 @@ public class Application extends android.app.Application {
 
     @Override
     public void onCreate() {
-        vkAccessTokenTracker.startTracking();
         super.onCreate();
+        vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
     }
 }

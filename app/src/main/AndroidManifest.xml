@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
         android:required="false" />
@@ -43,12 +44,20 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <!-- <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" /> -->
+
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
         <activity
             android:name=".activities.feeds.GlobalFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.other.FullscreenPreview"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".activities.other.FullscreenVideoPreview"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
@@ -64,6 +73,9 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.user.Favorites"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.user.FavoriteVideos"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.other.InternetNotification"
@@ -134,8 +146,9 @@
             android:name=".activities.other.PostHairstyle"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".classes.VKShare"
-            android:screenOrientation="portrait"/>
+            android:name=".sharing.vkontakte.GetToken"
+            android:screenOrientation="portrait" />
+        <activity android:name=".sharing.vkontakte.WallPost"></activity>
     </application>
 
 </manifest>

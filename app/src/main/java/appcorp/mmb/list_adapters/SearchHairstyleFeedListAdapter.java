@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -144,58 +147,66 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        final HairstyleDTO item = data.get(position);
-
-        if (item.getId() == -1) {
-            context.startActivity(new Intent(context, Search.class)
-                    .putExtra("from", "hairstyleFeed")
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            Toast.makeText(context, R.string.notFindResult, Toast.LENGTH_LONG).show();
+        if (position % 8 == 0) {
+            holder.post.removeAllViews();
+            NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
+            nativeExpressAdView.setAdUnitId("ca-app-pub-4982253629578691/5250720366");
+            nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
+            nativeExpressAdView.loadAd(new AdRequest.Builder().build());
+            holder.post.addView(nativeExpressAdView);
         } else {
-            if (position == data.size() - 1) {
-                new Load(request, hairstyleLength, hairstyleType, hairstyleFor, data.size() / 100 + 1).execute();
-            }
+            final HairstyleDTO item = data.get(position);
 
-            final String SHOW = convertToString(context, R.string.show_more_container);
-            final String HIDE = convertToString(context, R.string.hide_more_container);
-
-            String[] date = item.getAvailableDate().split("");
-
-            holder.title.setText(item.getAuthorName());
-            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-            holder.likesCount.setText(String.valueOf(item.getLikes()));
-
-            if (!likes.contains(item.getId())) {
-                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+            if (item.getId() == -1) {
+                context.startActivity(new Intent(context, Search.class)
+                        .putExtra("from", "hairstyleFeed")
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                Toast.makeText(context, R.string.notFindResult, Toast.LENGTH_LONG).show();
             } else {
-                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-            }
-
-            holder.addLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
-                        if (!likes.contains(item.getId())) {
-                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                            likes.add(item.getId());
-                            holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-                            new GetRequest("http://195.88.209.17/app/in/hairstyleLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                        } else if (likes.contains(item.getId())) {
-                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                            likes.remove(item.getId());
-                            holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
-                            new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                        }
-                    } else {
-                        context.startActivity(new Intent(context, SignIn.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
+                if (position == data.size() - 1) {
+                    new Load(request, hairstyleLength, hairstyleType, hairstyleFor, data.size() / 100 + 1).execute();
                 }
-            });
 
-            Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
+                final String SHOW = convertToString(context, R.string.show_more_container);
+                final String HIDE = convertToString(context, R.string.hide_more_container);
+
+                String[] date = item.getAvailableDate().split("");
+
+                holder.title.setText(item.getAuthorName());
+                holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+                holder.likesCount.setText(String.valueOf(item.getLikes()));
+
+                if (!likes.contains(item.getId())) {
+                    holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                } else {
+                    holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                    holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+                }
+
+                holder.addLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty")) {
+                            if (!likes.contains(item.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                                likes.add(item.getId());
+                                holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+                                new GetRequest("http://195.88.209.17/app/in/hairstyleLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            } else if (likes.contains(item.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                                likes.remove(item.getId());
+                                holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
+                                new GetRequest("http://195.88.209.17/app/in/hairstyleDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            }
+                        } else {
+                            context.startActivity(new Intent(context, SignIn.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        }
+                    }
+                });
+
+                Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,144 +218,145 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
             }
         });*/
 
-            holder.hashTags.removeAllViews();
-            for (int i = 0; i < item.getHashTags().size(); i++) {
-                TextView hashTag = new TextView(context);
-                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-                hashTag.setTextSize(14);
-                final int finalI = i;
-                if (!item.getHashTags().get(i).toLowerCase().equals("")) {
-                    hashTag.setText("#" + item.getHashTags().get(i).toLowerCase() + " ");
-                }
-                hashTag.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        context.startActivity(new Intent(context, SearchHairstyleFeed.class)
-                                .putExtra("Request", item.getHashTags().get(finalI))
-                                .putExtra("HairstyleLength", "0")
-                                .putExtra("HairstyleType", "0")
-                                .putExtra("HairstyleFor", "0")
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        FireAnal.sendString("2", "SearchHairstyleFeedTag", item.getHashTags().get(finalI));
+                holder.hashTags.removeAllViews();
+                for (int i = 0; i < item.getHashTags().size(); i++) {
+                    TextView hashTag = new TextView(context);
+                    hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                    hashTag.setTextSize(14);
+                    final int finalI = i;
+                    if (!item.getHashTags().get(i).toLowerCase().equals("")) {
+                        hashTag.setText("#" + item.getHashTags().get(i).toLowerCase() + " ");
                     }
-                });
-                holder.hashTags.addView(hashTag);
-            }
+                    hashTag.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            context.startActivity(new Intent(context, SearchHairstyleFeed.class)
+                                    .putExtra("Request", item.getHashTags().get(finalI))
+                                    .putExtra("HairstyleLength", "0")
+                                    .putExtra("HairstyleType", "0")
+                                    .putExtra("HairstyleFor", "0")
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            FireAnal.sendString("2", "SearchHairstyleFeedTag", item.getHashTags().get(finalI));
+                        }
+                    });
+                    holder.hashTags.addView(hashTag);
+                }
 
-            holder.imageViewer.removeAllViews();
-            holder.countImages.removeAllViews();
-            for (int i = 0; i < item.getImages().size(); i++) {
-                ImageView screenShot = new ImageView(context);
-                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-                screenShot.setMinimumHeight(Storage.getInt("Width", 480));
-                screenShot.setPadding(0, 0, 1, 0);
-                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).onlyScaleDown().into(screenShot);
+                holder.imageViewer.removeAllViews();
+                holder.countImages.removeAllViews();
+                for (int i = 0; i < item.getImages().size(); i++) {
+                    ImageView screenShot = new ImageView(context);
+                    screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                    screenShot.setMinimumHeight(Storage.getInt("Width", 480));
+                    screenShot.setPadding(0, 0, 1, 0);
+                    screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+                    Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).onlyScaleDown().into(screenShot);
 
-                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                final int finalI = i;
-                screenShot.setOnClickListener(new View.OnClickListener() {
+                    screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    final int finalI = i;
+                    screenShot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (holder.showMore.getText().equals(SHOW)) {
+                                Intent intent = new Intent(context, FullscreenPreview.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                                context.startActivity(intent);
+                            }
+                        }
+                    });
+                    holder.imageViewer.addView(screenShot);
+                    holder.imageViewerHorizontal.scrollTo(0, 0);
+
+                    LinearLayout countLayout = new LinearLayout(context);
+                    countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
+                    TextView count = new TextView(context);
+                    count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
+                    count.setTextSize(20);
+                    count.setTextColor(Color.WHITE);
+                    count.setPadding(32, 32, 32, 32);
+                    count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+                    countLayout.addView(count);
+                    holder.countImages.addView(countLayout);
+                }
+
+                holder.moreContainer.removeAllViews();
+                holder.showMore.setText(SHOW);
+                holder.showMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         if (holder.showMore.getText().equals(SHOW)) {
-                            Intent intent = new Intent(context, FullscreenPreview.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                            context.startActivity(intent);
+                            holder.showMore.setText(HIDE);
+                            LinearLayout moreContainer = new LinearLayout(context);
+                            moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            moreContainer.setOrientation(LinearLayout.VERTICAL);
+                            moreContainer.setPadding(32, 32, 32, 0);
+
+                            switch (item.getHlenght()) {
+                                case "short":
+                                    moreContainer.addView(createText(convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
+                                    break;
+                                case "medium":
+                                    moreContainer.addView(createText(convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
+                                    break;
+                                case "long":
+                                    moreContainer.addView(createText(convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
+                                    break;
+                            }
+
+                            switch (item.getHtype()) {
+                                case "straight":
+                                    moreContainer.addView(createText(convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
+                                    break;
+                                case "braid":
+                                    moreContainer.addView(createText(convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
+                                    break;
+                                case "tail":
+                                    moreContainer.addView(createText(convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
+                                    break;
+                                case "bunch":
+                                    moreContainer.addView(createText(convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
+                                    break;
+                                case "netting":
+                                    moreContainer.addView(createText(convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
+                                    break;
+                                case "curls":
+                                    moreContainer.addView(createText(convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
+                                    break;
+                                case "unstandart":
+                                    moreContainer.addView(createText(convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
+                                    break;
+                            }
+
+                            switch (item.getHfor()) {
+                                case "kids":
+                                    moreContainer.addView(createText(convertToString(context, R.string.forKids), 16, "For", "1"));
+                                    break;
+                                case "everyday":
+                                    moreContainer.addView(createText(convertToString(context, R.string.forEveryday), 16, "For", "2"));
+                                    break;
+                                case "wedding":
+                                    moreContainer.addView(createText(convertToString(context, R.string.forWedding), 16, "For", "3"));
+                                    break;
+                                case "evening":
+                                    moreContainer.addView(createText(convertToString(context, R.string.forEvening), 16, "For", "4"));
+                                    break;
+                                case "exclusive":
+                                    moreContainer.addView(createText(convertToString(context, R.string.forExclusive), 16, "For", "5"));
+                                    break;
+                            }
+
+                            holder.moreContainer.addView(moreContainer);
+                        } else if (holder.showMore.getText().equals(HIDE)) {
+                            holder.showMore.setText(SHOW);
+                            holder.moreContainer.removeAllViews();
                         }
                     }
                 });
-                holder.imageViewer.addView(screenShot);
-                holder.imageViewerHorizontal.scrollTo(0, 0);
-
-                LinearLayout countLayout = new LinearLayout(context);
-                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
-                TextView count = new TextView(context);
-                count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
-                count.setTextSize(20);
-                count.setTextColor(Color.WHITE);
-                count.setPadding(32, 32, 32, 32);
-                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-                countLayout.addView(count);
-                holder.countImages.addView(countLayout);
             }
-
-            holder.moreContainer.removeAllViews();
-            holder.showMore.setText(SHOW);
-            holder.showMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (holder.showMore.getText().equals(SHOW)) {
-                        holder.showMore.setText(HIDE);
-                        LinearLayout moreContainer = new LinearLayout(context);
-                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        moreContainer.setOrientation(LinearLayout.VERTICAL);
-                        moreContainer.setPadding(32, 32, 32, 0);
-
-                        switch (item.getHlenght()) {
-                            case "short":
-                                moreContainer.addView(createText(convertToString(context, R.string.shortHairstyle), 16, "Length", "1"));
-                                break;
-                            case "medium":
-                                moreContainer.addView(createText(convertToString(context, R.string.mediumHairstyle), 16, "Length", "2"));
-                                break;
-                            case "long":
-                                moreContainer.addView(createText(convertToString(context, R.string.longHairstyle), 16, "Length", "3"));
-                                break;
-                        }
-
-                        switch (item.getHtype()) {
-                            case "straight":
-                                moreContainer.addView(createText(convertToString(context, R.string.straightHairstyleType), 16, "Type", "1"));
-                                break;
-                            case "braid":
-                                moreContainer.addView(createText(convertToString(context, R.string.braidHairstyleType), 16, "Type", "2"));
-                                break;
-                            case "tail":
-                                moreContainer.addView(createText(convertToString(context, R.string.tailHairstyleType), 16, "Type", "3"));
-                                break;
-                            case "bunch":
-                                moreContainer.addView(createText(convertToString(context, R.string.bunchHairstyleType), 16, "Type", "4"));
-                                break;
-                            case "netting":
-                                moreContainer.addView(createText(convertToString(context, R.string.nettingHairstyleType), 16, "Type", "5"));
-                                break;
-                            case "curls":
-                                moreContainer.addView(createText(convertToString(context, R.string.curlsHairstyleType), 16, "Type", "6"));
-                                break;
-                            case "unstandart":
-                                moreContainer.addView(createText(convertToString(context, R.string.unstandartHairstyleType), 16, "Type", "7"));
-                                break;
-                        }
-
-                        switch (item.getHfor()) {
-                            case "kids":
-                                moreContainer.addView(createText(convertToString(context, R.string.forKids), 16, "For", "1"));
-                                break;
-                            case "everyday":
-                                moreContainer.addView(createText(convertToString(context, R.string.forEveryday), 16, "For", "2"));
-                                break;
-                            case "wedding":
-                                moreContainer.addView(createText(convertToString(context, R.string.forWedding), 16, "For", "3"));
-                                break;
-                            case "evening":
-                                moreContainer.addView(createText(convertToString(context, R.string.forEvening), 16, "For", "4"));
-                                break;
-                            case "exclusive":
-                                moreContainer.addView(createText(convertToString(context, R.string.forExclusive), 16, "For", "5"));
-                                break;
-                        }
-
-                        holder.moreContainer.addView(moreContainer);
-                    } else if (holder.showMore.getText().equals(HIDE)) {
-                        holder.showMore.setText(SHOW);
-                        holder.moreContainer.removeAllViews();
-                    }
-                }
-            });
         }
     }
 
@@ -409,7 +421,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
         ImageView user_avatar, addLike;
         HorizontalScrollView imageViewerHorizontal;
 
@@ -426,6 +438,7 @@ public class SearchHairstyleFeedListAdapter extends RecyclerView.Adapter<SearchH
             user_avatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
+            post = (LinearLayout) itemView.findViewById(R.id.post);
         }
     }
 

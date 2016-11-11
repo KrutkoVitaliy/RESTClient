@@ -3,7 +3,7 @@ package appcorp.mmb.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoManicureDTO {
+public class VideoHairstyleDTO {
 
     private long id;
     private String title;
@@ -13,11 +13,11 @@ public class VideoManicureDTO {
     private long likes;
     private List<String> tags = new ArrayList<>();
 
-    private VideoManicureDTO() {
+    private VideoHairstyleDTO() {
 
     }
 
-    public VideoManicureDTO(long id, String title, String preview, String source, List<String> tags, long likes, String availableDate) {
+    public VideoHairstyleDTO(long id, String title, String preview, String source, List<String> tags, long likes, String availableDate) {
         this.id = id;
         this.title = title;
         this.preview = preview;

@@ -39,6 +39,7 @@ import appcorp.mmb.R;
 import appcorp.mmb.activities.other.InternetNotification;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.activities.user.FavoriteVideos;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.user.SignIn;
@@ -46,6 +47,8 @@ import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.GlobalDTO;
+import appcorp.mmb.dto.VideoMakeupDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 
 public class GlobalFeed extends AppCompatActivity {
@@ -54,6 +57,7 @@ public class GlobalFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private GlobalFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
+    private List<GlobalDTO> data = new ArrayList<>();
     private int toExit = 2;
 
     @Override
@@ -77,6 +81,8 @@ public class GlobalFeed extends AppCompatActivity {
         progressDialog.show();
 
         new GlobalFeedLoader(1).execute();
+//        new VideoManicureFeedLoader(1).execute();
+        //new VideoMakeupFeedLoader(1).execute();
         FireAnal.sendString("1", "Open", "GlobalFeed");
     }
 
@@ -137,6 +143,12 @@ public class GlobalFeed extends AppCompatActivity {
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        break;
+                    case R.id.navMenuFavoriteVideos:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
@@ -201,129 +213,153 @@ public class GlobalFeed extends AppCompatActivity {
         }.start();
     }
 
-    public class GlobalFeedLoader extends AsyncTask<Void, Void, String> {
+    public class GlobalFeedLoader extends AsyncTask<Void, Void, List<JSONArray>> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
-        private String resultJsonFeed = "";
         private int position;
+        private List<JSONArray> dataArrays = new ArrayList<>();
 
         GlobalFeedLoader(int position) {
             this.position = position;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<JSONArray> doInBackground(Void... params) {
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            resultJsonFeed = resultJsonFeed.replace("][", ",");
-            return resultJsonFeed;
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return dataArrays;
         }
 
         @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
+        protected void onPostExecute(List<JSONArray> dataArrays) {
+            super.onPostExecute(dataArrays);
 
-            List<JSONObject> hairstyleSet = new ArrayList<>();
+            List<JSONObject> items = new ArrayList<>();
+            List<GlobalDTO> exportData = new ArrayList<>();
+
+            try {
+                for (int i = 0; i < Math.max(dataArrays.get(0).length(), Math.max(dataArrays.get(1).length(), Math.max(dataArrays.get(2).length(), Math.max(dataArrays.get(3).length(), dataArrays.get(4).length())))); i++) {
+                    if (dataArrays.get(0).getJSONObject(i) != null)
+                        items.add(dataArrays.get(0).getJSONObject(i));
+                    if (dataArrays.get(1).getJSONObject(i) != null)
+                        items.add(dataArrays.get(1).getJSONObject(i));
+                    if (dataArrays.get(2).getJSONObject(i) != null)
+                        items.add(dataArrays.get(2).getJSONObject(i));
+                    if (dataArrays.get(3).getJSONObject(i) != null)
+                        items.add(dataArrays.get(3).getJSONObject(i));
+                    if (dataArrays.get(4).getJSONObject(i) != null)
+                        items.add(dataArrays.get(4).getJSONObject(i));
+                }
+                for (int i = 0; i < items.size(); i++) {
+                    List<String> images = new ArrayList<>();
+
+                    if(!items.get(i).has("videoSource")) {
+                        for (int j = 0; j < 10; j++)
+                            if (!items.get(i).getString("screen" + j).equals("empty.jpg"))
+                                images.add(items.get(i).getString("screen" + j));
+
+                        List<String> tags = new ArrayList<>();
+                        if (Storage.getString("Localization", "").equals("English")) {
+                            Collections.addAll(tags, items.get(i).getString("tags").split(","));
+                        } else if (Storage.getString("Localization", "").equals("Russian")) {
+                            Collections.addAll(tags, items.get(i).getString("tagsRu").split(","));
+                        }
+
+                        GlobalDTO post = new GlobalDTO(items.get(i).getLong("id"), items.get(i).getString("dataType"), items.get(i).getString("authorName"), items.get(i).getString("authorPhoto"), items.get(i).getString("uploadDate"), items.get(i).getString("length"), items.get(i).getString("type"), items.get(i).getString("for"), items.get(i).getString("colors"), items.get(i).getString("eyeColor"), items.get(i).getString("occasion"), items.get(i).getString("difficult"), items.get(i).getString("shape"), items.get(i).getString("design"), images, tags, items.get(i).getLong("likes"), 0, "", "", "", "", 0, "");
+                        exportData.add(post);
+                    }
+                    if(!items.get(i).has("id")){
+                        GlobalDTO post = new GlobalDTO(0, "video", items.get(i).getString("videoTitle"), "", items.get(i).getString("videoUploadDate"), "", "", "", "", "", "", "", "", "", new ArrayList<String>(), new ArrayList<String>(), 0, items.get(i).getLong("videoId"), "", items.get(i).getString("videoPreview"), items.get(i).getString("videoSource"), items.get(i).getString("videoTags"), items.get(i).getLong("videoLikes"), "");
+                        exportData.add(post);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (adapter != null)
+                adapter.setData(exportData);
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            /*List<JSONObject> hairstyleSet = new ArrayList<>();
             List<JSONObject> manicureSet = new ArrayList<>();
             List<JSONObject> makeupSet = new ArrayList<>();
             List<JSONObject> sortedData = new ArrayList<>();
 
-            List<GlobalDTO> data = new ArrayList<>();
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
                 for (int i = 0; i < items.length(); i++) {
@@ -350,19 +386,15 @@ public class GlobalFeed extends AppCompatActivity {
                     JSONObject item = sortedData.get(i);
 
                     List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
-
                     for (int j = 0; j < 10; j++)
                         if (!item.getString("screen" + j).equals("empty.jpg"))
                             images.add(item.getString("screen" + j));
 
-                    String[] tempTags;
+                    List<String> tags = new ArrayList<>();
                     if (Storage.getString("Localization", "").equals("English")) {
-                        tempTags = item.getString("tags").split(",");
-                        Collections.addAll(hashTags, tempTags);
+                        Collections.addAll(hashTags, item.getString("tags").split(","));
                     } else if (Storage.getString("Localization", "").equals("Russian")) {
-                        tempTags = item.getString("tagsRu").split(",");
-                        Collections.addAll(hashTags, tempTags);
+                        Collections.addAll(hashTags, item.getString("tagsRu").split(","));
                     }
 
                     if (item.getString("published").equals("t")) {
@@ -387,16 +419,181 @@ public class GlobalFeed extends AppCompatActivity {
                         data.add(globalDTO);
                     }
                 }
-                if (adapter != null && !data.isEmpty()) {
-                    adapter.setData(data);
-                }
                 if (progressDialog != null)
                     progressDialog.dismiss();
 
                 FireAnal.sendString("1", "Open", "HairstyleFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();
+            }*/
+        }
+    }
+
+    /*public class VideoManicureFeedLoader extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        VideoManicureFeedLoader(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
+
+                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    videoData.add(videoManicureDTO);
+                }
+
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
+
+    public class VideoMakeupFeedLoader extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        VideoMakeupFeedLoader(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
+
+                    VideoMakeupDTO videoMakeupDTO = new VideoMakeupDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    videoMakeupData.add(videoMakeupDTO);
+                }
+                if (adapter != null)
+                    adapter.setData(data, videoData, videoMakeupData);
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
 }

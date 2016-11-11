@@ -27,10 +27,18 @@ public class GlobalDTO {
     private List<String> hashTags = new ArrayList<>();
     private long likes;
 
+    private long videoId;
+    private String videoTitle;
+    private String videoPreview;
+    private String videoSource;
+    private String videoAvailableDate;
+    private long videoLikes;
+    private String videoTags;
+
     private GlobalDTO() {
     }
 
-    public GlobalDTO(long id, String dataType, String authorName, String authorPhoto, String availableDate, String hlength, String htype, String hfor, String colors, String eye_color, String occasion, String difficult, String shape, String design, List<String> images, List<String> hashTags, long likes) {
+    public GlobalDTO(long id, String dataType, String authorName, String authorPhoto, String availableDate, String hlength, String htype, String hfor, String colors, String eye_color, String occasion, String difficult, String shape, String design, List<String> images, List<String> hashTags, long likes, long videoId, String videoTitle, String videoPreview, String videoSource, String videoTags, long videoLikes, String videoAvailableDate) {
         this.id = id;
         this.dataType = dataType;
         this.authorName = authorName;
@@ -48,6 +56,13 @@ public class GlobalDTO {
         this.images = images;
         this.hashTags = hashTags;
         this.likes = likes;
+        this.videoId = videoId;
+        this.videoTitle = videoTitle;
+        this.videoPreview = videoPreview;
+        this.videoSource = videoSource;
+        this.videoTags = videoTags;
+        this.videoLikes = videoLikes;
+        this.videoAvailableDate = videoAvailableDate;
     }
 
     public long getId() {
@@ -184,5 +199,61 @@ public class GlobalDTO {
 
     public void setLikes(long likes) {
         this.likes = likes;
+    }
+
+    public long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(long videoId) {
+        this.videoId = videoId;
+    }
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public String getVideoPreview() {
+        return videoPreview;
+    }
+
+    public void setVideoPreview(String videoPreview) {
+        this.videoPreview = videoPreview;
+    }
+
+    public String getVideoSource() {
+        return videoSource;
+    }
+
+    public void setVideoSource(String videoSource) {
+        this.videoSource = videoSource;
+    }
+
+    public String getVideoAvailableDate() {
+        return videoAvailableDate;
+    }
+
+    public void setVideoAvailableDate(String videoAvailableDate) {
+        this.videoAvailableDate = videoAvailableDate;
+    }
+
+    public long getVideoLikes() {
+        return videoLikes;
+    }
+
+    public void setVideoLikes(long videoLikes) {
+        this.videoLikes = videoLikes;
+    }
+
+    public String getVideoTags() {
+        return videoTags;
+    }
+
+    public void setVideoTags(String videoTags) {
+        this.videoTags = videoTags;
     }
 }

@@ -412,6 +412,12 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
+                    case R.id.navMenuFavoriteVideos:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        break;
                 }
                 return true;
             }

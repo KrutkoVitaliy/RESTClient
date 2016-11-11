@@ -35,6 +35,7 @@ import java.util.List;
 import appcorp.mmb.R;
 import appcorp.mmb.activities.search_feeds.Search;
 import appcorp.mmb.activities.search_feeds.SearchStylist;
+import appcorp.mmb.activities.user.FavoriteVideos;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.user.SignIn;
@@ -42,6 +43,8 @@ import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.dto.VideoMakeupDTO;
+import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragment_adapters.MakeupFeedFragmentAdapter;
 
 public class MakeupFeed extends AppCompatActivity {
@@ -50,6 +53,8 @@ public class MakeupFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private MakeupFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
+    private List<MakeupDTO> data = new ArrayList<>();
+    private List<VideoMakeupDTO> videoData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class MakeupFeed extends AppCompatActivity {
         progressDialog.show();
 
         new MakeupFeedLoader(1).execute();
+        new VideoMakeupFeedLoader(1).execute();
     }
 
     public static String convertToString(Context context, int r) {
@@ -139,6 +145,12 @@ public class MakeupFeed extends AppCompatActivity {
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
+                    case R.id.navMenuFavoriteVideos:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        break;
                 }
                 return true;
             }
@@ -174,7 +186,7 @@ public class MakeupFeed extends AppCompatActivity {
 
     private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.makeupViewPager);
-        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>());
+        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>(), new ArrayList<VideoMakeupDTO>());
         viewPager.setAdapter(adapter);
     }
 
@@ -230,7 +242,6 @@ public class MakeupFeed extends AppCompatActivity {
         protected void onPostExecute(String resultJsonFeed) {
             super.onPostExecute(resultJsonFeed);
 
-            List<MakeupDTO> data = new ArrayList<>();
             try {
                 JSONArray items = new JSONArray(resultJsonFeed);
 
@@ -268,12 +279,93 @@ public class MakeupFeed extends AppCompatActivity {
                         data.add(makeupDTO);
                     }
                 }
+                FireAnal.sendString("1", "Open", "MakeupFeedLoader");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class VideoMakeupFeedLoader extends AsyncTask<Void, Void, String> {
+
+        private HttpURLConnection urlFeedConnection = null;
+        private BufferedReader reader = null;
+        private String resultJsonFeed = "";
+        private int position;
+
+        VideoMakeupFeedLoader(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                if (position == 1) {
+                    URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + position + ".html");
+                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                    urlFeedConnection.setRequestMethod("GET");
+                    urlFeedConnection.connect();
+                    InputStream inputStream = urlFeedConnection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                        buffer.append(line);
+                    resultJsonFeed += buffer.toString();
+                } else {
+                    for (int i = 1; i <= position; i++) {
+                        URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + i + ".html");
+                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                        urlFeedConnection.setRequestMethod("GET");
+                        urlFeedConnection.connect();
+                        InputStream inputStream = urlFeedConnection.getInputStream();
+                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder buffer = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            buffer.append(line);
+                        resultJsonFeed += buffer.toString();
+                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJsonFeed;
+        }
+
+        @Override
+        protected void onPostExecute(String resultJsonFeed) {
+            super.onPostExecute(resultJsonFeed);
+
+            try {
+                JSONArray items = new JSONArray(resultJsonFeed);
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    List<String> tags = new ArrayList<>();
+                    if (Storage.getString("Localization", "").equals("English"))
+                        Collections.addAll(tags, item.getString("videoTags").split(","));
+                    else if (Storage.getString("Localization", "").equals("Russian"))
+                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
+
+                    VideoMakeupDTO videoMakeupDTO = new VideoMakeupDTO(
+                            item.getLong("videoId"),
+                            item.getString("videoTitle"),
+                            item.getString("videoPreview"),
+                            item.getString("videoSource"),
+                            tags,
+                            item.getLong("videoLikes"),
+                            item.getString("videoUploadDate"));
+                    videoData.add(videoMakeupDTO);
+                }
                 if (adapter != null)
-                    adapter.setData(data);
+                    adapter.setData(data, videoData);
                 if (progressDialog != null)
                     progressDialog.dismiss();
 
-                FireAnal.sendString("1", "Open", "MakeupFeedLoader");
+                FireAnal.sendString("1", "Open", "MakeupFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

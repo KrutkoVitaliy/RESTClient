@@ -13,19 +13,21 @@ import java.util.List;
 
 import appcorp.mmb.R;
 import appcorp.mmb.dto.MakeupDTO;
+import appcorp.mmb.dto.VideoMakeupDTO;
 import appcorp.mmb.list_adapters.MakeupFeedListAdapter;
 
 public class MakeupFeedFragment extends AbstractTabFragment{
 
     private List<MakeupDTO> data;
+    private List<VideoMakeupDTO> videoData;
     private MakeupFeedListAdapter adapter;
 
-    public static MakeupFeedFragment getInstance(Context context, List<MakeupDTO> data) {
+    public static MakeupFeedFragment getInstance(Context context, List<MakeupDTO> data, List<VideoMakeupDTO> videoData) {
         Bundle args = new Bundle();
         MakeupFeedFragment fragment = new MakeupFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(data);
+        fragment.setData(data, videoData);
         return fragment;
     }
 
@@ -33,8 +35,9 @@ public class MakeupFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<MakeupDTO> data) {
+    public void setData(List<MakeupDTO> data, List<VideoMakeupDTO> videoData) {
         this.data = data;
+        this.videoData = videoData;
     }
 
     @Nullable
@@ -43,13 +46,13 @@ public class MakeupFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new MakeupFeedListAdapter(data, context);
+        adapter = new MakeupFeedListAdapter(data, videoData, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<MakeupDTO> data) {
-        adapter.setData(data);
+    public void refreshData(List<MakeupDTO> data, List<VideoMakeupDTO> videoData) {
+        adapter.setData(data, videoData);
         adapter.notifyDataSetChanged();
     }
 }

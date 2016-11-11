@@ -10,6 +10,7 @@
     <string name="toolbar_title_search">Поиск</string>
     <string name="toolbar_title_profile">Мой профиль</string>
     <string name="toolbar_title_favorites">Избранное</string>
+    <string name="toolbar_title_favorite_videos">Избранное видео</string>
     <string name="toolbar_title_options">Настройки</string>
     <string name="toolbar_title_support">Помощь</string>
 
@@ -65,6 +66,7 @@
     <string name="menu_item_user">Пользователь</string>
     <string name="menu_item_profile">Мой профиль</string>
     <string name="menu_item_favorites">Мои закладки</string>
+    <string name="menu_item_favorite_videos">Мои видео-закладки</string>
     <string name="menu_item_application">Приложение</string>
     <string name="menu_item_settings">Настройки</string>
     <string name="menu_item_help">Помощь</string>

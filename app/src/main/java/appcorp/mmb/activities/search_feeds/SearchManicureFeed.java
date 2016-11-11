@@ -37,6 +37,7 @@ import appcorp.mmb.activities.feeds.GlobalFeed;
 import appcorp.mmb.activities.feeds.HairstyleFeed;
 import appcorp.mmb.activities.feeds.MakeupFeed;
 import appcorp.mmb.activities.feeds.ManicureFeed;
+import appcorp.mmb.activities.user.FavoriteVideos;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.user.SignIn;
@@ -165,6 +166,12 @@ public class SearchManicureFeed extends AppCompatActivity {
                     case R.id.navMenuFavorites:
                         if (!Storage.getString("E-mail", "").equals(""))
                             startActivity(new Intent(getApplicationContext(), Favorites.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        break;
+                    case R.id.navMenuFavoriteVideos:
+                        if (!Storage.getString("E-mail", "").equals(""))
+                            startActivity(new Intent(getApplicationContext(), FavoriteVideos.class));
                         else
                             startActivity(new Intent(getApplicationContext(), SignIn.class));
                         break;
