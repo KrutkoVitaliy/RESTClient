@@ -198,16 +198,21 @@
             android:textSize="7pt" />
     </FrameLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#dddddd" />
     <LinearLayout
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:background="#F4F4F4"/>
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
         android:background="#dddddd" />
 <!--
     <com.google.android.gms.ads.AdView

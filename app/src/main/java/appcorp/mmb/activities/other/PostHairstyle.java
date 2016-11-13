@@ -39,24 +39,26 @@ import appcorp.mmb.network.GetRequest;
 
 public class PostHairstyle extends AppCompatActivity {
 
-    String imageUrl;
-    LinearLayout postHairstyleHashTags, postHairstyleImageViewer, postHairstyleCountImages, postHairstyleMoreContainer;
-    HorizontalScrollView postHairstyleImageViewerHorizontal;
-    ImageView postHairstyleAvatar, postHairstyleAddLike;
-    TextView postHairstyleTitle, postHairstyleAvailableDate, postHairstyleLikesCount;
+    private String imageUrl;
+    private LinearLayout postHairstyleHashTags, postHairstyleImageViewer, postHairstyleCountImages, postHairstyleMoreContainer;
+    private HorizontalScrollView postHairstyleImageViewerHorizontal;
+    private ImageView postHairstyleAvatar, postHairstyleAddLike;
+    private TextView postHairstyleTitle, postHairstyleAvailableDate, postHairstyleLikesCount;
     private List<Long> likes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_hairstyle);
+
         initViews();
-        Storage.init(getApplicationContext());
 
         imageUrl = getIntent().getStringExtra("hairstyleImageUrl");
         new LoadPost().execute();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+
+        FireAnal.sendString("Post hairstyle", "Open", "Activity");
     }
 
     public static String convertToString(Context context, int r) {

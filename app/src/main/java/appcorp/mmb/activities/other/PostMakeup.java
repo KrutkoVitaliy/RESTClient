@@ -39,24 +39,27 @@ import appcorp.mmb.classes.Storage;
 import appcorp.mmb.network.GetRequest;
 
 public class PostMakeup extends AppCompatActivity {
-    String imageUrl;
-    LinearLayout postMakeupHashTags, postMakeupImageViewer, postMakeupCountImages, postMakeupMoreContainer;
-    HorizontalScrollView postMakeupImageViewerHorizontal;
-    ImageView postMakeupAvatar, postMakeupAddLike;
-    TextView postMakeupTitle, postMakeupAvailableDate, postMakeupLikesCount;
+
+    private String imageUrl;
+    private LinearLayout postMakeupHashTags, postMakeupImageViewer, postMakeupCountImages, postMakeupMoreContainer;
+    private HorizontalScrollView postMakeupImageViewerHorizontal;
+    private ImageView postMakeupAvatar, postMakeupAddLike;
+    private TextView postMakeupTitle, postMakeupAvailableDate, postMakeupLikesCount;
     private List<Long> likes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_makeup);
+
         initViews();
-        Storage.init(getApplicationContext());
 
         imageUrl = getIntent().getStringExtra("makeupImageUrl");
         new LoadPost().execute();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+
+        FireAnal.sendString("Post makeup", "Open", "Activity");
     }
 
     public static String convertToString(Context context, int r) {

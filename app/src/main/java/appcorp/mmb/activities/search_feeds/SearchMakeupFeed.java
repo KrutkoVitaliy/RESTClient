@@ -61,10 +61,7 @@ public class SearchMakeupFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "SearchMakeupFeed");
+        FireAnal.sendString("Search makeup feed", "Open", "Activity");
 
         this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");

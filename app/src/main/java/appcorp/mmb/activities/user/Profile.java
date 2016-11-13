@@ -69,10 +69,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "Profile");
+        FireAnal.sendString("Profile", "Open", "Activity");
 
         initToolbar();
         initNavigationView();
@@ -90,10 +87,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         TextView textView = new TextView(context);
         textView.setText(r);
         return textView.getText().toString();
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     private void initViews() {

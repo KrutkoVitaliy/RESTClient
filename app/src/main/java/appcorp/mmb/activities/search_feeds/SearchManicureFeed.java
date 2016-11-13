@@ -61,10 +61,7 @@ public class SearchManicureFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manicure_feed);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "SearchManicureFeed");
+        FireAnal.sendString("Search manicure feed", "Open", "Activity");
 
         this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");

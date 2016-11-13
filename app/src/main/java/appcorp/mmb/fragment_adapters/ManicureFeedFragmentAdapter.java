@@ -19,13 +19,11 @@ public class ManicureFeedFragmentAdapter extends FragmentPagerAdapter {
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
     private List<ManicureDTO> data;
-    private List<VideoManicureDTO> videoData;
     private ManicureFeedFragment manicureFeedFragment;
 
-    public ManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
+    public ManicureFeedFragmentAdapter(Context context, FragmentManager fm, List<ManicureDTO> data) {
         super(fm);
         this.data = data;
-        this.videoData = videoData;
         this.context = context;
         initTabsMap(context);
     }
@@ -47,13 +45,12 @@ public class ManicureFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
-        manicureFeedFragment = ManicureFeedFragment.getInstance(context, data, videoData);
+        manicureFeedFragment = ManicureFeedFragment.getInstance(context, data);
         tabs.put(0, manicureFeedFragment);
     }
 
-    public void setData(List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
-        this.videoData = videoData;
-        manicureFeedFragment.refreshData(data, videoData);
+        manicureFeedFragment.refreshData(data);
     }
 }

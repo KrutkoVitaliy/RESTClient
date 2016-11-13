@@ -8,7 +8,6 @@ import android.webkit.WebView;
 
 import appcorp.mmb.R;
 import appcorp.mmb.classes.FireAnal;
-import appcorp.mmb.classes.Storage;
 
 public class FullscreenPreview extends Activity {
 
@@ -17,18 +16,14 @@ public class FullscreenPreview extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullscreen_preview);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "FullscreenView");
-
+        FireAnal.sendString("Fullscreen preview", "Open", "Activity");
 
         final WebView webView;
         webView = (WebView) findViewById(R.id.fullscreenView);
         webView.setBackgroundColor(Color.BLACK);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.setPadding(0,0,0,0);
+        webView.setPadding(0, 0, 0, 0);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.setScrollbarFadingEnabled(true);
@@ -37,15 +32,11 @@ public class FullscreenPreview extends Activity {
         webView.loadData("<html><body>" +
                 "<table width='100%' height='100%'>" +
                 "<tr>" +
-                "<td width='100%' height='100%' valign='middle'><img src='"+s+"' width='100%'/></td>" +
+                "<td width='100%' height='100%' valign='middle'><img src='" + s + "' width='100%'/></td>" +
                 "</tr>" +
                 "</table>" +
-                "</body></html>" ,"text/html",  "UTF-8");
+                "</body></html>", "text/html", "UTF-8");
 
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     @Override

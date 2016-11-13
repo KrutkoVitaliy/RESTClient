@@ -19,13 +19,11 @@ public class MakeupFeedFragmentAdapter extends FragmentPagerAdapter {
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
     private List<MakeupDTO> data;
-    private List<VideoMakeupDTO> videoData;
     private MakeupFeedFragment makeupFeedFragment;
 
-    public MakeupFeedFragmentAdapter(Context context, FragmentManager fm, List<MakeupDTO> data, List<VideoMakeupDTO> videoData) {
+    public MakeupFeedFragmentAdapter(Context context, FragmentManager fm, List<MakeupDTO> data) {
         super(fm);
         this.data = data;
-        this.videoData = videoData;
         this.context = context;
         initTabsMap(context);
     }
@@ -47,13 +45,12 @@ public class MakeupFeedFragmentAdapter extends FragmentPagerAdapter {
 
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
-        makeupFeedFragment = MakeupFeedFragment.getInstance(context, data, videoData);
+        makeupFeedFragment = MakeupFeedFragment.getInstance(context, data);
         tabs.put(0, makeupFeedFragment);
     }
 
-    public void setData(List<MakeupDTO> data, List<VideoMakeupDTO> videoData) {
+    public void setData(List<MakeupDTO> data) {
         this.data = data;
-        this.videoData = videoData;
-        makeupFeedFragment.refreshData(data, videoData);
+        makeupFeedFragment.refreshData(data);
     }
 }

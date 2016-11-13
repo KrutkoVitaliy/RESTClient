@@ -42,6 +42,8 @@ import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.GlobalDTO;
+import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragment_adapters.ManicureFeedFragmentAdapter;
@@ -52,19 +54,12 @@ public class ManicureFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ManicureFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
-    private List<ManicureDTO> data = new ArrayList<>();
-    private List<VideoManicureDTO> videoData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manicure_feed);
-
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "ManicureFeed");
 
         initToolbar();
         initNavigationView();
@@ -75,17 +70,13 @@ public class ManicureFeed extends AppCompatActivity {
         progressDialog.show();
 
         new ManicureFeedLoader(1).execute();
-        new VideoManicureFeedLoader(1).execute();
+        FireAnal.sendString("Manicure feed", "Open", "Feeds");
     }
 
     public static String convertToString(Context context, int r) {
         TextView textView = new TextView(context);
         textView.setText(r);
         return textView.getText().toString();
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     private void initToolbar() {
@@ -186,186 +177,134 @@ public class ManicureFeed extends AppCompatActivity {
 
     private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.manicureViewPager);
-        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>(), new ArrayList<VideoManicureDTO>());
+        adapter = new ManicureFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<ManicureDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    public class ManicureFeedLoader extends AsyncTask<Void, Void, String> {
+    public class ManicureFeedLoader extends AsyncTask<Void, Void, List<JSONArray>> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
-        private String resultJsonFeed = "";
         private int position;
+        private List<JSONArray> dataArrays = new ArrayList<>();
 
         ManicureFeedLoader(int position) {
             this.position = position;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<JSONArray> doInBackground(Void... params) {
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return resultJsonFeed;
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return dataArrays;
         }
 
         @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
+        protected void onPostExecute(List<JSONArray> dataArrays) {
+            super.onPostExecute(dataArrays);
 
-            long id, likes;
-            String availableDate, colors, shape, design, tags = "", authorPhoto, authorName;
+            List<JSONObject> items = new ArrayList<>();
+            List<ManicureDTO> exportData = new ArrayList<>();
 
             try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
+                for (int i = 0; i < Math.max(dataArrays.get(0).length(), dataArrays.get(1).length()); i++) {
+                    if (dataArrays.get(0).getJSONObject(i) != null)
+                        items.add(dataArrays.get(0).getJSONObject(i));
+                    if (dataArrays.get(1).getJSONObject(i) != null)
+                        items.add(dataArrays.get(1).getJSONObject(i));
+                }
+                for (int i = 0; i < items.size(); i++) {
                     List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
+                    if (!items.get(i).has("videoSource")) {
+                        for (int j = 0; j < 10; j++)
+                            if (!items.get(i).getString("screen" + j).equals("empty.jpg"))
+                                images.add(items.get(i).getString("screen" + j));
 
-                    id = item.getLong("id");
-                    authorPhoto = item.getString("authorPhoto");
-                    authorName = item.getString("authorName");
-                    availableDate = item.getString("uploadDate");
-                    if (Storage.getString("Localization", "").equals("English"))
-                        tags = item.getString("tags");
-                    else if (Storage.getString("Localization", "").equals("Russian"))
-                        tags = item.getString("tagsRu");
-                    shape = item.getString("shape");
-                    design = item.getString("design");
-                    colors = item.getString("colors");
-                    likes = item.getLong("likes");
+                        List<String> tags = new ArrayList<>();
+                        if (Storage.getString("Localization", "").equals("English")) {
+                            Collections.addAll(tags, items.get(i).getString("tags").split(","));
+                        } else if (Storage.getString("Localization", "").equals("Russian")) {
+                            Collections.addAll(tags, items.get(i).getString("tagsRu").split(","));
+                        }
 
-                    String[] tempTags = tags.split(",");
-                    Collections.addAll(hashTags, tempTags);
-
-                    ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
-                    data.add(manicureDTO);
-                }
-                if (progressDialog != null)
-                    progressDialog.dismiss();
-
-                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public class VideoManicureFeedLoader extends AsyncTask<Void, Void, String> {
-
-        private HttpURLConnection urlFeedConnection = null;
-        private BufferedReader reader = null;
-        private String resultJsonFeed = "";
-        private int position;
-
-        VideoManicureFeedLoader(int position) {
-            this.position = position;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                        ManicureDTO post = new ManicureDTO(
+                                items.get(i).getLong("id"),
+                                "content",
+                                items.get(i).getString("uploadDate"),
+                                items.get(i).getString("authorName"),
+                                items.get(i).getString("authorPhoto"),
+                                items.get(i).getString("shape"),
+                                items.get(i).getString("design"),
+                                images,
+                                items.get(i).getString("colors"),
+                                tags,
+                                items.get(i).getLong("likes"),
+                                0,
+                                "",
+                                "",
+                                "",
+                                "",
+                                0,
+                                "");
+                        exportData.add(post);
+                    }
+                    if (!items.get(i).has("id")) {
+                        ManicureDTO post = new ManicureDTO(
+                                0,
+                                "video",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                new ArrayList<String>(),
+                                "",
+                                new ArrayList<String>(),
+                                0,
+                                items.get(i).getLong("videoId"),
+                                items.get(i).getString("videoTitle"),
+                                items.get(i).getString("videoPreview"),
+                                items.get(i).getString("videoSource"),
+                                items.get(i).getString("videoTags"),
+                                items.get(i).getLong("videoLikes"),
+                                items.get(i).getString("videoUploadDate"));
+                        exportData.add(post);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-
-                    List<String> tags = new ArrayList<>();
-                    if (Storage.getString("Localization", "").equals("English"))
-                        Collections.addAll(tags, item.getString("videoTags").split(","));
-                    else if (Storage.getString("Localization", "").equals("Russian"))
-                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
-
-                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
-                            item.getLong("videoId"),
-                            item.getString("videoTitle"),
-                            item.getString("videoPreview"),
-                            item.getString("videoSource"),
-                            tags,
-                            item.getLong("videoLikes"),
-                            item.getString("videoUploadDate"));
-                    videoData.add(videoManicureDTO);
-                }
+                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
                 if (adapter != null)
-                    adapter.setData(data, videoData);
+                    adapter.setData(exportData);
                 if (progressDialog != null)
                     progressDialog.dismiss();
-
-                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -56,10 +56,7 @@ public class Favorites extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "Favorites");
+        FireAnal.sendString("Favorites", "Open", "Activity");
 
         initToolbar();
         initNavigationView();

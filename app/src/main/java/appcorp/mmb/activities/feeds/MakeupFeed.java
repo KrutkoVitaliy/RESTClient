@@ -42,6 +42,8 @@ import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.GlobalDTO;
+import appcorp.mmb.dto.HairstyleDTO;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.dto.VideoMakeupDTO;
 import appcorp.mmb.dto.VideoManicureDTO;
@@ -53,18 +55,11 @@ public class MakeupFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private MakeupFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
-    private List<MakeupDTO> data = new ArrayList<>();
-    private List<VideoMakeupDTO> videoData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_makeup_feed);
-
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "MakeupFeed");
 
         initToolbar();
         initNavigationView();
@@ -75,17 +70,13 @@ public class MakeupFeed extends AppCompatActivity {
         progressDialog.show();
 
         new MakeupFeedLoader(1).execute();
-        new VideoMakeupFeedLoader(1).execute();
+        FireAnal.sendString("Makeup feed", "Open", "Feeds");
     }
 
     public static String convertToString(Context context, int r) {
         TextView textView = new TextView(context);
         textView.setText(r);
         return textView.getText().toString();
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     private void initToolbar() {
@@ -186,186 +177,136 @@ public class MakeupFeed extends AppCompatActivity {
 
     private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.makeupViewPager);
-        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>(), new ArrayList<VideoMakeupDTO>());
+        adapter = new MakeupFeedFragmentAdapter(getApplicationContext(), getSupportFragmentManager(), new ArrayList<MakeupDTO>());
         viewPager.setAdapter(adapter);
     }
 
-    private class MakeupFeedLoader extends AsyncTask<Void, Void, String> {
+    private class MakeupFeedLoader extends AsyncTask<Void, Void, List<JSONArray>> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
-        private String resultJsonFeed = "";
         private int position;
+        private List<JSONArray> dataArrays = new ArrayList<>();
 
         MakeupFeedLoader(int position) {
             this.position = position;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<JSONArray> doInBackground(Void... params) {
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/makeup" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return resultJsonFeed;
+            try {
+                URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return dataArrays;
         }
 
         @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
+        protected void onPostExecute(List<JSONArray> dataArrays) {
+            super.onPostExecute(dataArrays);
+
+            List<JSONObject> items = new ArrayList<>();
+            List<MakeupDTO> exportData = new ArrayList<>();
 
             try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
+                for (int i = 0; i < Math.max(dataArrays.get(0).length(), dataArrays.get(1).length()); i++) {
+                    if (dataArrays.get(0).getJSONObject(i) != null)
+                        items.add(dataArrays.get(0).getJSONObject(i));
+                    if (dataArrays.get(1).getJSONObject(i) != null)
+                        items.add(dataArrays.get(1).getJSONObject(i));
+                }
+                for (int i = 0; i < items.size(); i++) {
                     List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
+                    if (!items.get(i).has("videoSource")) {
+                        for (int j = 0; j < 10; j++)
+                            if (!items.get(i).getString("screen" + j).equals("empty.jpg"))
+                                images.add(items.get(i).getString("screen" + j));
 
-                    String[] tempTags;
-                    if (Storage.getString("Localization", "").equals("English")) {
-                        tempTags = item.getString("tags").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    } else if (Storage.getString("Localization", "").equals("Russian")) {
-                        tempTags = item.getString("tagsRu").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    }
+                        List<String> tags = new ArrayList<>();
+                        if (Storage.getString("Localization", "").equals("English")) {
+                            Collections.addAll(tags, items.get(i).getString("tags").split(","));
+                        } else if (Storage.getString("Localization", "").equals("Russian")) {
+                            Collections.addAll(tags, items.get(i).getString("tagsRu").split(","));
+                        }
 
-                    if (item.getString("published").equals("t") && !images.isEmpty()) {
-                        MakeupDTO makeupDTO = new MakeupDTO(
-                                item.getLong("id"),
-                                item.getString("uploadDate"),
-                                item.getString("authorName"),
-                                item.getString("authorPhoto"),
+                        MakeupDTO post = new MakeupDTO(
+                                items.get(i).getLong("id"),
+                                "content",
+                                items.get(i).getString("uploadDate"),
+                                items.get(i).getString("authorName"),
+                                items.get(i).getString("authorPhoto"),
                                 images,
-                                item.getString("colors"),
-                                item.getString("eyeColor"),
-                                item.getString("occasion"),
-                                item.getString("difficult"),
-                                hashTags,
-                                item.getLong("likes"));
-                        data.add(makeupDTO);
+                                items.get(i).getString("colors"),
+                                items.get(i).getString("eyeColor"),
+                                items.get(i).getString("occasion"),
+                                items.get(i).getString("difficult"),
+                                tags,
+                                items.get(i).getLong("likes"),
+                                0,
+                                "",
+                                "",
+                                "",
+                                "",
+                                0,
+                                "");
+                        exportData.add(post);
+                    }
+                    if (!items.get(i).has("id")) {
+                        MakeupDTO post = new MakeupDTO(
+                                0,
+                                "video",
+                                "",
+                                "",
+                                "",
+                                new ArrayList<String>(),
+                                "",
+                                "",
+                                "",
+                                "",
+                                new ArrayList<String>(),
+                                0,
+                                items.get(i).getLong("videoId"),
+                                items.get(i).getString("videoTitle"),
+                                items.get(i).getString("videoPreview"),
+                                items.get(i).getString("videoSource"),
+                                items.get(i).getString("videoTags"),
+                                items.get(i).getLong("videoLikes"),
+                                items.get(i).getString("videoUploadDate"));
+                        exportData.add(post);
                     }
                 }
                 FireAnal.sendString("1", "Open", "MakeupFeedLoader");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public class VideoMakeupFeedLoader extends AsyncTask<Void, Void, String> {
-
-        private HttpURLConnection urlFeedConnection = null;
-        private BufferedReader reader = null;
-        private String resultJsonFeed = "";
-        private int position;
-
-        VideoMakeupFeedLoader(int position) {
-            this.position = position;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/videoMakeup" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-
-                    List<String> tags = new ArrayList<>();
-                    if (Storage.getString("Localization", "").equals("English"))
-                        Collections.addAll(tags, item.getString("videoTags").split(","));
-                    else if (Storage.getString("Localization", "").equals("Russian"))
-                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
-
-                    VideoMakeupDTO videoMakeupDTO = new VideoMakeupDTO(
-                            item.getLong("videoId"),
-                            item.getString("videoTitle"),
-                            item.getString("videoPreview"),
-                            item.getString("videoSource"),
-                            tags,
-                            item.getLong("videoLikes"),
-                            item.getString("videoUploadDate"));
-                    videoData.add(videoMakeupDTO);
-                }
                 if (adapter != null)
-                    adapter.setData(data, videoData);
+                    adapter.setData(exportData);
                 if (progressDialog != null)
                     progressDialog.dismiss();
-
-                FireAnal.sendString("1", "Open", "MakeupFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

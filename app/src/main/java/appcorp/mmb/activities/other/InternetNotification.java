@@ -16,18 +16,15 @@ import appcorp.mmb.classes.Storage;
 
 public class InternetNotification extends AppCompatActivity {
 
-    TextView checkLogoText;
-    Button reconnect;
+    private TextView checkLogoText;
+    private Button reconnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internet_notification);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "InternetNotification");
+        FireAnal.sendString("Internet notification", "Open", "Activity");
 
         checkLogoText = (TextView) findViewById(R.id.checkLogoText);
         checkLogoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Galada.ttf"));
@@ -40,9 +37,5 @@ public class InternetNotification extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), GlobalFeed.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
         });
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 }

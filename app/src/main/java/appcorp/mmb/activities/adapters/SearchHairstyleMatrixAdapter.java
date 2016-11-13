@@ -21,7 +21,6 @@ public class SearchHairstyleMatrixAdapter extends BaseAdapter {
     private ArrayList<String> thumbs = new ArrayList<>();
 
     public SearchHairstyleMatrixAdapter(Context context){
-        Storage.init(context);
         this.context = context;
     }
 

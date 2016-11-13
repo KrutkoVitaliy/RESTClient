@@ -60,10 +60,7 @@ public class SearchHairstyleFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hairstyle_feed);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "SearchHairstyleFeed");
+        FireAnal.sendString("Search hairstyle feed", "Open", "Activity");
 
         request = getIntent().getStringExtra("Request");
         hairstyleLength = getIntent().getStringExtra("HairstyleLength");

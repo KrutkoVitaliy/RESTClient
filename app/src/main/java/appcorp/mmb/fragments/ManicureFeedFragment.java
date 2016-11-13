@@ -19,15 +19,14 @@ import appcorp.mmb.list_adapters.ManicureFeedListAdapter;
 public class ManicureFeedFragment extends AbstractTabFragment{
 
     private List<ManicureDTO> data;
-    private List<VideoManicureDTO> videoData;
     private ManicureFeedListAdapter adapter;
 
-    public static ManicureFeedFragment getInstance(Context context, List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
+    public static ManicureFeedFragment getInstance(Context context, List<ManicureDTO> data) {
         Bundle args = new Bundle();
         ManicureFeedFragment fragment = new ManicureFeedFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setData(data, videoData);
+        fragment.setData(data);
         return fragment;
     }
 
@@ -35,9 +34,8 @@ public class ManicureFeedFragment extends AbstractTabFragment{
         this.context = context;
     }
 
-    public void setData(List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
-        this.videoData = videoData;
     }
 
     @Nullable
@@ -46,13 +44,13 @@ public class ManicureFeedFragment extends AbstractTabFragment{
         view = inflater.inflate(R.layout.fragment_weekly, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new ManicureFeedListAdapter(data, videoData, context);
+        adapter = new ManicureFeedListAdapter(data, context);
         rv.setAdapter(adapter);
         return view;
     }
 
-    public void refreshData(List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
-        adapter.setData(data, videoData);
+    public void refreshData(List<ManicureDTO> data) {
+        adapter.setData(data);
         adapter.notifyDataSetChanged();
     }
 }

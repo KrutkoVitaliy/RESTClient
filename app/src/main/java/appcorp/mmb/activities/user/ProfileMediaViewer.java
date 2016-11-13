@@ -16,10 +16,7 @@ public class ProfileMediaViewer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_media_viewer);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "ProfileMediaViewer");
+        FireAnal.sendString("Profile media viewer", "Open", "Activity");
 
         WebView webView = (WebView) findViewById(R.id.webViewProfile);
         webView.setWebViewClient(new WebViewClient());

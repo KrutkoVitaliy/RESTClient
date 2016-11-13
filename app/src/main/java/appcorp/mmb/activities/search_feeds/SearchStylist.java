@@ -52,10 +52,7 @@ public class SearchStylist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_stylist);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "SearchStylist");
+        FireAnal.sendString("Search stylist", "Open", "Activity");
 
         initToolbar();
         initNavigationView();

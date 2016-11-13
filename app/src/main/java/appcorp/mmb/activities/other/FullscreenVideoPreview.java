@@ -13,7 +13,7 @@ import appcorp.mmb.classes.Storage;
 
 public class FullscreenVideoPreview extends Activity {
 
-    VideoView videoView;
+    private VideoView videoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class FullscreenVideoPreview extends Activity {
         Storage.init(getApplicationContext());
         initFirebase();
 
-        FireAnal.sendString("1", "Open", "FullscreenVideoView");
+        FireAnal.sendString("Fullscreen video preview", "Open", "Activity");
 
         videoView.setMinimumWidth(Storage.getInt("Width", 480));
         videoView.setMinimumHeight(Storage.getInt("Width", 480));

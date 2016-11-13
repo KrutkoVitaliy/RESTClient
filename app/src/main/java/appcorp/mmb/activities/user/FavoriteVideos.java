@@ -59,10 +59,7 @@ public class FavoriteVideos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_videos);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "FavoriteVideos");
+        FireAnal.sendString("Favorite videos", "Open", "Activity");
 
         initToolbar();
         initNavigationView();

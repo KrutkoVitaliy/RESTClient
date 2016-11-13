@@ -60,10 +60,7 @@ public class EditMyProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_profile);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "EditProfile");
+        FireAnal.sendString("Edit profile", "Open", "Activity");
 
         loadProgressDialog = new ProgressDialog(this);
         loadProgressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
@@ -85,10 +82,6 @@ public class EditMyProfile extends AppCompatActivity {
                 startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
             }
         });
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

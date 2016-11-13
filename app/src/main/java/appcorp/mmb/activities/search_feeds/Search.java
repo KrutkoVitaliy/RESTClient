@@ -41,8 +41,7 @@ public class Search extends AppCompatActivity {
     private String category = "";
     private EditText requestField;
     private Spinner hairstyleLength, hairstyleType, hairstyleFor;
-    private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle,
-            eyeGrayCircle, eyeBlackCircle;
+    private ImageView eyeBlueCircle, eyeGreenCircle, eyeHazelCircle, eyeBrownCircle, eyeGrayCircle, eyeBlackCircle;
     private LinearLayout easyDifficult, mediumDifficult, hardDifficult;
     private Spinner occasion, shape, design;
     private ArrayList<String> colors = new ArrayList<>();
@@ -56,10 +55,7 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "Search");
+        FireAnal.sendString("Search", "Open", "Activity");
 
         initToolbar();
         initNavigationView();

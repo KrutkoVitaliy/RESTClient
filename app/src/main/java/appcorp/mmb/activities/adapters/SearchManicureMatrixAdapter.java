@@ -21,7 +21,6 @@ public class SearchManicureMatrixAdapter extends BaseAdapter {
     private ArrayList<String> thumbs = new ArrayList<>();
 
     public SearchManicureMatrixAdapter(Context context) {
-        Storage.init(context);
         this.context = context;
     }
 

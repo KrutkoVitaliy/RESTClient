@@ -21,7 +21,6 @@ public class SearchMakeupMatrixAdapter extends BaseAdapter {
     private ArrayList<String> thumbs = new ArrayList<>();
 
     public SearchMakeupMatrixAdapter(Context context){
-        Storage.init(context);
         this.context = context;
     }
 

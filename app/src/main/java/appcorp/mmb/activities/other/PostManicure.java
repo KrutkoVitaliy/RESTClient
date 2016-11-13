@@ -36,24 +36,26 @@ import appcorp.mmb.network.GetRequest;
 
 public class PostManicure extends AppCompatActivity {
 
-    String imageUrl;
-    LinearLayout postManicureHashTags, postManicureImageViewer, postManicureCountImages, postManicureColorSet;
-    HorizontalScrollView postManicureImageViewerHorizontal;
-    ImageView postManicureAvatar, postManicureAddLike;
-    TextView postManicureTitle, postManicureAvailableDate, postManicureLikesCount, postManicureShape, postManicureDesign, postManicureColors;
+    private String imageUrl;
+    private LinearLayout postManicureHashTags, postManicureImageViewer, postManicureCountImages, postManicureColorSet;
+    private HorizontalScrollView postManicureImageViewerHorizontal;
+    private ImageView postManicureAvatar, postManicureAddLike;
+    private TextView postManicureTitle, postManicureAvailableDate, postManicureLikesCount, postManicureShape, postManicureDesign, postManicureColors;
     private List<Long> likes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_manicure);
+
         initViews();
-        Storage.init(getApplicationContext());
 
         imageUrl = getIntent().getStringExtra("manicureImageUrl");
         new LoadPost().execute();
         if (!Storage.getString("Name", "Make Me Beauty").equals("Make Me Beauty"))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
+
+        FireAnal.sendString("Post manicure", "Open", "Activity");
     }
 
     private void initViews() {

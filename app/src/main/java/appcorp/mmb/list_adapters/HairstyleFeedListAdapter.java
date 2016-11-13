@@ -54,7 +54,6 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         this.context = context;
 
         Storage.init(context);
-        initFirebase();
 
         if (!Storage.getString("E-mail", "").equals(""))
             new CheckLikes(Storage.getString("E-mail", "")).execute();
@@ -64,10 +63,6 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         TextView textView = new TextView(context);
         textView.setText(r);
         return textView.getText().toString();
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(context);
     }
 
     @Override
@@ -410,95 +405,89 @@ public class HairstyleFeedListAdapter extends RecyclerView.Adapter<HairstyleFeed
         }
     }
 
-    private class Load extends AsyncTask<Void, Void, String> {
+    public class Load extends AsyncTask<Void, Void, List<JSONArray>> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
-        private String resultJsonFeed = "";
         private int position;
+        private List<JSONArray> dataArrays = new ArrayList<>();
 
         Load(int position) {
             this.position = position;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<JSONArray> doInBackground(Void... params) {
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuffer buffer;
-                    buffer = new StringBuffer();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
-                    }
-                }
+                URL feedURL = new URL("http://195.88.209.17/app/static/hairstyle" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer buffer;
+                buffer = new StringBuffer();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return resultJsonFeed;
+            return dataArrays;
         }
 
         @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
+        protected void onPostExecute(List<JSONArray> dataArrays) {
+            super.onPostExecute(dataArrays);
+
+            List<JSONObject> items = new ArrayList<>();
+            List<HairstyleDTO> exportData = new ArrayList<>();
 
             try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
+                for (int i = 0; i < dataArrays.get(0).length(); i++) {
+                    if (dataArrays.get(0).getJSONObject(i) != null)
+                        items.add(dataArrays.get(0).getJSONObject(i));
+                }
+                for (int i = 0; i < items.size(); i++) {
                     List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
 
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
+                    if (!items.get(i).has("videoSource")) {
+                        for (int j = 0; j < 10; j++)
+                            if (!items.get(i).getString("screen" + j).equals("empty.jpg"))
+                                images.add(items.get(i).getString("screen" + j));
 
-                    String[] tempTags;
-                    if (Storage.getString("Localization", "").equals("English")) {
-                        tempTags = item.getString("tags").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    } else if (Storage.getString("Localization", "").equals("Russian")) {
-                        tempTags = item.getString("tagsRu").split(",");
-                        Collections.addAll(hashTags, tempTags);
-                    }
+                        List<String> tags = new ArrayList<>();
+                        if (Storage.getString("Localization", "").equals("English")) {
+                            Collections.addAll(tags, items.get(i).getString("tags").split(","));
+                        } else if (Storage.getString("Localization", "").equals("Russian")) {
+                            Collections.addAll(tags, items.get(i).getString("tagsRu").split(","));
+                        }
 
-                    if (item.getString("published").equals("t")) {
-                        HairstyleDTO hairstyleDTO = new HairstyleDTO(
-                                item.getLong("id"),
-                                item.getString("uploadDate"),
-                                item.getString("authorName"),
-                                item.getString("authorPhoto"),
-                                item.getString("hairstyleType"),
+                        HairstyleDTO post = new HairstyleDTO(
+                                items.get(i).getLong("id"),
+                                "content",
+                                items.get(i).getString("uploadDate"),
+                                items.get(i).getString("authorName"),
+                                items.get(i).getString("authorPhoto"),
+                                items.get(i).getString("hairstyleType"),
                                 images,
-                                hashTags,
-                                item.getLong("likes"),
-                                item.getString("length"),
-                                item.getString("type"),
-                                item.getString("for"));
-                        data.add(hairstyleDTO);
+                                tags,
+                                items.get(i).getLong("likes"),
+                                items.get(i).getString("length"),
+                                items.get(i).getString("type"),
+                                items.get(i).getString("for"),
+                                0,
+                                "",
+                                "",
+                                "",
+                                "",
+                                0,
+                                "");
+                        exportData.add(post);
                     }
                 }
+
                 FireAnal.sendString("1", "Open", "HairstyleFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();

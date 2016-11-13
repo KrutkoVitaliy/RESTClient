@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -88,16 +89,15 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
         return new TapeViewHolder(view);
     }
 
-    String preUrl = "";
-
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        if (position % 8 == 0 && position != 0) {
-            holder.postHeader.removeAllViews();
+        if (position % 10 == 0 && position != 0) {
+            /*holder.postHeader.removeAllViews();
             holder.postFooter.removeAllViews();
             holder.postTagsFrame.removeAllViews();
             holder.imageViewer.removeAllViews();
-            holder.hashTags.removeAllViews();
+            holder.hashTags.removeAllViews();*/
+            holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
             nativeExpressAdView.setAdUnitId("ca-app-pub-4151792091524133/1939808891");
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
@@ -114,15 +114,9 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                 String[] date = post.getAvailableDate().split("");
                 holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
                 Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").resize(100, 100).centerCrop().into(holder.user_avatar);
-
                 final VideoView videoView = new VideoView(context);
                 videoView.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
-                if (post.getVideoTags().equals("videomanicure")) {
-                    preUrl = "http://195.88.209.17/storage/videos/";
-                } else if (post.getVideoTags().equals("videomakeup")) {
-                    preUrl = "http://195.88.209.17/storage/videos/makeup/";
-                }
-                videoView.setVideoURI(Uri.parse(preUrl + post.getVideoSource()));
+                videoView.setVideoURI(Uri.parse("http://195.88.209.17/storage/videos/" + post.getVideoSource()));
                 videoView.setBackgroundColor(Color.parseColor("#336699FF"));
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
@@ -177,30 +171,6 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
                         new CheckVideoLikes(Storage.getString("E-mail", "")).execute();
                     }
                 });
-
-                /*holder.showMore.setVisibility(View.INVISIBLE);
-
-                for (int i = 0; i < post.getVideoTags().size(); i++) {
-                    TextView hashTag = new TextView(context);
-                    hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-                    hashTag.setTextSize(16);
-                    final int finalI = i;
-                    hashTag.setText("#" + post.getVideoTags().get(i).replace(" ", "") + " ");
-                    hashTag.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                        *//*context.startActivity(new Intent(context, SearchManicureVideoMatrix.class)
-                        .putExtra("Request", post.getTags().get(finalI).trim())
-                                .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
-                                .putExtra("Shape", "" + "0")
-                                .putExtra("Design", "" + "0")
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        FireAnal.sendString("2", "ManicureFeedTag", post.getTags().get(finalI));*//*
-                        }
-                    });
-                    holder.hashTags.addView(hashTag);
-                }
-                Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").into(holder.user_avatar);*/
             } else {
                 holder.imageViewer.removeAllViews();
                 holder.hashTags.removeAllViews();

@@ -43,6 +43,7 @@ import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Storage;
+import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.sharing.vkontakte.GetToken;
 import appcorp.mmb.dto.ManicureDTO;
 import appcorp.mmb.dto.VideoManicureDTO;
@@ -52,14 +53,12 @@ import appcorp.mmb.sharing.vkontakte.WallPost;
 public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedListAdapter.TapeViewHolder> {
 
     private List<ManicureDTO> data;
-    private List<VideoManicureDTO> videoData;
     private List<Long> likes = new ArrayList<>();
     private List<Long> videoLikes = new ArrayList<>();
     private Context context;
 
-    public ManicureFeedListAdapter(List<ManicureDTO> data, List<VideoManicureDTO> videoData, Context context) {
+    public ManicureFeedListAdapter(List<ManicureDTO> data, Context context) {
         this.data = data;
-        this.videoData = videoData;
         this.context = context;
 
         Storage.init(context);
@@ -89,155 +88,144 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
     @Override
     public void onBindViewHolder(final TapeViewHolder holder, int position) {
-        if (position % 8 == 0 && position != 0) {
+        if (position % 10 == 0 && position != 0) {
+            /*holder.postHeader.removeAllViews();
+            holder.postFooter.removeAllViews();
+            holder.postTagsFrame.removeAllViews();
+            holder.imageViewer.removeAllViews();
+            holder.hashTags.removeAllViews();*/
             holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
-            nativeExpressAdView.setAdUnitId("ca-app-pub-4982253629578691/5250720366");
+            nativeExpressAdView.setAdUnitId("ca-app-pub-4151792091524133/1939808891");
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
             nativeExpressAdView.loadAd(new AdRequest.Builder().build());
             holder.post.addView(nativeExpressAdView);
-        } else if (position % 3 == 0 && position / 3 < videoData.size()) {
-            final VideoManicureDTO video = videoData.get(position / 3);
-            final VideoView videoView = new VideoView(context);
-            videoView.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
-            videoView.setVideoURI(Uri.parse("http://195.88.209.17/storage/videos/" + video.getSource()));
-            videoView.setBackgroundColor(Color.parseColor("#336699FF"));
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    videoView.setBackgroundColor(Color.parseColor("#33669900"));
-                    videoView.start();
-                }
-            });
-            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    videoView.start();
-                }
-            });
 
-            videoView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if(videoView.isPlaying()){
-                        videoView.pause();
-                    } else {
+            holder.post.setMinimumWidth(Storage.getInt("Width", 480));
+            holder.post.setMinimumHeight(Storage.getInt("Width", 480));
+        } else {
+            final ManicureDTO post = data.get(position);
+
+            if (post.getDataType().equals("video")) {
+                holder.title.setText(post.getAuthorName());
+                String[] date = post.getAvailableDate().split("");
+                holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+                Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").resize(100, 100).centerCrop().into(holder.user_avatar);
+                final VideoView videoView = new VideoView(context);
+                videoView.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
+                videoView.setVideoURI(Uri.parse("http://195.88.209.17/storage/videos/" + post.getVideoSource()));
+                videoView.setBackgroundColor(Color.parseColor("#336699FF"));
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        videoView.setBackgroundColor(Color.parseColor("#33669900"));
                         videoView.start();
                     }
-                    return false;
-                }
-            });
-            holder.showMore.setVisibility(View.INVISIBLE);
-            holder.hashTags.setVisibility(View.INVISIBLE);
-            holder.imageViewer.addView(videoView);
-
-            holder.title.setText(video.getTitle());
-            String[] dateVideo = String.valueOf(video.getAvailableDate()).split("");
-            holder.availableDate.setText(dateVideo[1] + dateVideo[2] + "-" + dateVideo[3] + dateVideo[4] + "-" + dateVideo[5] + dateVideo[6] + " " + dateVideo[7] + dateVideo[8] + ":" + dateVideo[9] + dateVideo[10]);
-
-            holder.hashTags.removeAllViews();
-            for (int i = 0; i < video.getTags().size(); i++) {
-                TextView hashTag = new TextView(context);
-                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-                hashTag.setTextSize(16);
-                final int finalI = i;
-                hashTag.setText("#" + video.getTags().get(i).replace(" ", "") + " ");
-                hashTag.setOnClickListener(new View.OnClickListener() {
+                });
+                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
-                    public void onClick(View view) {
-                        /*context.startActivity(new Intent(context, SearchManicureVideoMatrix.class)
-                                .putExtra("Request", video.getTags().get(finalI).trim())
-                                .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
-                                .putExtra("Shape", "" + "0")
-                                .putExtra("Design", "" + "0")
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        FireAnal.sendString("2", "ManicureFeedTag", video.getTags().get(finalI));*/
+                    public void onCompletion(MediaPlayer mp) {
+                        videoView.start();
                     }
                 });
-                holder.hashTags.addView(hashTag);
-                holder.likesCount.setText(String.valueOf(video.getLikes()));
+                videoView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (videoView.isPlaying()) {
+                            videoView.pause();
+                        } else {
+                            videoView.start();
+                        }
+                        return false;
+                    }
+                });
+                holder.showMore.setVisibility(View.INVISIBLE);
+                holder.postFrame.removeView(holder.hashTags);
+                holder.hashTags.removeAllViews();
+                holder.imageViewer.removeAllViews();
+                holder.imageViewer.addView(videoView);
+
+                holder.likesCount.setText(String.valueOf(post.getVideoLikes()));
                 holder.addLike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (!Storage.getString("E-mail", "").equals("")) {
-                            if (!videoLikes.contains(video.getId())) {
+                            if (!videoLikes.contains(post.getVideoId())) {
                                 holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                                videoLikes.add(video.getId());
-                                holder.likesCount.setText(String.valueOf(video.getLikes() + 1));
-                                new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + video.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                            } else if (videoLikes.contains(video.getId())) {
+                                videoLikes.add(post.getVideoId());
+                                holder.likesCount.setText(String.valueOf(post.getVideoLikes() + 1));
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + post.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            } else if (videoLikes.contains(post.getVideoId())) {
                                 holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                                videoLikes.remove(video.getId());
+                                videoLikes.remove(post.getVideoId());
                                 holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
-                                new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + video.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + post.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
                             }
                         } else {
                             context.startActivity(new Intent(context, SignIn.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
-                        new CheckLikes(Storage.getString("E-mail", "")).execute();
                         new CheckVideoLikes(Storage.getString("E-mail", "")).execute();
                     }
                 });
             }
-            Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").into(holder.user_avatar);
-        } else {
-            final ManicureDTO item = data.get(position);
+            if (post.getDataType().equals("content")) {
+                final ManicureDTO item = data.get(position);
 
-            if (position == data.size() - data.size()/10) {
-                if (data.size() - 1 % 100 != 8)
-                    new Load(data.size() / 100 + 1).execute();
-            }
+                if (position == data.size() - data.size() / 10) {
+                    if (data.size() - 1 % 100 != 8)
+                        new Load(data.size() / 100 + 1).execute();
+                }
 
-            final String SHOW = convertToString(R.string.show_more_container);
-            final String HIDE = convertToString(R.string.hide_more_container);
+                final String SHOW = convertToString(R.string.show_more_container);
+                final String HIDE = convertToString(R.string.hide_more_container);
 
-            holder.title.setText(item.getAuthorName());
-            String[] date = item.getAvailableDate().split("");
-            holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
-            holder.likesCount.setText(String.valueOf(item.getLikes()));
-            if (!likes.contains(item.getId())) {
-                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-            } else {
-                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-            }
+                holder.title.setText(item.getVideoTitle());
+                String[] date = item.getVideoAvailableDate().split("");
+                holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
+                holder.likesCount.setText(String.valueOf(item.getLikes()));
+                if (!likes.contains(item.getId())) {
+                    holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                } else {
+                    holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                    holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+                }
 
-            holder.addLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!Storage.getString("E-mail", "").equals("")) {
-                        if (!likes.contains(item.getId())) {
-                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
-                            likes.add(item.getId());
-                            holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
-                            new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
-                        } else if (likes.contains(item.getId())) {
-                            holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
-                            likes.remove(item.getId());
-                            holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
-                            new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                holder.addLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!Storage.getString("E-mail", "").equals("")) {
+                            if (!likes.contains(item.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart);
+                                likes.add(item.getId());
+                                holder.likesCount.setText(String.valueOf(item.getLikes() + 1));
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoLike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            } else if (likes.contains(item.getId())) {
+                                holder.addLike.setBackgroundResource(R.mipmap.ic_heart_outline);
+                                likes.remove(item.getId());
+                                holder.likesCount.setText(String.valueOf(holder.likesCount.getText()));
+                                new GetRequest("http://195.88.209.17/app/in/manicureVideoDislike.php?id=" + item.getId() + "&email=" + Storage.getString("E-mail", "")).execute();
+                            }
+                        } else {
+                            context.startActivity(new Intent(context, SignIn.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
-                    } else {
-                        context.startActivity(new Intent(context, SignIn.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
-                }
-            });
+                });
 
-            holder.share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (Objects.equals(Storage.getString("VKAccessToken", ""), ""))
-                        context.startActivity(new Intent(context, GetToken.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    else
-                        context.startActivity(new Intent(context, WallPost.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });
+                holder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (Objects.equals(Storage.getString("VKAccessToken", ""), ""))
+                            context.startActivity(new Intent(context, GetToken.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        else
+                            context.startActivity(new Intent(context, WallPost.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
 
-            Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
+                Picasso.with(context).load("http://195.88.209.17/storage/photos/" + item.getAuthorPhoto()).into(holder.user_avatar);
         /*holder.user_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -249,161 +237,162 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             }
         });*/
 
-            holder.hashTags.removeAllViews();
-            for (int i = 0; i < item.getHashTags().size(); i++) {
-                TextView hashTag = new TextView(context);
-                hashTag.setTextColor(Color.argb(255, 51, 102, 153));
-                hashTag.setTextSize(16);
-                final int finalI = i;
-                hashTag.setText("#" + item.getHashTags().get(i).replace(" ", "") + " ");
-                hashTag.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        context.startActivity(new Intent(context, SearchManicureMatrix.class)
-                                .putExtra("Request", item.getHashTags().get(finalI).trim())
-                                .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
-                                .putExtra("Shape", "" + "0")
-                                .putExtra("Design", "" + "0")
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        FireAnal.sendString("2", "ManicureFeedTag", item.getHashTags().get(finalI));
-                    }
-                });
-                holder.hashTags.addView(hashTag);
-            }
-
-            holder.imageViewer.removeAllViews();
-            holder.countImages.removeAllViews();
-            for (int i = 0; i < item.getImages().size(); i++) {
-                ImageView screenShot = new ImageView(context);
-                screenShot.setMinimumWidth(Storage.getInt("Width", 480));
-                screenShot.setMinimumHeight(Storage.getInt("Width", 480));
-                screenShot.setPadding(0, 0, 1, 0);
-                screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
-                Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
-
-                screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                final int finalI = i;
-                screenShot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (holder.showMore.getText().equals(SHOW)) {
-                            Intent intent = new Intent(context, FullscreenPreview.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
-                            context.startActivity(intent);
+                holder.hashTags.removeAllViews();
+                for (int i = 0; i < item.getHashTags().size(); i++) {
+                    TextView hashTag = new TextView(context);
+                    hashTag.setTextColor(Color.argb(255, 51, 102, 153));
+                    hashTag.setTextSize(16);
+                    final int finalI = i;
+                    hashTag.setText("#" + item.getHashTags().get(i).replace(" ", "") + " ");
+                    hashTag.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            context.startActivity(new Intent(context, SearchManicureMatrix.class)
+                                    .putExtra("Request", item.getHashTags().get(finalI).trim())
+                                    .putStringArrayListExtra("ManicureColors", new ArrayList<String>())
+                                    .putExtra("Shape", "" + "0")
+                                    .putExtra("Design", "" + "0")
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            FireAnal.sendString("2", "ManicureFeedTag", item.getHashTags().get(finalI));
                         }
-                    }
-                });
-                holder.imageViewer.addView(screenShot);
-                holder.imageViewerHorizontal.scrollTo(0, 0);
-
-                LinearLayout countLayout = new LinearLayout(context);
-                countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
-                TextView count = new TextView(context);
-                count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
-                count.setTextSize(24);
-                count.setTextColor(Color.WHITE);
-                count.setPadding(32, 32, 32, 32);
-                count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
-                countLayout.addView(count);
-                holder.countImages.addView(countLayout);
-            }
-
-            holder.moreContainer.removeAllViews();
-            holder.showMore.setText(SHOW);
-            holder.showMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (holder.showMore.getText().equals(SHOW)) {
-                        holder.showMore.setText(HIDE);
-                        LinearLayout moreContainer = new LinearLayout(context);
-                        moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        moreContainer.setOrientation(LinearLayout.VERTICAL);
-                        moreContainer.setPadding(32, 32, 32, 0);
-
-                        moreContainer.addView(createText(convertToString(R.string.title_used_colors), 16, "", ""));
-                        LinearLayout colors = new LinearLayout(context);
-                        colors.setOrientation(LinearLayout.HORIZONTAL);
-                        String[] mColors = (item.getColors().split(","));
-                        for (String mColor : mColors) {
-                            if (!mColor.equals("FFFFFF"))
-                                colors.addView(createCircle("#" + mColor, mColor));
-                            else
-                                colors.addView(createCircle("#EEEEEE", mColor));
-                        }
-                        moreContainer.addView(colors);
-                        switch (item.getShape()) {
-                            case "square":
-                                moreContainer.addView(createText(convertToString(R.string.squareShape), 16, "Shape", "1"));
-                                break;
-                            case "oval":
-                                moreContainer.addView(createText(convertToString(R.string.ovalShape), 16, "Shape", "2"));
-                                break;
-                            case "stiletto":
-                                moreContainer.addView(createText(convertToString(R.string.stilettoShape), 16, "Shape", "3"));
-                                break;
-                        }
-
-                        switch (item.getDesign()) {
-                            case "french_classic":
-                                moreContainer.addView(createText(convertToString(R.string.french_classicDesign), 16, "Design", "1"));
-                                break;
-                            case "french_chevron":
-                                moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), 16, "Design", "2"));
-                                break;
-                            case "french_millennium":
-                                moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), 16, "Design", "3"));
-                                break;
-                            case "french_fun":
-                                moreContainer.addView(createText(convertToString(R.string.french_funDesign), 16, "Design", "4"));
-                                break;
-                            case "french_crystal":
-                                moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), 16, "Design", "5"));
-                                break;
-                            case "french_colorful":
-                                moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), 16, "Design", "6"));
-                                break;
-                            case "french_designer":
-                                moreContainer.addView(createText(convertToString(R.string.french_designerDesign), 16, "Design", "7"));
-                                break;
-                            case "french_spa":
-                                moreContainer.addView(createText(convertToString(R.string.french_spaDesign), 16, "Design", "8"));
-                                break;
-                            case "french_moon":
-                                moreContainer.addView(createText(convertToString(R.string.french_moonDesign), 16, "Design", "9"));
-                                break;
-                            case "art":
-                                moreContainer.addView(createText(convertToString(R.string.artDesign), 16, "Design", "10"));
-                                break;
-                            case "designer":
-                                moreContainer.addView(createText(convertToString(R.string.designerDesign), 16, "Design", "11"));
-                                break;
-                            case "volume":
-                                moreContainer.addView(createText(convertToString(R.string.volumeDesign), 16, "Design", "12"));
-                                break;
-                            case "aqua":
-                                moreContainer.addView(createText(convertToString(R.string.aquaDesign), 16, "Design", "13"));
-                                break;
-                            case "american":
-                                moreContainer.addView(createText(convertToString(R.string.americanDesign), 16, "Design", "14"));
-                                break;
-                            case "photo":
-                                moreContainer.addView(createText(convertToString(R.string.photoDesign), 16, "Design", "15"));
-                                break;
-                        }
-
-                        holder.moreContainer.addView(moreContainer);
-                    } else if (holder.showMore.getText().equals(HIDE)) {
-                        holder.showMore.setText(SHOW);
-                        holder.moreContainer.removeAllViews();
-                    }
+                    });
+                    holder.hashTags.addView(hashTag);
                 }
-            });
-            holder.showMore.setVisibility(View.VISIBLE);
-            holder.hashTags.setVisibility(View.VISIBLE);
+
+                holder.imageViewer.removeAllViews();
+                holder.countImages.removeAllViews();
+                for (int i = 0; i < item.getImages().size(); i++) {
+                    ImageView screenShot = new ImageView(context);
+                    screenShot.setMinimumWidth(Storage.getInt("Width", 480));
+                    screenShot.setMinimumHeight(Storage.getInt("Width", 480));
+                    screenShot.setPadding(0, 0, 1, 0);
+                    screenShot.setBackgroundColor(Color.argb(255, 200, 200, 200));
+                    Picasso.with(context).load("http://195.88.209.17/storage/images/" + item.getImages().get(i)).resize(Storage.getInt("Width", 480), Storage.getInt("Width", 480)).centerCrop().into(screenShot);
+
+                    screenShot.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    final int finalI = i;
+                    screenShot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (holder.showMore.getText().equals(SHOW)) {
+                                Intent intent = new Intent(context, FullscreenPreview.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("screenshot", "http://195.88.209.17/storage/images/" + item.getImages().get(finalI));
+                                context.startActivity(intent);
+                            }
+                        }
+                    });
+                    holder.imageViewer.addView(screenShot);
+                    holder.imageViewerHorizontal.scrollTo(0, 0);
+
+                    LinearLayout countLayout = new LinearLayout(context);
+                    countLayout.setLayoutParams(new ViewGroup.LayoutParams(Storage.getInt("Width", 480), Storage.getInt("Width", 480)));
+                    TextView count = new TextView(context);
+                    count.setText("< " + (i + 1) + "/" + item.getImages().size() + " >");
+                    count.setTextSize(24);
+                    count.setTextColor(Color.WHITE);
+                    count.setPadding(32, 32, 32, 32);
+                    count.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Galada.ttf"));
+                    countLayout.addView(count);
+                    holder.countImages.addView(countLayout);
+                }
+
+                holder.moreContainer.removeAllViews();
+                holder.showMore.setText(SHOW);
+                holder.showMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (holder.showMore.getText().equals(SHOW)) {
+                            holder.showMore.setText(HIDE);
+                            LinearLayout moreContainer = new LinearLayout(context);
+                            moreContainer.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            moreContainer.setOrientation(LinearLayout.VERTICAL);
+                            moreContainer.setPadding(32, 32, 32, 0);
+
+                            moreContainer.addView(createText(convertToString(R.string.title_used_colors), 16, "", ""));
+                            LinearLayout colors = new LinearLayout(context);
+                            colors.setOrientation(LinearLayout.HORIZONTAL);
+                            String[] mColors = (item.getColors().split(","));
+                            for (String mColor : mColors) {
+                                if (!mColor.equals("FFFFFF"))
+                                    colors.addView(createCircle("#" + mColor, mColor));
+                                else
+                                    colors.addView(createCircle("#EEEEEE", mColor));
+                            }
+                            moreContainer.addView(colors);
+                            switch (item.getShape()) {
+                                case "square":
+                                    moreContainer.addView(createText(convertToString(R.string.squareShape), 16, "Shape", "1"));
+                                    break;
+                                case "oval":
+                                    moreContainer.addView(createText(convertToString(R.string.ovalShape), 16, "Shape", "2"));
+                                    break;
+                                case "stiletto":
+                                    moreContainer.addView(createText(convertToString(R.string.stilettoShape), 16, "Shape", "3"));
+                                    break;
+                            }
+
+                            switch (item.getDesign()) {
+                                case "french_classic":
+                                    moreContainer.addView(createText(convertToString(R.string.french_classicDesign), 16, "Design", "1"));
+                                    break;
+                                case "french_chevron":
+                                    moreContainer.addView(createText(convertToString(R.string.french_chevronDesign), 16, "Design", "2"));
+                                    break;
+                                case "french_millennium":
+                                    moreContainer.addView(createText(convertToString(R.string.french_millenniumDesign), 16, "Design", "3"));
+                                    break;
+                                case "french_fun":
+                                    moreContainer.addView(createText(convertToString(R.string.french_funDesign), 16, "Design", "4"));
+                                    break;
+                                case "french_crystal":
+                                    moreContainer.addView(createText(convertToString(R.string.french_crystalDesign), 16, "Design", "5"));
+                                    break;
+                                case "french_colorful":
+                                    moreContainer.addView(createText(convertToString(R.string.french_colorfulDesign), 16, "Design", "6"));
+                                    break;
+                                case "french_designer":
+                                    moreContainer.addView(createText(convertToString(R.string.french_designerDesign), 16, "Design", "7"));
+                                    break;
+                                case "french_spa":
+                                    moreContainer.addView(createText(convertToString(R.string.french_spaDesign), 16, "Design", "8"));
+                                    break;
+                                case "french_moon":
+                                    moreContainer.addView(createText(convertToString(R.string.french_moonDesign), 16, "Design", "9"));
+                                    break;
+                                case "art":
+                                    moreContainer.addView(createText(convertToString(R.string.artDesign), 16, "Design", "10"));
+                                    break;
+                                case "designer":
+                                    moreContainer.addView(createText(convertToString(R.string.designerDesign), 16, "Design", "11"));
+                                    break;
+                                case "volume":
+                                    moreContainer.addView(createText(convertToString(R.string.volumeDesign), 16, "Design", "12"));
+                                    break;
+                                case "aqua":
+                                    moreContainer.addView(createText(convertToString(R.string.aquaDesign), 16, "Design", "13"));
+                                    break;
+                                case "american":
+                                    moreContainer.addView(createText(convertToString(R.string.americanDesign), 16, "Design", "14"));
+                                    break;
+                                case "photo":
+                                    moreContainer.addView(createText(convertToString(R.string.photoDesign), 16, "Design", "15"));
+                                    break;
+                            }
+
+                            holder.moreContainer.addView(moreContainer);
+                        } else if (holder.showMore.getText().equals(HIDE)) {
+                            holder.showMore.setText(SHOW);
+                            holder.moreContainer.removeAllViews();
+                        }
+                    }
+                });
+                holder.showMore.setVisibility(View.VISIBLE);
+                holder.hashTags.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -522,14 +511,13 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         return data.size();
     }
 
-    public void setData(List<ManicureDTO> data, List<VideoManicureDTO> videoData) {
+    public void setData(List<ManicureDTO> data) {
         this.data = data;
-        this.videoData = videoData;
     }
 
     public static class TapeViewHolder extends RecyclerView.ViewHolder {
         TextView title, availableDate, showMore, likesCount;
-        LinearLayout imageViewer, countImages, hashTags, moreContainer, post;
+        LinearLayout imageViewer, countImages, hashTags, moreContainer, post, postFrame;
         ImageView user_avatar, addLike, share;
         HorizontalScrollView imageViewerHorizontal;
 
@@ -548,6 +536,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             addLike = (ImageView) itemView.findViewById(R.id.addLike);
             share = (ImageView) itemView.findViewById(R.id.share);
             post = (LinearLayout) itemView.findViewById(R.id.post);
+            postFrame = (LinearLayout) itemView.findViewById(R.id.postFrame);
         }
     }
 
@@ -635,19 +624,19 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
         }
     }
 
-    private class Load extends AsyncTask<Void, Void, String> {
+    public class Load extends AsyncTask<Void, Void, List<JSONArray>> {
 
         private HttpURLConnection urlFeedConnection = null;
         private BufferedReader reader = null;
-        private String resultJsonFeed = "";
         private int position;
+        private List<JSONArray> dataArrays = new ArrayList<>();
 
         Load(int position) {
             this.position = position;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<JSONArray> doInBackground(Void... params) {
             try {
                 URL feedURL = new URL("http://195.88.209.17/app/static/manicure" + position + ".html");
                 urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
@@ -659,133 +648,101 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 String line;
                 while ((line = reader.readLine()) != null)
                     buffer.append(line);
-                resultJsonFeed += buffer.toString();
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            long id, likes;
-            String availableDate, colors, shape, design, tags = "", authorPhoto, authorName;
-
             try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-                    List<String> images = new ArrayList<>();
-                    List<String> hashTags = new ArrayList<>();
-
-                    for (int j = 0; j < 10; j++)
-                        if (!item.getString("screen" + j).equals("empty.jpg"))
-                            images.add(item.getString("screen" + j));
-
-                    id = item.getLong("id");
-                    authorPhoto = item.getString("authorPhoto");
-                    authorName = item.getString("authorName");
-                    availableDate = item.getString("uploadDate");
-                    if (Storage.getString("Localization", "").equals("English"))
-                        tags = item.getString("tags");
-                    else if (Storage.getString("Localization", "").equals("Russian"))
-                        tags = item.getString("tagsRu");
-                    shape = item.getString("shape");
-                    design = item.getString("design");
-                    colors = item.getString("colors");
-                    likes = item.getLong("likes");
-
-                    String[] tempTags = tags.split(",");
-                    Collections.addAll(hashTags, tempTags);
-
-                    ManicureDTO manicureDTO = new ManicureDTO(id, availableDate, authorName, authorPhoto, shape, design, images, colors, hashTags, likes);
-                    data.add(manicureDTO);
-                }
-                FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
-            } catch (JSONException e) {
+                URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
+                urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
+                urlFeedConnection.setRequestMethod("GET");
+                urlFeedConnection.connect();
+                InputStream inputStream = urlFeedConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    buffer.append(line);
+                dataArrays.add(new JSONArray(String.valueOf(buffer)));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private class VideoLoad extends AsyncTask<Void, Void, String> {
-
-        private HttpURLConnection urlFeedConnection = null;
-        private BufferedReader reader = null;
-        private String resultJsonFeed = "";
-        private int position;
-
-        VideoLoad(int position) {
-            this.position = position;
+            return dataArrays;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected void onPostExecute(List<JSONArray> dataArrays) {
+            super.onPostExecute(dataArrays);
+
+            List<JSONObject> items = new ArrayList<>();
+            List<ManicureDTO> exportData = new ArrayList<>();
+
             try {
-                if (position == 1) {
-                    URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + position + ".html");
-                    urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                    urlFeedConnection.setRequestMethod("GET");
-                    urlFeedConnection.connect();
-                    InputStream inputStream = urlFeedConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder buffer = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null)
-                        buffer.append(line);
-                    resultJsonFeed += buffer.toString();
-                } else {
-                    for (int i = 1; i <= position; i++) {
-                        URL feedURL = new URL("http://195.88.209.17/app/static/videoManicure" + i + ".html");
-                        urlFeedConnection = (HttpURLConnection) feedURL.openConnection();
-                        urlFeedConnection.setRequestMethod("GET");
-                        urlFeedConnection.connect();
-                        InputStream inputStream = urlFeedConnection.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder buffer = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                            buffer.append(line);
-                        resultJsonFeed += buffer.toString();
-                        resultJsonFeed = resultJsonFeed.replace("][", ",");
+                for (int i = 0; i < Math.max(dataArrays.get(0).length(), dataArrays.get(1).length()); i++) {
+                    if (dataArrays.get(0).getJSONObject(i) != null)
+                        items.add(dataArrays.get(0).getJSONObject(i));
+                    if (dataArrays.get(1).getJSONObject(i) != null)
+                        items.add(dataArrays.get(1).getJSONObject(i));
+                }
+                for (int i = 0; i < items.size(); i++) {
+                    List<String> images = new ArrayList<>();
+
+                    if (!items.get(i).has("videoSource")) {
+                        for (int j = 0; j < 10; j++)
+                            if (!items.get(i).getString("screen" + j).equals("empty.jpg"))
+                                images.add(items.get(i).getString("screen" + j));
+
+                        List<String> tags = new ArrayList<>();
+                        if (Storage.getString("Localization", "").equals("English")) {
+                            Collections.addAll(tags, items.get(i).getString("tags").split(","));
+                        } else if (Storage.getString("Localization", "").equals("Russian")) {
+                            Collections.addAll(tags, items.get(i).getString("tagsRu").split(","));
+                        }
+
+                        ManicureDTO post = new ManicureDTO(
+                                items.get(i).getLong("id"),
+                                "content",
+                                items.get(i).getString("uploadDate"),
+                                items.get(i).getString("authorName"),
+                                items.get(i).getString("authorPhoto"),
+                                items.get(i).getString("shape"),
+                                items.get(i).getString("design"),
+                                images,
+                                items.get(i).getString("colors"),
+                                tags,
+                                items.get(i).getLong("likes"),
+                                0,
+                                "",
+                                "",
+                                "",
+                                "",
+                                0,
+                                "");
+                        exportData.add(post);
+                    }
+                    if (!items.get(i).has("id")) {
+                        ManicureDTO post = new ManicureDTO(
+                                0,
+                                "video",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                new ArrayList<String>(),
+                                "",
+                                new ArrayList<String>(),
+                                0,
+                                items.get(i).getLong("videoId"),
+                                items.get(i).getString("videoTitle"),
+                                items.get(i).getString("videoPreview"),
+                                items.get(i).getString("videoSource"),
+                                items.get(i).getString("videoTags"),
+                                items.get(i).getLong("videoLikes"),
+                                items.get(i).getString("videoUploadDate"));
+                        exportData.add(post);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return resultJsonFeed;
-        }
-
-        @Override
-        protected void onPostExecute(String resultJsonFeed) {
-            super.onPostExecute(resultJsonFeed);
-
-            try {
-                JSONArray items = new JSONArray(resultJsonFeed);
-
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-
-                    List<String> tags = new ArrayList<>();
-                    if (Storage.getString("Localization", "").equals("English"))
-                        Collections.addAll(tags, item.getString("videoTags").split(","));
-                    else if (Storage.getString("Localization", "").equals("Russian"))
-                        Collections.addAll(tags, item.getString("videoTagsRu").split(","));
-
-                    VideoManicureDTO videoManicureDTO = new VideoManicureDTO(
-                            item.getLong("videoId"),
-                            item.getString("videoTitle"),
-                            item.getString("videoPreview"),
-                            item.getString("videoSource"),
-                            tags,
-                            item.getLong("videoLikes"),
-                            item.getString("videoUploadDate"));
-                    videoData.add(videoManicureDTO);
-                }
-
                 FireAnal.sendString("1", "Open", "ManicureFeedLoaded");
             } catch (JSONException e) {
                 e.printStackTrace();

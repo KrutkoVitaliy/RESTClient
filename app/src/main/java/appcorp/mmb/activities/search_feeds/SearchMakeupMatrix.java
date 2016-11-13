@@ -41,6 +41,7 @@ import appcorp.mmb.activities.user.FavoriteVideos;
 import appcorp.mmb.activities.user.Favorites;
 import appcorp.mmb.activities.user.MyProfile;
 import appcorp.mmb.activities.user.SignIn;
+import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 
@@ -64,6 +65,8 @@ public class SearchMakeupMatrix extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_manicure_matrix);
+
+        FireAnal.sendString("Search manicure matrix", "Open", "Activity");
 
         this.toolbarTitle = getIntent().getStringExtra("Toolbar");
         this.request = getIntent().getStringExtra("Request");

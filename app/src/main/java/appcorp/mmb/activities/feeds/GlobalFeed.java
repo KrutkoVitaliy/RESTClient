@@ -18,8 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -47,8 +45,6 @@ import appcorp.mmb.classes.FireAnal;
 import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.GlobalDTO;
-import appcorp.mmb.dto.VideoMakeupDTO;
-import appcorp.mmb.dto.VideoManicureDTO;
 import appcorp.mmb.fragment_adapters.GlobalFeedFragmentAdapter;
 
 public class GlobalFeed extends AppCompatActivity {
@@ -57,20 +53,12 @@ public class GlobalFeed extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private GlobalFeedFragmentAdapter adapter;
     private ProgressDialog progressDialog;
-    private List<GlobalDTO> data = new ArrayList<>();
     private int toExit = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_feed);
-        Storage.init(getApplicationContext());
-        FireAnal.setContext(getApplicationContext());
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(getApplication());
-
-        if (!Intermediates.isConnected(getApplicationContext()))
-            startActivity(new Intent(getApplicationContext(), InternetNotification.class));
 
         initToolbar();
         initNavigationView();
@@ -81,9 +69,7 @@ public class GlobalFeed extends AppCompatActivity {
         progressDialog.show();
 
         new GlobalFeedLoader(1).execute();
-//        new VideoManicureFeedLoader(1).execute();
-        //new VideoMakeupFeedLoader(1).execute();
-        FireAnal.sendString("1", "Open", "GlobalFeed");
+        FireAnal.sendString("Global feed", "Open", "Feeds");
     }
 
     private void initToolbar() {

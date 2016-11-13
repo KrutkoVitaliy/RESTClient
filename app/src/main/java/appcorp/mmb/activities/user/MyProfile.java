@@ -68,17 +68,14 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
     private LinearLayout myProfileServices;
     private FloatingActionButton addToGallery;
     private ProgressDialog progressDialog;
-    List<Integer> numbers = new ArrayList<>();
+    private List<Integer> numbers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
 
-        Storage.init(getApplicationContext());
-        initFirebase();
-
-        FireAnal.sendString("1", "Open", "MyProfile");
+        FireAnal.sendString("My profile", "Open", "Activity");
 
         for (int i = 0; i < 10; i++) {
             numbers.add(i);
@@ -92,10 +89,6 @@ public class MyProfile extends AppCompatActivity implements View.OnClickListener
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(Intermediates.convertToString(getApplicationContext(), R.string.loading));
         progressDialog.show();
-    }
-
-    private void initFirebase() {
-        FireAnal.setContext(getApplicationContext());
     }
 
     private void initViews() {
