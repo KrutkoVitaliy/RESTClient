@@ -196,7 +196,7 @@ public class SearchHairstyleMatrix extends AppCompatActivity {
         TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
         accountName.setText(Storage.getString("Name", "Make Me Beauty"));
 
-        menuHeader.setOnClickListener(new View.OnClickListener() {
+        /*menuHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
@@ -206,7 +206,7 @@ public class SearchHairstyleMatrix extends AppCompatActivity {
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
-        });
+        });*/
     }
 
     public class Load extends AsyncTask<Void, Void, String> {

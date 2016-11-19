@@ -2,6 +2,7 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4151792091524133/8805221291</string>
     <string name="facebook_app_id" translatable="false">542389459298988</string>
     <integer name="com_vk_sdk_AppId" translatable="false">5646808</integer>
+    <string name="adUnitId" translatable="false">ca-app-pub-4151792091524133/1939808891</string>
     <string name="translation">English</string>
 
     <!-- MAIN VALUES -->

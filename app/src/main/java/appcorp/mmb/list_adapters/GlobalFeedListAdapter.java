@@ -47,6 +47,7 @@ import appcorp.mmb.activities.search_feeds.SearchMakeupMatrix;
 import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.GlobalDTO;
 import appcorp.mmb.network.GetRequest;
@@ -99,7 +100,7 @@ public class GlobalFeedListAdapter extends RecyclerView.Adapter<GlobalFeedListAd
             holder.hashTags.removeAllViews();*/
             holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
-            nativeExpressAdView.setAdUnitId("ca-app-pub-4151792091524133/1939808891");
+            nativeExpressAdView.setAdUnitId(Intermediates.convertToString(context, R.string.adUnitId));
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
             nativeExpressAdView.loadAd(new AdRequest.Builder().build());
             holder.post.addView(nativeExpressAdView);

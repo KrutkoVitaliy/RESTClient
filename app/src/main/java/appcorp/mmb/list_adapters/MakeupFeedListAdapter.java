@@ -99,7 +99,7 @@ public class MakeupFeedListAdapter extends RecyclerView.Adapter<MakeupFeedListAd
             holder.hashTags.removeAllViews();*/
             holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
-            nativeExpressAdView.setAdUnitId("ca-app-pub-4151792091524133/1939808891");
+            nativeExpressAdView.setAdUnitId(Intermediates.convertToString(context, R.string.adUnitId));
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
             nativeExpressAdView.loadAd(new AdRequest.Builder().build());
             holder.post.addView(nativeExpressAdView);

@@ -185,7 +185,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         TextView accountName = (TextView) menuHeader.findViewById(R.id.accountName);
         accountName.setText(Storage.getString("Name", "Make Me Beauty"));
 
-        menuHeader.setOnClickListener(new View.OnClickListener() {
+        /*menuHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!Storage.getString("E-mail", "").equals("")) {
@@ -195,7 +195,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                             .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 }
             }
-        });
+        });*/
     }
 
     @Override

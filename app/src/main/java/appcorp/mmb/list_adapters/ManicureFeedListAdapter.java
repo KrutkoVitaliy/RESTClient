@@ -42,6 +42,7 @@ import appcorp.mmb.activities.other.FullscreenPreview;
 import appcorp.mmb.activities.search_feeds.SearchManicureMatrix;
 import appcorp.mmb.activities.user.SignIn;
 import appcorp.mmb.classes.FireAnal;
+import appcorp.mmb.classes.Intermediates;
 import appcorp.mmb.classes.Storage;
 import appcorp.mmb.dto.MakeupDTO;
 import appcorp.mmb.sharing.vkontakte.GetToken;
@@ -96,7 +97,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
             holder.hashTags.removeAllViews();*/
             holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
-            nativeExpressAdView.setAdUnitId("ca-app-pub-4151792091524133/1939808891");
+            nativeExpressAdView.setAdUnitId(Intermediates.convertToString(context, R.string.adUnitId));
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
             nativeExpressAdView.loadAd(new AdRequest.Builder().build());
             holder.post.addView(nativeExpressAdView);
@@ -108,7 +109,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
 
             if (post.getDataType().equals("video")) {
                 holder.title.setText(post.getAuthorName());
-                String[] date = post.getAvailableDate().split("");
+                String[] date = post.getVideoAvailableDate().split("");
                 holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
                 Picasso.with(context).load("http://195.88.209.17/storage/photos/mmbuser.jpg").resize(100, 100).centerCrop().into(holder.user_avatar);
                 final VideoView videoView = new VideoView(context);
@@ -181,7 +182,7 @@ public class ManicureFeedListAdapter extends RecyclerView.Adapter<ManicureFeedLi
                 final String HIDE = convertToString(R.string.hide_more_container);
 
                 holder.title.setText(item.getVideoTitle());
-                String[] date = item.getVideoAvailableDate().split("");
+                String[] date = item.getAvailableDate().split("");
                 holder.availableDate.setText(date[1] + date[2] + "-" + date[3] + date[4] + "-" + date[5] + date[6] + " " + date[7] + date[8] + ":" + date[9] + date[10]);
                 holder.likesCount.setText(String.valueOf(item.getLikes()));
                 if (!likes.contains(item.getId())) {

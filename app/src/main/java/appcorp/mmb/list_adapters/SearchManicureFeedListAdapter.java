@@ -150,7 +150,7 @@ public class SearchManicureFeedListAdapter extends RecyclerView.Adapter<SearchMa
         if (position % 8 == 0) {
             holder.post.removeAllViews();
             NativeExpressAdView nativeExpressAdView = new NativeExpressAdView(context);
-            nativeExpressAdView.setAdUnitId("ca-app-pub-4982253629578691/5250720366");
+            nativeExpressAdView.setAdUnitId(Intermediates.convertToString(context, R.string.adUnitId));
             nativeExpressAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
             nativeExpressAdView.loadAd(new AdRequest.Builder().build());
             holder.post.addView(nativeExpressAdView);
